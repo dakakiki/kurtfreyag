@@ -50,19 +50,13 @@
                     </div>
                 <?php endif; ?>
 
-                <div class="footer__left--nav">
-                    <?php
-                        include 'template_parts/legal_menu.php';
-                    ?>
-                </div>
-
             </div>
 
             <div class="footer__right">
 
                 <div class="footer__right--nav">
                     <?php
-                        include 'template_parts/main_menu.php';
+                        include 'template_parts/footer_menu.php';
                     ?>
                 </div>
 

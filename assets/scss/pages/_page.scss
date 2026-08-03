@@ -47,7 +47,7 @@
                     $min-size: 14,
                     $max-height: 24,
                     $min-height: 20,
-                    $tx-color: theme-color(text-aqua),
+                    $tx-color: theme-color(text-golden),
                     $tx-weight: 700,
                     $max-rsp: $max-resize,
                     $min-rsp: $min-resize,
@@ -64,7 +64,7 @@
 
                 &:hover {
 
-                    color: theme-color(text-charcoal);
+                    color: theme-color(text-blue);
                 }
             }
         }
@@ -131,7 +131,7 @@
                 $min-size: 17,
                 $max-height: 24,
                 $min-height: 24,
-                $tx-color: theme-color(text-charcoal),
+                $tx-color: theme-color(text-blue),
                 $tx-weight: 300,
                 $max-rsp: $max-resize,
                 $min-rsp: $min-resize,
@@ -194,9 +194,9 @@
 
                 box-sizing: border-box;
 
-                background-color: color-alpha(bg-aqua, 0.8);
+                background-color: color-alpha(bg-sky, 0.8);
 
-                color: theme-color(text-charcoal);
+                color: theme-color(text-blue);
 
                 @include brd-radius-all (
                     $brd-radius: 20px

@@ -59,12 +59,7 @@
             &.is-active,
             &:hover {
 
-                border-bottom: 1px solid theme-color(brd-aqua);
-            }
-
-            &.ftr-active {
-
-                display: none;
+                text-decoration: underline;
             }
         }
     }
@@ -89,7 +84,7 @@ footer {
                         $min-size: 10,
                         $max-height: 15,
                         $min-height: 15,
-                        $tx-color: theme-color(text-cloud),
+                        $tx-color: theme-color(text-blue),
                         $tx-weight: 400,
                         $max-rsp: $max-resize,
                         $min-rsp: $min-resize,
@@ -99,62 +94,6 @@ footer {
                 &.ftr-active {
 
                     display: block;
-                }
-            }
-        }
-    }
-
-    .nav-legal-wrap {
-
-        &__menu {
-
-            list-style: none;
-            margin: 0;
-            padding: 0;
-
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-
-            > li {
-
-                > a {
-
-                    display: block;
-
-                    @include format-text (
-                        $max-size: 10,
-                        $min-size: 10,
-                        $max-height: 15,
-                        $min-height: 15,
-                        $tx-color: theme-color(text-cloud),
-                        $tx-weight: 400,
-                        $max-rsp: $max-resize,
-                        $min-rsp: $min-resize,
-                    );
-
-                    text-decoration: none;
-
-                    @include trans;
-                }
-
-                &:not(:last-of-type) {
-
-                    > a:after {
-                        content: "|";
-                        padding: 0 3px;
-                    }
-                }
-
-                &.current_page_item,
-                &.current-menu-item,
-                &.is-active,
-                &:hover {
-
-                    a {
-
-                        color: theme-color(brd-aqua);
-                    }
                 }
             }
         }

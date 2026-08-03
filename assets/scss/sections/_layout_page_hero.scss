@@ -73,7 +73,7 @@
                         $min-size: 20,
                         $max-height: 36,
                         $min-height: 30,
-                        $tx-color: theme-color(text-charcoal),
+                        $tx-color: theme-color(text-white),
                     );
                 }
             }
@@ -124,13 +124,6 @@
 
                 width: 100%;
                 height: 100%;
-
-                background: linear-gradient(
-                    90deg,
-                    color-alpha(bg-cloud, 0.92) 0%,
-                    color-alpha(bg-cloud, 0.35) 45%,
-                    color-alpha(bg-cloud, 0) 65%
-                );
             }
 
             img {

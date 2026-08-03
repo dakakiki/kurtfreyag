@@ -175,7 +175,7 @@
     $min-size: 14,
     $max-height: 24,
     $min-height: 22,
-    $tx-color: theme-color(text-charcoal),
+    $tx-color: theme-color(text-blue),
     $tx-weight: 400,
     $max-rsp: $max-resize,
     $min-rsp: $min-resize,
@@ -248,13 +248,11 @@
         $min-size: 52,
         $max-height: 76,
         $min-height: 56,
-        $tx-color: theme-color(title-charcoal),
+        $tx-color: theme-color(title-blue),
         $tx-weight: 700,
         $max-rsp: $max-resize,
         $min-rsp: $min-resize,
     );
-
-    font-family: $font-Secondary;
     
     strong {
 
@@ -272,13 +270,11 @@
         $min-size: 32,
         $max-height: 49,
         $min-height: 34,
-        $tx-color: theme-color(title-charcoal),
+        $tx-color: theme-color(title-blue),
         $tx-weight: 700,
         $max-rsp: $max-resize,
         $min-rsp: $min-resize,
     );
-    
-    font-family: $font-Secondary;
 
     strong {
 
@@ -296,13 +292,11 @@
         $min-size: 16,
         $max-height: 25,
         $min-height: 21,
-        $tx-color: theme-color(title-charcoal),
+        $tx-color: theme-color(title-blue),
         $tx-weight: 700,
         $max-rsp: $max-resize,
         $min-rsp: $min-resize,
     );
-
-    font-family: $font-Secondary;
 }
 
 
@@ -315,13 +309,11 @@
         $min-size: 13,
         $max-height: 20,
         $min-height: 20,
-        $tx-color: theme-color(title-aqua),
+        $tx-color: theme-color(title-golden),
         $tx-weight: 400,
         $max-rsp: $max-resize-sec,
         $min-rsp: $min-resize-sec,
     );
-
-    font-family: $font-Tertiary;
 }
 
 
@@ -356,8 +348,8 @@
     border: none;
     border-collapse: collapse;
 
-    background-color: theme-color(bg-slate);
-    border: 1px solid theme-color(brd-slate);
+    background-color: theme-color(bg-blue);
+    border: 1px solid theme-color(bg-blue);
 
     @include brd-radius-all(
         $brd-radius: rem(3)
@@ -367,10 +359,10 @@
 
     &:hover {
 
-        background-color: theme-color(bg-aqua);
-        border: 1px solid theme-color(brd-aqua);
+        background-color: theme-color(bg-white);
+        border: 1px solid theme-color(brd-blue);
 
-        color: theme-color(text-white);
+        color: theme-color(text-blue);
 
         text-decoration: none;
     }
@@ -408,8 +400,8 @@
     border: none;
     border-collapse: collapse;
 
-    border: 1px solid theme-color(brd-aqua);
-    background-color: theme-color(bg-aqua);
+    border: 1px solid theme-color(brd-white);
+    background-color: theme-color(bg-white);
 
     @include brd-radius-all(
         $brd-radius: rem(3)
@@ -419,14 +411,15 @@
 
     &:hover {
 
-        background-color: theme-color(bg-cloud);
-        border: 1px solid theme-color(brd-cloud);
+        background-color: theme-color(bg-blue);
+        border: 1px solid theme-color(brd-blue);
 
-        color: theme-color(text-charcoal);
+        color: theme-color(text-white);
 
         text-decoration: none;
     }
 }
+
 
 
 

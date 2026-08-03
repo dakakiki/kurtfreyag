@@ -18,7 +18,7 @@ header {
     align-items: center;
     justify-content: center;
 
-    background-color: theme-color(bg-white);
+    background-color: color-alpha(bg-white, 0.9);
 
     .header {
 

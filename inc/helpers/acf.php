@@ -11,10 +11,15 @@ if ( ! defined('ABSPATH') ) exit;
  */
 function getHeaderSettings()
 {
+    if (!function_exists('get_field')) {
+        return array();
+    }
 
-  $header_o = theme_get_option('header_content');
+    $general_options = get_field('header_content', 'option');
 
-  return $header_o;
+    return is_array($general_options)
+        ? $general_options
+        : array();
 }
 
 /**
@@ -22,10 +27,31 @@ function getHeaderSettings()
  */
 function getFooterSettings()
 {
+    if (!function_exists('get_field')) {
+        return array();
+    }
 
-  $footer_o = theme_get_option('footer_content');
+    $general_options = get_field('footer_content', 'option');
 
-  return $footer_o;
+    return is_array($general_options)
+        ? $general_options
+        : array();
+}
+
+/**
+ * Get Theme SN Options
+ */
+function getSNOptions()
+{
+    if (!function_exists('get_field')) {
+        return array();
+    }
+
+    $general_options = get_field('sn_content', 'option');
+
+    return is_array($general_options)
+        ? $general_options
+        : array();
 }
 
 /**
@@ -33,33 +59,15 @@ function getFooterSettings()
  */
 function getGeneralOptions()
 {
+    if (!function_exists('get_field')) {
+        return array();
+    }
 
-  $general_o = theme_get_option('general_options');
+    $general_options = get_field('general_content', 'option');
 
-  return $general_o;
-}
-
-
-/**
- * Get Theme SN Options
- */
-function getSNOptions()
-{
-
-  $sn_o = theme_get_option('sn_content');
-
-  return $sn_o;
-}
-
-/**
- * Get Theme SN Options
- */
-function getContactContent()
-{
-
-  $contact_o = theme_get_option('general_contact_content');
-
-  return $contact_o;
+    return is_array($general_options)
+        ? $general_options
+        : array();
 }
 
 

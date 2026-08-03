@@ -313,8 +313,7 @@ function register_my_menus() {
     register_nav_menus(
       array(
         'menu-main' => __( 'Menu - Main' ),
-        'menu-footer' => __( 'Menu - Footer' ),
-        'menu-legal' => __( 'Menu - Legal' )
+        'menu-footer' => __( 'Menu - Footer' )
       )
     );
   }
@@ -360,7 +359,6 @@ require_once THEME_PATH . '/inc/helpers/wp_editor.php';
 require_once THEME_PATH . '/inc/helpers/fonts.php';
 require_once THEME_PATH . '/inc/helpers/svg.php';
 require_once THEME_PATH . '/inc/helpers/slugify.php';
-// require_once THEME_PATH . '/inc/helpers/wpml.php';
 require_once THEME_PATH . '/inc/helpers/acf.php';
 require_once THEME_PATH . '/inc/helpers/colors.php';
 require_once THEME_PATH . '/inc/helpers/date.php';

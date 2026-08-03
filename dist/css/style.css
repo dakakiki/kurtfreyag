@@ -77,6 +77,1064 @@ Tags: KurtFreyAG
 /* Fluid property multiple values */
 /* fluid with calculations */
 /* Example: @include fluid-calc-prop('height', "100vh - 90px", 60, 80, $min-resize, $max-resize, $unit: px); */
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
+* Header
+*/
+header {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  display: flex;
+  width: 100%;
+  height: 90px;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+header .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+header .header__all {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+header .header__logo {
+  display: block;
+  flex: 1 1 0;
+}
+header .header__logo a {
+  display: block;
+  width: fit-content;
+}
+header .header__logo a img {
+  display: block;
+  height: auto;
+  width: clamp(110px, -300.4733727811px + 41.4201183432vw, 180px);
+}
+header .header__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+header .header__lng-items {
+  display: block;
+}
+header .header__hamburger {
+  display: none;
+  /* Reset the default button chrome - this is an icon control */
+  padding: 0;
+  border: none;
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.875rem;
+  height: 1.875rem;
+  margin-left: auto;
+  cursor: pointer;
+}
+header .header__buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: clamp(0px, 0px + 0vw, 0px) clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
+}
+header .header__buttons .btn-apply {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: clamp(32px, -61.8224852071px + 9.4674556213vw, 48px);
+  font-size: clamp(14px, -0.847826087px + 1.0869565217vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  padding-left: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
+  padding-right: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
+  border: none;
+  border-collapse: collapse;
+  border: 1px solid #ffffff;
+  background-color: #ffffff;
+  -webkit-border-radius: 0.1875rem;
+  -moz-border-radius: 0.1875rem;
+  border-radius: 0.1875rem;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+header .header__buttons .btn-apply:hover {
+  background-color: #00529E;
+  border: 1px solid #00529E;
+  color: #ffffff;
+  text-decoration: none;
+}
+@media (max-width: 1024px) {
+  header .header__nav, header .header__lng-items {
+    display: none;
+  }
+  header .header {
+    /*
+    * The header CTA leaves the bar and floats over the page,
+    * bottom right, so it stays reachable while scrolling.
+    */
+  }
+  header .header__buttons {
+    position: fixed;
+    z-index: 1;
+    right: 1rem;
+    bottom: 1rem;
+    padding: 0;
+  }
+  header .header__buttons .btn-apply {
+    /* Larger than the in-bar version so it stays a comfortable touch target */
+    height: 3rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    -webkit-border-radius: 6.25rem;
+    -moz-border-radius: 6.25rem;
+    border-radius: 6.25rem;
+    -webkit-box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+    -moz-box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+  }
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
+* Footer
+*/
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: #00529E;
+}
+footer .footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: clamp(36px, -175.100591716px + 21.3017751479vw, 72px);
+  padding-bottom: clamp(24px, -116.7337278107px + 14.201183432vw, 48px);
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+footer .footer__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-bottom: clamp(24px, -22.9112426036px + 4.7337278107vw, 32px);
+  gap: clamp(24px, -22.9112426036px + 4.7337278107vw, 32px);
+}
+footer .footer__cta h3 {
+  display: block;
+  font-size: clamp(16px, -7.4556213018px + 2.3668639053vw, 20px);
+  line-height: clamp(21px, -2.4556213018px + 2.3668639053vw, 25px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  color: #ffffff;
+}
+footer .footer__cta .btn-contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: clamp(32px, -61.8224852071px + 9.4674556213vw, 48px);
+  font-size: clamp(14px, -0.847826087px + 1.0869565217vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  padding-left: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
+  padding-right: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
+  border: none;
+  border-collapse: collapse;
+  border: 1px solid #ffffff;
+  background-color: #ffffff;
+  -webkit-border-radius: 0.1875rem;
+  -moz-border-radius: 0.1875rem;
+  border-radius: 0.1875rem;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+footer .footer__cta .btn-contact:hover {
+  background-color: #00529E;
+  border: 1px solid #00529E;
+  color: #ffffff;
+  text-decoration: none;
+}
+footer .footer__contact-info {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: clamp(11px, 11px + 0vw, 11px);
+  line-height: clamp(14px, 14px + 0vw, 14px);
+  color: #ffffff;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+footer .footer__contact-info p {
+  margin: 0;
+  font-size: clamp(11px, 11px + 0vw, 11px);
+  line-height: clamp(14px, 14px + 0vw, 14px);
+  color: #ffffff;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+footer .footer__contact-info p a {
+  color: #ffffff;
+  text-decoration: none;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+footer .footer__contact-info p a:hover {
+  color: #FFB500;
+}
+footer .footer__contact-info p:first-of-type {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: min-content;
+  margin-bottom: 0.5rem;
+  font-size: clamp(10px, 10px + 0vw, 10px);
+  line-height: clamp(10px, 10px + 0vw, 10px);
+  color: #A7D8F4;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+footer .footer__contact-info p:first-of-type a {
+  flex-shrink: 0;
+}
+footer .footer__contact-info p:first-of-type img {
+  display: block;
+  height: 20px;
+  width: auto;
+}
+footer .footer__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+footer .footer__left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+footer .footer__left--copy {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: clamp(10px, 10px + 0vw, 10px);
+  line-height: clamp(15px, 15px + 0vw, 15px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+footer .footer__left--copy:after {
+  content: "|";
+  padding: 0 3px;
+}
+footer .footer__sn {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 1rem 0;
+}
+@media (max-width: 991px) {
+  footer .footer__row {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
+* Navigation
+*/
+.nav-wrap {
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+}
+.nav-wrap__menu {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(16px, -28.5434782609px + 3.2608695652vw, 22px);
+}
+.nav-wrap__menu > li {
+  position: relative;
+  padding: 0 5px;
+  border-bottom: 1px solid transparent;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.nav-wrap__menu > li > a {
+  display: block;
+  font-size: clamp(14px, 2.2721893491px + 1.1834319527vw, 16px);
+  line-height: clamp(22px, 10.2721893491px + 1.1834319527vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  text-decoration: none;
+}
+.nav-wrap__menu > li.current_page_item, .nav-wrap__menu > li.current-menu-item, .nav-wrap__menu > li.is-active, .nav-wrap__menu > li:hover {
+  text-decoration: underline;
+}
+
+footer .nav-wrap__menu {
+  gap: 1rem;
+}
+footer .nav-wrap__menu > li {
+  padding: 0 3px;
+}
+footer .nav-wrap__menu > li > a {
+  font-size: clamp(10px, 10px + 0vw, 10px);
+  line-height: clamp(15px, 15px + 0vw, 15px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+footer .nav-wrap__menu > li.ftr-active {
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  header .nav-wrap {
+    display: none;
+  }
+  header .header__hamburger {
+    display: block;
+  }
+}
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
+* RSP
+*/
+.rsp {
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  display: block;
+  background-color: #ffffff;
+  /*
+   * visibility keeps the closed panel out of the tab order. Without it the
+   * menu sits off screen but its links are still reachable with the keyboard.
+   * The delay lets the slide-out finish before it is hidden.
+   */
+  visibility: hidden;
+  transform: translateX(100%);
+  transition: transform 0.2s ease-out, visibility 0s linear 0.2s;
+}
+.rsp.is-open {
+  visibility: visible;
+  transform: translateX(0);
+  transition: transform 0.2s ease-out, visibility 0s;
+}
+.rsp {
+  /*
+   * Set once GSAP is available. It drives the transform frame by frame, so
+   * the CSS transition would try to smooth values that are already animated.
+   * The slide above stays as the fallback when the bundle does not load.
+   */
+}
+.rsp.rsp--animated {
+  transition: none;
+}
+.rsp__elements {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: 2rem 1.5rem;
+  box-sizing: border-box;
+  background-color: #00529E;
+}
+.rsp__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.rsp__logo a img {
+  display: block;
+  height: auto;
+  width: clamp(110px, -300.4733727811px + 41.4201183432vw, 180px);
+}
+.rsp__close {
+  cursor: pointer;
+  /* Reset the default button chrome - this is an icon control */
+  padding: 0;
+  border: none;
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+  line-height: 0;
+}
+.rsp__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+}
+.rsp__content .nav-wrap {
+  padding-top: 0;
+  margin-left: 0;
+  padding-left: 1rem;
+}
+.rsp__content .nav-wrap__menu {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1.5rem;
+}
+.rsp__content .nav-wrap__menu > li > a {
+  font-size: clamp(14px, 2.2721893491px + 1.1834319527vw, 16px);
+  line-height: clamp(22px, 10.2721893491px + 1.1834319527vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  text-transform: none;
+  color: #ffffff;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+.rsp__content .nav-wrap__menu > li.ftr-active {
+  display: block;
+}
+.rsp__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+@media (min-width: 1160px) {
+  .rsp {
+    display: none;
+  }
+}
+
+/*
+* Page behind the open menu
+*
+* Scrolling is frozen while the panel covers the viewport. Hiding the
+* scrollbar frees up its width, so the same amount is added back as padding
+* to keep the fixed header from jumping sideways.
+*/
+body.has-menu-open {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width, 0px);
+}
+body.has-menu-open header {
+  padding-right: var(--scrollbar-width, 0px);
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
+* SN links
+*/
+.sn-items {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.sn-items a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+}
+.sn-items a svg {
+  width: 70%;
+  height: 70%;
+}
+
+footer .sn-items {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+footer .sn-items a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+}
+footer .sn-items a svg {
+  display: block;
+  width: 15px;
+  height: 15px;
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
+* Scroll animations - initial state
+*
+* GSAP hides these elements the moment it initialises, but the script is
+* deferred, so without this the browser paints them first and they blink out.
+* The rule only applies while JS is confirmed alive (`.js` on <html>) and only
+* until GSAP marks the element as initialised, after which it owns the state.
+*/
+.js .fade-up:not(.fade-up-initialized),
+.js .fade-left:not(.fade-left-initialized),
+.js .fade-right:not(.fade-right-initialized) {
+  visibility: hidden;
+}
+.js .path__steps:not(.path-initialized) .path__step {
+  opacity: 0.2;
+}
+
+/* Motion turned off at OS level - never hide anything. */
+@media (prefers-reduced-motion: reduce) {
+  .js .fade-up:not(.fade-up-initialized),
+  .js .fade-left:not(.fade-left-initialized),
+  .js .fade-right:not(.fade-right-initialized) {
+    visibility: visible;
+  }
+  .js .path__steps:not(.path-initialized) .path__step {
+    opacity: 1;
+  }
+}
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
+* Block - Page Hero (layout_page_hero)
+*/
+.layout-page-hero {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.layout-page-hero .page-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.layout-page-hero .page-hero__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+.layout-page-hero .page-hero__wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 41.875rem;
+  width: 100%;
+}
+.layout-page-hero .page-hero__wrap .section-label {
+  display: block;
+  font-size: clamp(13px, 13px + 0vw, 13px);
+  line-height: clamp(20px, 20px + 0vw, 20px);
+  color: #FFB500;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+.layout-page-hero .page-hero__wrap h1 {
+  display: block;
+  font-size: clamp(52px, -65.2781065089px + 11.8343195266vw, 72px);
+  line-height: clamp(56px, -61.2781065089px + 11.8343195266vw, 76px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-page-hero .page-hero__wrap h1 strong {
+  font-weight: 700;
+}
+.layout-page-hero .page-hero__wrap--text {
+  margin-top: clamp(16px, -7.4556213018px + 2.3668639053vw, 20px);
+}
+.layout-page-hero .page-hero__wrap--text p {
+  font-size: clamp(20px, -15.1834319527px + 3.550295858vw, 26px);
+  line-height: clamp(30px, -5.1834319527px + 3.550295858vw, 36px);
+  color: #ffffff;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-page-hero .page-hero__wrap--btns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: clamp(40px, -53.8224852071px + 9.4674556213vw, 56px);
+}
+.layout-page-hero .page-hero__wrap--btns a {
+  text-decoration: none;
+}
+.layout-page-hero .page-hero__wrap--btns a.b-dark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: clamp(32px, -61.8224852071px + 9.4674556213vw, 48px);
+  font-size: clamp(14px, -0.847826087px + 1.0869565217vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #ffffff;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  padding-left: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
+  padding-right: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
+  border: none;
+  border-collapse: collapse;
+  background-color: #00529E;
+  border: 1px solid #00529E;
+  -webkit-border-radius: 0.1875rem;
+  -moz-border-radius: 0.1875rem;
+  border-radius: 0.1875rem;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.layout-page-hero .page-hero__wrap--btns a.b-dark:hover {
+  background-color: #ffffff;
+  border: 1px solid #00529E;
+  color: #00529E;
+  text-decoration: none;
+}
+.layout-page-hero .page-hero__wrap--btns a.b-light {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: clamp(32px, -61.8224852071px + 9.4674556213vw, 48px);
+  font-size: clamp(14px, -0.847826087px + 1.0869565217vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  padding-left: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
+  padding-right: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
+  border: none;
+  border-collapse: collapse;
+  border: 1px solid #ffffff;
+  background-color: #ffffff;
+  -webkit-border-radius: 0.1875rem;
+  -moz-border-radius: 0.1875rem;
+  border-radius: 0.1875rem;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.layout-page-hero .page-hero__wrap--btns a.b-light:hover {
+  background-color: #00529E;
+  border: 1px solid #00529E;
+  color: #ffffff;
+  text-decoration: none;
+}
+.layout-page-hero .page-hero__image {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+.layout-page-hero .page-hero__image--overlay {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.layout-page-hero .page-hero__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  position: relative;
+  z-index: 1;
+}
+@media (max-width: 991px) {
+  .layout-page-hero .page-hero {
+    flex-direction: column;
+  }
+  .layout-page-hero .page-hero__content {
+    order: 2;
+    max-width: 100%;
+    padding-top: clamp(24px, 19.4358161648px + 1.2678288431vw, 32px);
+  }
+  .layout-page-hero .page-hero__wrap {
+    max-width: 100%;
+  }
+  .layout-page-hero .page-hero__wrap h1 {
+    hyphens: auto;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+  .layout-page-hero .page-hero__image {
+    order: 1;
+    position: relative;
+    width: 100%;
+    height: clamp(280px, 200.1267828843px + 22.1870047544vw, 420px);
+  }
+}
+.layout-page-hero {
+  /* Layout height style */
+}
+.layout-page-hero.h-full .page-hero {
+  min-height: 100vh;
+}
+@media (max-width: 991px) {
+  .layout-page-hero.h-full .page-hero {
+    min-height: auto;
+    padding-bottom: clamp(40px, 21.7432646593px + 5.0713153724vw, 72px);
+  }
+}
+.layout-page-hero.h-page .page-hero {
+  min-height: 70vh;
+}
+@media (max-width: 991px) {
+  .layout-page-hero.h-page .page-hero {
+    min-height: auto;
+    padding-bottom: clamp(32px, 18.3074484945px + 3.8034865293vw, 56px);
+  }
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
+* Single, Page
+*/
+.spacer {
+  display: block;
+  width: 100%;
+  height: 90px;
+}
+@media (max-width: 1164px) {
+  .spacer {
+    height: 60px;
+  }
+}
+
+.page-header-wrap {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.page-header-wrap .page-header {
+  display: block;
+  --container-bleed: clamp(
+    28px,
+    calc(28px + 36 * ((100vw - 991px) / 169)),
+    64px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+  margin: clamp(16px, -66.0946745562px + 8.2840236686vw, 30px) clamp(0px, 0px + 0vw, 0px) clamp(16px, -66.0946745562px + 8.2840236686vw, 30px) clamp(0px, 0px + 0vw, 0px);
+}
+.page-header-wrap .page-header__back {
+  display: block;
+  margin-bottom: clamp(24px, -116.7337278107px + 14.201183432vw, 48px);
+}
+.page-header-wrap .page-header__back a {
+  font-size: clamp(14px, 2.2721893491px + 1.1834319527vw, 16px);
+  line-height: clamp(20px, -3.4556213018px + 2.3668639053vw, 24px);
+  color: #FFB500;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  text-transform: uppercase;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.page-header-wrap .page-header__back a span {
+  margin-left: 0.625rem;
+}
+.page-header-wrap .page-header__back a:hover {
+  color: #00529E;
+}
+.page-header-wrap .page-header h1 {
+  display: block;
+  font-size: clamp(52px, -65.2781065089px + 11.8343195266vw, 72px);
+  line-height: clamp(56px, -61.2781065089px + 11.8343195266vw, 76px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.page-header-wrap .page-header h1 strong {
+  font-weight: 700;
+}
+
+.page-image {
+  display: block;
+  --container-bleed: clamp(
+    28px,
+    calc(28px + 36 * ((100vw - 991px) / 169)),
+    64px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+  margin-top: 1.75rem;
+  margin-bottom: 1.75rem;
+}
+.page-image__featured {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  -webkit-border-radius: 16px;
+  -moz-border-radius: 16px;
+  border-radius: 16px;
+}
+.page-image__featured img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.page-wrap {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.page-wrap .page-content {
+  display: block;
+  --container-bleed: clamp(
+    32px,
+    calc(32px + 16 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+  padding-top: clamp(15px, 15px + 0vw, 15px);
+  padding-bottom: clamp(35px, -170.2366863905px + 20.7100591716vw, 70px);
+}
+.page-wrap .page-content .content {
+  font-size: clamp(17px, 17px + 0vw, 17px);
+  line-height: clamp(24px, 24px + 0vw, 24px);
+  color: #00529E;
+  font-weight: 300;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.page-wrap .page-content .content h2 {
+  display: block;
+  font-size: clamp(32px, -55.9585798817px + 8.875739645vw, 47px);
+  line-height: clamp(34px, -53.9585798817px + 8.875739645vw, 49px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.page-wrap .page-content .content h2 strong {
+  font-weight: 700;
+}
+.page-wrap .page-content .content h2 {
+  margin: clamp(20px, -38.6390532544px + 5.9171597633vw, 30px) clamp(0px, 0px + 0vw, 0px) clamp(15px, -14.3195266272px + 2.9585798817vw, 20px) clamp(0px, 0px + 0vw, 0px);
+}
+.page-wrap .page-content .content h3 {
+  display: block;
+  font-size: clamp(16px, -7.4556213018px + 2.3668639053vw, 20px);
+  line-height: clamp(21px, -2.4556213018px + 2.3668639053vw, 25px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  margin: clamp(20px, -38.6390532544px + 5.9171597633vw, 30px) clamp(0px, 0px + 0vw, 0px) clamp(15px, -14.3195266272px + 2.9585798817vw, 20px) clamp(0px, 0px + 0vw, 0px);
+}
+.page-wrap .page-content .content h4 {
+  font-weight: 700;
+  margin: clamp(20px, -38.6390532544px + 5.9171597633vw, 30px) clamp(0px, 0px + 0vw, 0px) clamp(15px, -14.3195266272px + 2.9585798817vw, 20px) clamp(0px, 0px + 0vw, 0px);
+}
+.page-wrap .page-content .content figure {
+  display: block;
+  width: 100%;
+  margin: 0;
+  margin-top: 1.75rem;
+  margin-bottom: 1.75rem;
+  border-radius: clamp(16px, 16px + 0vw, 16px) clamp(16px, 16px + 0vw, 16px) clamp(16px, 16px + 0vw, 16px) clamp(16px, 16px + 0vw, 16px);
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.page-wrap .page-content .content figure img {
+  width: 100%;
+  height: auto;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+}
+.page-wrap .page-content .content blockquote {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: rgba(167, 216, 244, 0.8);
+  color: #00529E;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  -webkit-box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+  -moz-box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+  box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+}
+
 body {
   position: relative;
   margin: 0;

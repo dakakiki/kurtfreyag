@@ -641,7 +641,7 @@
         {
             "key": "field_68c825c3a5319",
             "label": "Options",
-            "name": "general_options",
+            "name": "general_content",
             "aria-label": "",
             "type": "group",
             "instructions": "",
@@ -652,7 +652,6 @@
                 "class": "",
                 "id": ""
             },
-            "wpml_cf_preferences": 3,
             "layout": "block",
             "sub_fields": [
                 {
@@ -723,5 +722,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785756288
+    "modified": 1785757233
 }
