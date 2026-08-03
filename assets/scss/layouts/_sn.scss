@@ -1,0 +1,67 @@
+@use '../abstracts' as *;
+
+/*
+* SN links
+*/
+
+.sn-items {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    a {
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        width: 40px;
+        height: 40px;
+
+        @include brd-radius-all (
+            $brd-radius: 100px
+        );
+
+        svg {
+            width: 70%;
+            height: 70%;
+        }
+    }
+}
+
+footer {
+
+    .sn-items {
+
+        display: flex;
+
+        align-items: center;
+        justify-content: flex-start;
+
+        a {
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            width: 25px;
+            height: 25px;
+
+            @include brd-radius-all (
+                $brd-radius: 30px
+            );
+
+            svg {
+
+                display: block;
+
+                width: 15px;
+                height: 15px;
+            }
+        }
+    }
+}

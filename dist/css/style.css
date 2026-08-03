@@ -1,0 +1,125 @@
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/* use of palette */
+/* use of color */
+/* color alpha - background: color-alpha(primary, 0.85); */
+/* hover shade - background: color-darken(primary, 10%); */
+/*
+* Fonts
+*/
+/*
+* Font - Lato
+*/
+@font-face {
+  font-family: "Lato";
+  src: url("../../assets/fonts/Lato/Lato-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lato";
+  src: url("../../assets/fonts/Lato/Lato-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+/* Page */
+/*
+* Breakpoints
+*/
+/*
+* Functions
+*/
+/* fluid values from max to min vw */
+/* convert px to rem */
+/* EM helper for the component scalling */
+/*
+    Transition 1s
+*/
+/*
+    Background property
+*/
+/*
+    Border radius All
+*/
+/*
+    Border radius TOP
+*/
+/*
+    Border radius BOTTOM
+*/
+/*
+    Border radius RIGHT
+*/
+/*
+    Border radius LEFT
+*/
+/*
+    Block shaddow
+*/
+/*
+    Animations
+*/
+/* fluid container:
+   - side bleed grows from $min-space to $max-space
+   - between $min-vw and $max-vw
+   - content width still respects $max-page-width
+*/
+/* add spacing left and right to the element if vw less than max-width */
+/* add spacing to the left side an align with other elements on the page */
+/* Generic helper for any property */
+/* Fluid property multiple values */
+/* fluid with calculations */
+/* Example: @include fluid-calc-prop('height', "100vh - 90px", 60, 80, $min-resize, $max-resize, $unit: px); */
+body {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Lato", sans-serif;
+  color: #00529E;
+  background-color: #ffffff;
+  overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+p {
+  margin: 0 0 24px;
+}
+p:last-child {
+  margin: 0;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #FFB500;
+  text-decoration: underline;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+strong {
+  font-weight: 700;
+}
+
+/*# sourceMappingURL=style.css.map */

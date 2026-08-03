@@ -1,0 +1,47 @@
+/*
+* Functions
+*/
+
+@use "sass:math";
+@use "sass:list";
+
+/* fluid values from max to min vw */
+@function fluid($from, $to, $min-vw, $max-vw, $unit: px, $base: 16) {
+  @if $min-vw == $max-vw {
+    @error "$min-vw and $max-vw must be different.";
+  }
+
+  @if $unit == rem {
+    $from: math.div($from, $base);
+    $to: math.div($to, $base);
+  }
+
+  $slope: math.div(($to - $from), ($max-vw - $min-vw));
+  $intercept: $from - $slope * $min-vw;
+  $min-value: math.min($from, $to);
+  $max-value: math.max($from, $to);
+
+  @if $unit == rem {
+    @return clamp(
+      #{$min-value}rem,
+      calc(#{$intercept}rem + #{$slope * 100}vw),
+      #{$max-value}rem
+    );
+  }
+
+  @return clamp(
+    #{$min-value}px,
+    calc(#{$intercept}px + #{$slope * 100}vw),
+    #{$max-value}px
+  );
+}
+
+/* convert px to rem */
+@function rem($px, $base: 16) {
+  @return math.div($px, $base) * 1rem;
+}
+
+/* EM helper for the component scalling */
+@function em($px, $base: 16) {
+  @return #{($px / $base)}em;
+}

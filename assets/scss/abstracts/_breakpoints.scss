@@ -1,0 +1,50 @@
+/*
+* Breakpoints
+*/
+
+@use "sass:map";
+
+// Define your breakpoints
+$breakpoints: (
+    "xxxs": 360px,
+    "xxs": 390px,
+    "xs": 568px,
+    "sm": 640px,
+    "md": 768px,
+    "lg": 991px,
+    "xl": 1024px,
+    "xxl": 1160px,
+    "xxxl": 1440px,
+    "xxxxl": 1600px
+) !default;
+
+@mixin respond-min($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (min-width: map.get($breakpoints, $breakpoint)) { @content; }
+  } @else {
+    @warn "No breakpoint found for `#{$breakpoint}`. Check your $breakpoints map.";
+  }
+}
+
+@mixin respond-max($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (max-width: map.get($breakpoints, $breakpoint)) { @content; }
+  } @else {
+    @warn "No breakpoint found for `#{$breakpoint}`. Check your $breakpoints map.";
+  }
+}
+
+@mixin respond-between($min, $max) {
+  @if map.has-key($breakpoints, $min) and map.has-key($breakpoints, $max) {
+    $min-val: map.get($breakpoints, $min);
+    $max-val: map.get($breakpoints, $max);
+
+    @if $min-val < $max-val {
+      @media (min-width: $min-val) and (max-width: $max-val) { @content; }
+    } @else {
+      @warn "`#{$min}` (#{$min-val}) should be less than `#{$max}` (#{$max-val}).";
+    }
+  } @else {
+    @warn "Check your $breakpoints map, one of `#{$min}` or `#{$max}` does not exist.";
+  }
+}

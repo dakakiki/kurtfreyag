@@ -1,0 +1,209 @@
+@use '../abstracts' as *;
+
+/*
+* Single, Page
+*/
+
+.spacer {
+
+    display: block;
+    width: 100%;
+    height: $spacer;
+
+    @media (max-width: 1164px) {
+
+        height: $spacer-rsp;
+    }
+}
+
+.page-header-wrap {
+
+    display: flex;
+    width: 100%;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .page-header {
+
+        display: block;
+        
+        @include container-fluid($max-page-width, 28, 64, $min-resize, $max-resize);
+
+
+        @include fluid-prop-multi('margin', 16 0 16 0, 30 0 30 0, $min-resize, $max-resize, $unit: px, $base: 16);
+
+        &__back {
+
+            display: block;
+
+            @include fluid-prop('margin-bottom', 24, 48, $min-resize, $max-resize, $unit: px);
+
+            a {
+
+                @include format-text (
+                    $max-size: 16,
+                    $min-size: 14,
+                    $max-height: 24,
+                    $min-height: 20,
+                    $tx-color: theme-color(text-aqua),
+                    $tx-weight: 700,
+                    $max-rsp: $max-resize,
+                    $min-rsp: $min-resize,
+                );
+
+                text-transform: uppercase;
+
+                @include trans;
+
+                span {
+
+                    margin-left: rem(10);
+                }
+
+                &:hover {
+
+                    color: theme-color(text-charcoal);
+                }
+            }
+        }
+
+        h1 {
+
+            @include t-h1;
+        }
+    }
+}
+
+.page-image {
+
+    display: block;
+    @include container-fluid($max-page-width, 28, 64, $min-resize, $max-resize);
+
+    margin-top: rem(28);
+    margin-bottom: rem(28);
+
+    &__featured {
+
+        display: block;
+        width: 100%;
+
+        aspect-ratio: 4 / 3;
+
+        overflow: hidden;
+
+        @include brd-radius-all (
+            $brd-radius: 16px
+        );
+
+        img {
+
+            @include image-cover;
+        }
+    }
+}
+
+
+.page-wrap {
+
+    display: flex;
+    width: 100%;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .page-content {
+
+        display: block;
+        
+        @include container-fluid($max-page-width, 32, 48, $min-resize, $max-resize);
+
+        @include fluid-prop('padding-top', 15, 15, $min-resize, $max-resize);
+        @include fluid-prop('padding-bottom', 35, 70, $min-resize, $max-resize);
+
+
+        .content {
+
+            @include format-text (
+                $max-size: 17,
+                $min-size: 17,
+                $max-height: 24,
+                $min-height: 24,
+                $tx-color: theme-color(text-charcoal),
+                $tx-weight: 300,
+                $max-rsp: $max-resize,
+                $min-rsp: $min-resize,
+            );
+
+
+            h2 {
+
+                @include t-h2;
+                @include fluid-prop-multi('margin', 20 0 15 0, 30 0 20 0, $min-resize, $max-resize);
+            }
+
+            h3 {
+
+                @include t-h3;
+                @include fluid-prop-multi('margin', 20 0 15 0, 30 0 20 0, $min-resize, $max-resize);
+            }
+
+            h4 {
+
+                font-weight: 700;
+                @include fluid-prop-multi('margin', 20 0 15 0, 30 0 20 0, $min-resize, $max-resize);
+            }
+
+            figure {
+
+                display: block;
+                width: 100%;
+
+                margin: 0;
+                margin-top: rem(28);
+                margin-bottom: rem(28);
+
+                @include fluid-prop-multi('border-radius', 16 16 16 16, 16 16 16 16, $min-resize, $max-resize);
+
+                @include brd-radius-all (
+                    $brd-radius: 20px
+                );
+
+                overflow: hidden;
+
+                img {
+
+                    width: 100%;
+                    height: auto;
+
+                    @include brd-radius-all (
+                        $brd-radius: 20px
+                    );
+                }
+            }
+
+            blockquote {
+
+                display: block;
+
+                width: 100%;
+                margin: 0;
+                padding: rem(16);
+
+                box-sizing: border-box;
+
+                background-color: color-alpha(bg-aqua, 0.8);
+
+                color: theme-color(text-charcoal);
+
+                @include brd-radius-all (
+                    $brd-radius: 20px
+                );
+
+                @include block-shaddow;
+            }
+        }
+    }
+}

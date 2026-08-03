@@ -1,0 +1,40 @@
+{
+    "name": "kurtfreyag",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "npm-run-all build watch",
+        "build": "npm-run-all build:css build:js build:images",
+        "build:css": "npm-run-all build:css:dev copy:css build:css:min",
+        "build:css:dev": "sass assets/scss/style.scss dist/css/style.css --source-map",
+        "build:css:min": "postcss dist/css/style.css -o dist/css/style.min.css",
+        "build:js": "node scripts/build-js.mjs",
+        "build:images": "node scripts/build-images.mjs",
+        "copy:css": "node scripts/copy-css-assets.mjs",
+        "watch": "npm-run-all build watch:all",
+        "watch:all": "npm-run-all -p watch:css watch:css:min watch:js watch:images",
+        "watch:css": "sass assets/scss/style.scss dist/css/style.css --watch --source-map",
+        "watch:css:min": "node scripts/watch-css-min.mjs",
+        "watch:js": "node scripts/watch-js.mjs",
+        "watch:images": "node scripts/watch-images.mjs",
+        "prod": "cross-env NODE_ENV=production npm-run-all prod:css prod:js prod:images",
+        "prod:css": "sass assets/scss/style.scss dist/css/style.css --no-source-map && npm run copy:css && postcss dist/css/style.css -o dist/css/style.min.css",
+        "prod:js": "node scripts/build-js.mjs",
+        "prod:images": "node scripts/build-images.mjs"
+    },
+    "devDependencies": {
+        "autoprefixer": "^10.4.23",
+        "chokidar": "^5.0.0",
+        "cross-env": "^10.1.0",
+        "cssnano": "^7.1.2",
+        "esbuild": "^0.27.4",
+        "npm-run-all": "^4.1.5",
+        "postcss": "^8.5.6",
+        "postcss-cli": "^11.0.1",
+        "sass": "^1.97.1",
+        "terser": "^5.44.1"
+    },
+    "dependencies": {
+        "gsap": "^3.14.2"
+    }
+}

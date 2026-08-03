@@ -1,0 +1,50 @@
+@use '../abstracts' as *;
+
+/*
+* Scroll animations - initial state
+*
+* GSAP hides these elements the moment it initialises, but the script is
+* deferred, so without this the browser paints them first and they blink out.
+* The rule only applies while JS is confirmed alive (`.js` on <html>) and only
+* until GSAP marks the element as initialised, after which it owns the state.
+*/
+
+.js {
+
+    .fade-up:not(.fade-up-initialized),
+    .fade-left:not(.fade-left-initialized),
+    .fade-right:not(.fade-right-initialized) {
+
+        visibility: hidden;
+    }
+
+    .path__steps:not(.path-initialized) {
+
+        .path__step {
+
+            opacity: 0.2;
+        }
+    }
+}
+
+/* Motion turned off at OS level - never hide anything. */
+@media (prefers-reduced-motion: reduce) {
+
+    .js {
+
+        .fade-up:not(.fade-up-initialized),
+        .fade-left:not(.fade-left-initialized),
+        .fade-right:not(.fade-right-initialized) {
+
+            visibility: visible;
+        }
+
+        .path__steps:not(.path-initialized) {
+
+            .path__step {
+
+                opacity: 1;
+            }
+        }
+    }
+}

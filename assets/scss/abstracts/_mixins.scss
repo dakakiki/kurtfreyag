@@ -1,0 +1,542 @@
+@use "sass:list";
+@use "sass:math";
+
+@use '../abstracts/colors' as *;
+@use '../abstracts/fonts' as *;
+@use '../abstracts/variables' as *;
+@use '../abstracts/breakpoints' as *;
+@use '../abstracts/functions' as *;
+
+/*
+    Transition 1s
+*/
+@mixin trans (
+    $trans-duration: 0.2s,
+    $trans-effect: ease-in-out
+) {
+    -moz-transition: all $trans-duration $trans-effect;
+    -o-transition: all $trans-duration $trans-effect;
+    -webkit-transition: all $trans-duration $trans-effect;
+    transition: all $trans-duration $trans-effect;
+}
+
+/*
+    Background property
+*/
+@mixin bck-prop (
+    $bck-img: null,
+    $bck-color: null,
+    $bck-position: null,
+    $bck-repeat: null,
+    $bck-size: null
+) {
+
+    background-image: $bck-img;
+    background-color: $bck-color;
+    background-position: $bck-position;
+    background-repeat: $bck-repeat;
+    background-size: $bck-size;
+
+}
+
+/*
+    Border radius All
+*/
+@mixin brd-radius-all (
+    $brd-radius: 0
+) {
+
+    -webkit-border-radius: $brd-radius;
+    -moz-border-radius: $brd-radius;
+    border-radius: $brd-radius;
+
+}
+
+/*
+    Border radius TOP
+*/
+@mixin brd-radius-top (
+    $brd-radius: null
+) {
+
+    -webkit-border-top-left-radius: $brd-radius;
+    -webkit-border-top-right-radius: $brd-radius;
+    -moz-border-radius-topleft: $brd-radius;
+    -moz-border-radius-topright: $brd-radius;
+    border-top-left-radius: $brd-radius;
+    border-top-right-radius: $brd-radius;
+}
+
+/*
+    Border radius BOTTOM
+*/
+@mixin brd-radius-bottom (
+    $brd-radius: null
+) {
+
+    -webkit-border-bottom-right-radius: $brd-radius;
+    -webkit-border-bottom-left-radius: $brd-radius;
+    -moz-border-radius-bottomright: $brd-radius;
+    -moz-border-radius-bottomleft: $brd-radius;
+    border-bottom-right-radius: $brd-radius;
+    border-bottom-left-radius: $brd-radius;
+}
+
+/*
+    Border radius RIGHT
+*/
+@mixin brd-radius-right (
+    $brd-radius: null
+) {
+    -webkit-border-top-right-radius: $brd-radius;
+    -webkit-border-bottom-right-radius: $brd-radius;
+    -moz-border-radius-topright: $brd-radius;
+    -moz-border-radius-bottomright: $brd-radius;
+    border-top-right-radius: $brd-radius;
+    border-bottom-right-radius: $brd-radius;
+}
+
+/*
+    Border radius LEFT
+*/
+@mixin brd-radius-left (
+    $brd-radius: null
+) {
+    -webkit-border-top-left-radius: $brd-radius;
+    -webkit-border-bottom-left-radius: $brd-radius;
+    -moz-border-radius-topleft: $brd-radius;
+    -moz-border-radius-bottomleft: $brd-radius;
+    border-top-left-radius: $brd-radius;
+    border-bottom-left-radius: $brd-radius;
+}
+
+/*
+    Block shaddow
+*/
+@mixin block-shaddow {
+
+    -webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.16);
+    -moz-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.16);
+    box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.16);
+}
+
+
+@mixin word-break {
+
+    white-space: pre-line;
+    word-spacing: 100vw;
+}
+
+/*
+    Animations
+*/
+@mixin animation (
+    $animation: null,
+    $animation-duraton: null,
+    // $animation-delay: null
+) {
+    animation: $animation;
+    animation-duration: $animation-duraton;
+    // animation-delay: $animation-delay;
+}
+
+@mixin slick-same-height {
+
+    .slick-track
+    {
+        display: flex !important;
+    }
+    
+    .slick-slide
+    {
+        height: inherit !important;
+    }
+}
+
+
+@mixin logo-format {
+
+    display: block;
+    
+    height: auto;
+    @include fluid-prop('width', 110, 180, $min-resize, $max-resize, $unit: px);
+}
+
+@mixin pass-through {
+
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); // Safari
+}
+
+
+@mixin format-text (
+    $max-size: 16,
+    $min-size: 14,
+    $max-height: 24,
+    $min-height: 22,
+    $tx-color: theme-color(text-charcoal),
+    $tx-weight: 400,
+    $max-rsp: $max-resize,
+    $min-rsp: $min-resize,
+) {
+
+    font-size: fluid($min-size, $max-size, $min-rsp, $max-rsp);
+    line-height: fluid($min-height, $max-height, $min-rsp, $max-rsp);
+
+    color: $tx-color;
+    font-weight: $tx-weight;
+    text-decoration: none;
+    font-family: $font-Primary;
+}
+
+@mixin placeholder-style {
+
+    &::-webkit-input-placeholder {
+        color: theme-color(text-charcoal);
+    }
+
+    &::-moz-placeholder {
+        color: theme-color(text-charcoal);
+        opacity: 1;
+    }
+
+    &:-ms-input-placeholder {
+        color: theme-color(text-charcoal);
+    }
+
+    &::placeholder {
+        color: theme-color(text-charcoal);
+        opacity: 1;
+    }
+}
+
+@mixin break-word {
+    hyphens: auto;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+@mixin image-cover {
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+    
+    object-fit: cover;
+    object-position: center center;
+}
+
+@mixin image-contain {
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+    
+    object-fit: contain;
+    object-position: center center;
+}
+
+@mixin t-h1 {
+
+    display: block;
+
+    @include format-text (
+        $max-size: 72,
+        $min-size: 52,
+        $max-height: 76,
+        $min-height: 56,
+        $tx-color: theme-color(title-charcoal),
+        $tx-weight: 700,
+        $max-rsp: $max-resize,
+        $min-rsp: $min-resize,
+    );
+
+    font-family: $font-Secondary;
+    
+    strong {
+
+        font-weight: 700;
+    }
+}
+
+
+@mixin t-h2 {
+
+    display: block;
+
+    @include format-text (
+        $max-size: 47,
+        $min-size: 32,
+        $max-height: 49,
+        $min-height: 34,
+        $tx-color: theme-color(title-charcoal),
+        $tx-weight: 700,
+        $max-rsp: $max-resize,
+        $min-rsp: $min-resize,
+    );
+    
+    font-family: $font-Secondary;
+
+    strong {
+
+        font-weight: 700;
+    }
+}
+
+
+@mixin t-h3 {
+
+    display: block;
+
+    @include format-text (
+        $max-size: 20,
+        $min-size: 16,
+        $max-height: 25,
+        $min-height: 21,
+        $tx-color: theme-color(title-charcoal),
+        $tx-weight: 700,
+        $max-rsp: $max-resize,
+        $min-rsp: $min-resize,
+    );
+
+    font-family: $font-Secondary;
+}
+
+
+@mixin t-h4 {
+
+    display: block;
+
+    @include format-text (
+        $max-size: 13,
+        $min-size: 13,
+        $max-height: 20,
+        $min-height: 20,
+        $tx-color: theme-color(title-aqua),
+        $tx-weight: 400,
+        $max-rsp: $max-resize-sec,
+        $min-rsp: $min-resize-sec,
+    );
+
+    font-family: $font-Tertiary;
+}
+
+
+@mixin btn-primary {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: fit-content;
+    @include fluid-prop('height', 32, 48, $min-resize, $max-resize, $unit: px);
+
+    @include format-text(
+        $max-size: 16,
+        $min-size: 14,
+        $max-height: 24,
+        $min-height: 22,
+        $tx-color: theme-color(text-white),
+        $tx-weight: 400,
+        $max-rsp: $max-resize-sec,
+        $min-rsp: $min-resize-sec,
+    );
+
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: none;
+
+    @include fluid-prop('padding-left', 16, 32, $min-resize, $max-resize, $unit: px);
+    @include fluid-prop('padding-right', 16, 32, $min-resize, $max-resize, $unit: px);
+
+
+    border: none;
+    border-collapse: collapse;
+
+    background-color: theme-color(bg-slate);
+    border: 1px solid theme-color(brd-slate);
+
+    @include brd-radius-all(
+        $brd-radius: rem(3)
+    );
+
+    @include trans;
+
+    &:hover {
+
+        background-color: theme-color(bg-aqua);
+        border: 1px solid theme-color(brd-aqua);
+
+        color: theme-color(text-white);
+
+        text-decoration: none;
+    }
+}
+
+
+@mixin btn-secondary {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: fit-content;
+    @include fluid-prop('height', 32, 48, $min-resize, $max-resize, $unit: px);
+
+    @include format-text(
+        $max-size: 16,
+        $min-size: 14,
+        $max-height: 24,
+        $min-height: 22,
+        $tx-color: theme-color(text-blue),
+        $tx-weight: 400,
+        $max-rsp: $max-resize-sec,
+        $min-rsp: $min-resize-sec,
+    );
+
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: none;
+
+    @include fluid-prop('padding-left', 16, 32, $min-resize, $max-resize, $unit: px);
+    @include fluid-prop('padding-right', 16, 32, $min-resize, $max-resize, $unit: px);
+
+
+    border: none;
+    border-collapse: collapse;
+
+    border: 1px solid theme-color(brd-aqua);
+    background-color: theme-color(bg-aqua);
+
+    @include brd-radius-all(
+        $brd-radius: rem(3)
+    );
+
+    @include trans;
+
+    &:hover {
+
+        background-color: theme-color(bg-cloud);
+        border: 1px solid theme-color(brd-cloud);
+
+        color: theme-color(text-charcoal);
+
+        text-decoration: none;
+    }
+}
+
+
+
+
+/* fluid container:
+   - side bleed grows from $min-space to $max-space
+   - between $min-vw and $max-vw
+   - content width still respects $max-page-width
+*/
+@function to-px($value) {
+  @if math.is-unitless($value) {
+    @return $value * 1px;
+  } @else {
+    @return $value;
+  }
+}
+
+@function strip-px($value) {
+  @if math.is-unitless($value) {
+    @return $value;
+  } @else {
+    @return math.div($value, 1px);
+  }
+}
+
+@mixin container-fluid(
+  $max-page-width,
+  $min-space,
+  $max-space,
+  $min-vw,
+  $max-vw
+) {
+  $min-space: to-px($min-space);
+  $max-space: to-px($max-space);
+  $min-vw: to-px($min-vw);
+  $max-vw: to-px($max-vw);
+
+  $space-diff: strip-px($max-space - $min-space); // unitless
+  $vw-diff: strip-px($max-vw - $min-vw); // unitless
+
+  --container-bleed: clamp(
+    #{$min-space},
+    calc(#{$min-space} + #{$space-diff} * ((100vw - #{$min-vw}) / #{$vw-diff})),
+    #{$max-space}
+  );
+
+  width: 100%;
+  max-width: calc(#{$max-page-width} + (var(--container-bleed) * 2));
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+
+
+
+/* add spacing left and right to the element if vw less than max-width */
+@mixin container($max-width, $side-space) {
+    width: 100%;
+    max-width: calc(#{$max-width} + (#{$side-space} * 2));
+    margin-inline: auto;
+    padding-inline: $side-space;
+    box-sizing: border-box;
+}
+
+/* add spacing to the left side an align with other elements on the page */
+@mixin container-left-bleed($max-width, $side-space) {
+    box-sizing: border-box;
+
+    /* same left start as a regular centered container */
+    margin-left: max(#{$side-space}, calc((100vw - #{$max-width}) / 2));
+
+    /* fill remaining space to the right edge of viewport */
+    width: calc(100vw - max(#{$side-space}, calc((100vw - #{$max-width}) / 2)));
+}
+
+
+
+/* Generic helper for any property */
+@mixin fluid-prop($property, $from, $to, $min-vw, $max-vw, $unit: px) {
+  #{$property}: fluid($from, $to, $min-vw, $max-vw, $unit);
+}
+
+/* Fluid property multiple values */
+@mixin fluid-prop-multi($property, $from-values, $to-values, $min-vw, $max-vw, $unit: px, $base: 16) {
+  @if list.length($from-values) != list.length($to-values) {
+    @error "$from-values and $to-values must have the same length.";
+  }
+
+  $out: ();
+
+  @for $i from 1 through list.length($from-values) {
+    $from: list.nth($from-values, $i);
+    $to: list.nth($to-values, $i);
+
+    $out: list.append(
+      $out,
+      fluid($from, $to, $min-vw, $max-vw, $unit, $base),
+      $separator: space
+    );
+  }
+
+  #{$property}: $out;
+}
+
+/* fluid with calculations */
+@function fluid-offset($from, $to, $min-vw, $max-vw, $unit: px) {
+  @return fluid($from, $to, $min-vw, $max-vw, $unit);
+}
+
+/* Example: @include fluid-calc-prop('height', "100vh - #{$header-height}", 60, 80, $min-resize, $max-resize, $unit: px); */
+@mixin fluid-calc-prop($property, $base, $from, $to, $min-vw, $max-vw, $unit: px) {
+  #{$property}: calc(#{$base} - #{fluid($from, $to, $min-vw, $max-vw, $unit)});
+}

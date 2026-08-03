@@ -1,0 +1,210 @@
+@use '../abstracts' as *;
+
+/*
+* Block - Page Hero (layout_page_hero)
+*/
+
+.layout-page-hero {
+
+    position: relative;
+
+    overflow: hidden;
+
+    width: 100%;
+
+    .page-hero {
+
+        position: relative;
+
+        display: flex;
+
+        align-items: center;
+
+        &__content {
+
+            position: relative;
+            z-index: 2;
+
+            display: flex;
+
+            align-items: flex-start;
+            justify-content: flex-start;
+
+            width: 100%;
+
+            @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+        }
+
+        &__wrap {
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: flex-start;
+            justify-content: flex-start;
+
+            max-width: rem(670);
+            width: 100%;
+
+            .section-label {
+
+                @include t-h4;
+
+                margin-top: 0;
+
+                margin-bottom: rem(16);
+
+                text-transform: uppercase;
+            }
+
+            h1 {
+
+                @include t-h1;
+            }
+
+            &--text {
+
+                @include fluid-prop('margin-top', 16, 20, $min-resize, $max-resize, $unit: px);
+
+                p {
+
+                    @include format-text(
+                        $max-size: 26,
+                        $min-size: 20,
+                        $max-height: 36,
+                        $min-height: 30,
+                        $tx-color: theme-color(text-charcoal),
+                    );
+                }
+            }
+
+            &--btns {
+
+                display: flex;
+                flex-wrap: wrap;
+
+                align-items: center;
+                gap: rem(16);
+
+                @include fluid-prop('margin-top', 40, 56, $min-resize, $max-resize, $unit: px);
+
+                a {
+
+                    text-decoration: none;
+
+                    &.b-dark {
+
+                        @include btn-primary;
+                    }
+
+                    &.b-light {
+
+                        @include btn-secondary;
+                    }
+                }
+            }
+        }
+
+        &__image {
+
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            right: 0;
+
+            width: 100%;
+            height: 100%;
+
+            &--overlay {
+
+                position: absolute;
+                z-index: 2;
+                top: 0;
+                left: 0;
+
+                width: 100%;
+                height: 100%;
+
+                background: linear-gradient(
+                    90deg,
+                    color-alpha(bg-cloud, 0.92) 0%,
+                    color-alpha(bg-cloud, 0.35) 45%,
+                    color-alpha(bg-cloud, 0) 65%
+                );
+            }
+
+            img {
+
+                @include image-cover;
+
+                position: relative;
+                z-index: 1;
+            }
+        }
+
+        @include respond-max(lg) {
+
+            flex-direction: column;
+
+            &__content {
+
+                order: 2;
+
+                max-width: 100%;
+
+                padding-top: fluid(24, 32, 360, 991);
+            }
+
+            &__wrap {
+
+                max-width: 100%;
+
+                h1 {
+
+                    @include break-word;
+                }
+            }
+
+            &__image {
+
+                order: 1;
+
+                position: relative;
+
+                width: 100%;
+                height: fluid(280, 420, 360, 991);
+            }
+        }
+    }
+
+    /* Layout height style */
+    &.h-full {
+
+        .page-hero {
+
+            min-height: 100vh;
+
+            @include respond-max(lg) {
+
+                min-height: auto;
+
+                padding-bottom: fluid(40, 72, 360, 991);
+            }
+        }
+    }
+
+    &.h-page {
+
+        .page-hero {
+
+            min-height: 70vh;
+
+            @include respond-max(lg) {
+
+                min-height: auto;
+
+                padding-bottom: fluid(32, 56, 360, 991);
+            }
+        }
+    }
+}

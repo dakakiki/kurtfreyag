@@ -1,0 +1,82 @@
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+
+// Abstract files
+@use "abstracts" as *;
+
+// Layout
+// @use "layouts" as *;
+
+// Sections
+// @use "sections" as *;
+
+// Pages
+// @use "pages" as *;
+
+// Vendors
+// @use "vendor" as *;
+
+body {
+    position: relative;
+    
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    font-family: $font-Primary;
+
+    color: theme-color(text-blue);
+
+    background-color: theme-color(surface);
+
+    overflow-x: hidden;
+}
+
+html {
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+
+p {
+    margin: 0 0 24px;
+
+    &:last-child {
+
+        margin: 0;
+    }
+}
+
+h1, h2, h3, h4 {
+
+    margin: 0;
+    padding: 0;
+}
+
+a {
+
+    color: theme-color(text-golden);
+    text-decoration: underline;
+
+    &:hover {
+
+        text-decoration: underline;
+    }
+}
+
+strong {
+
+    font-weight: 700;
+}

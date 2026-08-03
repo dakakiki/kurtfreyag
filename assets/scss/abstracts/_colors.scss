@@ -1,0 +1,85 @@
+@use "sass:color";
+@use "sass:map";
+
+$palette: (
+    clr-white: #ffffff,
+    clr-black: #000000,
+    clr-error: #FF6A57,
+
+    clr-warm-cream: #FBE8C9,
+    clr-ice-blue: #EDF6FC,
+    clr-golden-yellow: #FFB500,
+    clr-soft-sky-blue: #A7D8F4,
+    clr-deep-blue: #00529E,
+);
+
+/* use of palette */
+@function palette($name) {
+  @if not map.has-key($palette, $name) {
+    @error "Palette color '#{$name}' not found.";
+  }
+
+  @return map.get($palette, $name);
+}
+
+$colors: (
+    text-white: palette(clr-white),
+    text-black: palette(clr-black),
+    text-cream: palette(clr-warm-cream),
+    text-ice: palette(clr-ice-blue),
+    text-golden: palette(clr-golden-yellow),
+    text-sky: palette(clr-soft-sky-blue),
+    text-blue: palette(clr-deep-blue),
+
+    title-white: palette(clr-white),
+    title-black: palette(clr-black),
+    title-cream: palette(clr-warm-cream),
+    title-ice: palette(clr-ice-blue),
+    title-golden: palette(clr-golden-yellow),
+    title-sky: palette(clr-soft-sky-blue),
+    title-blue: palette(clr-deep-blue),
+
+    bg-white: palette(clr-white),
+    bg-black: palette(clr-black),
+    bg-cream: palette(clr-warm-cream),
+    bg-ice: palette(clr-ice-blue),
+    bg-golden: palette(clr-golden-yellow),
+    bg-sky: palette(clr-soft-sky-blue),
+    bg-blue: palette(clr-deep-blue),
+
+    surface: palette(clr-white),
+
+    brd-white: palette(clr-white),
+    brd-black: palette(clr-black),
+    brd-cream: palette(clr-warm-cream),
+    brd-ice: palette(clr-ice-blue),
+    brd-golden: palette(clr-golden-yellow),
+    brd-sky: palette(clr-soft-sky-blue),
+    brd-blue: palette(clr-deep-blue),
+
+    primary-nav: palette(clr-deep-blue),
+    primary-nav-hover: palette(clr-deep-blue),
+
+    bg-footer: palette(clr-deep-blue),
+
+    danger: palette(clr-error),
+);
+
+/* use of color */
+@function theme-color($name) {
+  @if not map.has-key($colors, $name) {
+    @error "Semantic color '#{$name}' not found.";
+  }
+
+  @return map.get($colors, $name);
+}
+
+/* color alpha - background: color-alpha(primary, 0.85); */
+@function color-alpha($name, $alpha) {
+  @return rgba(theme-color($name), $alpha);
+}
+
+/* hover shade - background: color-darken(primary, 10%); */
+@function color-darken($name, $amount) {
+  @return color.scale(theme-color($name), $lightness: -$amount);
+}

@@ -1,0 +1,203 @@
+@use '../abstracts' as *;
+
+/*
+* Footer
+*/
+
+footer {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    background-color: theme-color(bg-footer);
+
+    .footer {
+
+        display: flex;
+        flex-direction: column;
+        
+        align-items: center;
+        justify-content: center;
+
+        @include fluid-prop('padding-top', 36, 72, $min-resize, $max-resize, $unit: px);
+        @include fluid-prop('padding-bottom', 24, 48, $min-resize, $max-resize, $unit: px);
+
+        @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+
+        &__cta {
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+
+            width: 100%;
+
+            @include fluid-prop('padding-bottom', 24, 32, $min-resize, $max-resize, $unit: px);
+
+            @include fluid-prop('gap', 24, 32, $min-resize, $max-resize, $unit: px);
+
+            h3 {
+
+                @include t-h3;
+                color: theme-color(title-white);
+                font-family: $font-Secondary;
+            }
+
+            .btn-contact {
+
+                @include btn-secondary;
+            }
+        }
+
+        &__contact-info {
+
+            display: block;
+
+            width: 100%;
+            box-sizing: border-box;
+
+            @include format-text (
+                $max-size: 11,
+                $min-size: 11,
+                $max-height: 14,
+                $min-height: 14,
+                $tx-color: theme-color(text-white),
+                $tx-weight: 400,
+                $max-rsp: $max-resize,
+                $min-rsp: $min-resize,
+            );
+
+            p {
+
+                margin: 0;
+
+                @include format-text (
+                    $max-size: 11,
+                    $min-size: 11,
+                    $max-height: 14,
+                    $min-height: 14,
+                    $tx-color: theme-color(text-white),
+                    $tx-weight: 400,
+                    $max-rsp: $max-resize,
+                    $min-rsp: $min-resize,
+                );
+
+                a {
+
+                    color: theme-color(text-white);
+                    text-decoration: none;
+
+                    @include trans;
+
+                    &:hover {
+
+                        color: theme-color(text-aqua);
+                    }
+                }
+
+                &:first-of-type {
+
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    width: min-content;
+
+                    margin-bottom: rem(8);
+
+                    @include format-text (
+                        $max-size: 10,
+                        $min-size: 10,
+                        $max-height: 10,
+                        $min-height: 10,
+                        $tx-color: theme-color(text-cloud),
+                        $tx-weight: 400,
+                        $max-rsp: $max-resize,
+                        $min-rsp: $min-resize,
+                    );
+
+                    font-family: $font-Tertiary;
+
+                    a {
+                        flex-shrink: 0;
+                    }
+
+                    img {
+                        display: block;
+                        height: 20px;
+                        width: auto;
+                    }
+                }
+            }
+        }
+
+        &__row {
+
+            display: flex;
+
+            align-items: flex-start;
+            justify-content: space-between;
+
+            width: 100%;
+        }
+
+        &__left {
+
+            display: flex;
+
+            align-items: center;
+            justify-content: flex-start;
+
+            &--copy {
+
+                display: flex;
+
+                align-items: center;
+                justify-content: flex-start;
+
+                @include format-text (
+                    $max-size: 10,
+                    $min-size: 10,
+                    $max-height: 15,
+                    $min-height: 15,
+                    $tx-color: theme-color(text-cloud),
+                    $tx-weight: 400,
+                    $max-rsp: $max-resize,
+                    $min-rsp: $min-resize,
+                );
+
+                &:after {
+
+                    content: "|";
+                    padding: 0 3px;
+                }
+            }
+        }
+
+        &__sn {
+
+            display: flex;
+
+            align-items: flex-start;
+            justify-content: flex-start;
+
+            width: 100%;
+
+            padding: rem(16) 0;
+        }
+
+        @include respond-max(lg) {
+
+            &__row {
+
+                flex-direction: column;
+                gap: rem(24);
+            }
+        }
+    }
+}
