@@ -2,13 +2,43 @@
 
 /*
 * Header
+*
+* XD reference (1440 artboard):
+*   bar          1440 x 100, white
+*   logo         170 x 61 at x140 / y23
+*   nav links    Lato Regular 16, #00529E, ~34px apart
+*   CTA          blue pill 82 x 31, Lato Bold 14 white, right edge at x1300
+*
+* container-fluid(1160, 16, 48) puts the inner content at 140 -> 1300 on a
+* 1440 viewport, which is exactly the XD grid.
 */
+
+.skip-link {
+
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 10000;
+
+    padding: rem(12) rem(20);
+
+    background-color: theme-color(bg-blue);
+    color: theme-color(text-white);
+    text-decoration: none;
+
+    &:focus {
+
+        left: rem(16);
+        top: rem(16);
+    }
+}
 
 header {
 
     position: fixed;
     z-index: 9999;
     top: 0;
+    left: 0;
 
     display: flex;
     width: 100%;
@@ -18,7 +48,18 @@ header {
     align-items: center;
     justify-content: center;
 
-    background-color: color-alpha(bg-white, 0.9);
+    background-color: color-alpha(bg-white, 0.92);
+
+    @supports (backdrop-filter: blur(10px)) {
+
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    @include respond-max(xl) {
+
+        height: $header-height-rsp;
+    }
 
     .header {
 
@@ -50,9 +91,24 @@ header {
                 display: block;
                 width: fit-content;
 
+                @include focus-ring;
+
                 img {
 
-                    @include logo-format;
+                    display: block;
+
+                    height: auto;
+
+                    /* XD: 170px wide at 1440 */
+                    @include fluid-prop('width', 120, 170, $min-resize, $max-resize, $unit: px);
+                }
+            }
+
+            @include respond-max(xl) {
+
+                a img {
+
+                    width: rem(110);
                 }
             }
         }
@@ -65,11 +121,6 @@ header {
             justify-content: center;
 
             flex: 0 0 auto;
-        }
-
-        &__lng-items {
-
-            display: block;
         }
 
         &__hamburger {
@@ -86,63 +137,56 @@ header {
             width: rem(30);
             height: rem(30);
 
-            margin-left: auto;
+            flex: 0 0 auto;
 
+            color: theme-color(text-blue);
             cursor: pointer;
+
+            @include focus-ring;
         }
 
-        &__buttons {    
+        &__buttons {
 
             display: flex;
-            
+
             align-items: center;
             justify-content: flex-end;
 
-            @include fluid-prop-multi('padding', 0 16, 0 32, $min-resize, $max-resize, $unit: px, $base: 16);
+            @include fluid-prop-multi('padding', 0 0 0 16, 0 0 0 32, $min-resize, $max-resize, $unit: px, $base: 16);
 
             .btn-apply {
 
-                @include btn-secondary;
+                @include btn-pill-primary;
+                @include focus-ring;
+
+                /* XD: 82 x 31 */
+                min-width: rem(82);
             }
         }
 
         @include respond-max(xl) {
 
-            &__nav,
-            &__lng-items {
+            &__nav {
 
                 display: none;
             }
 
             /*
-            * The header CTA leaves the bar and floats over the page,
-            * bottom right, so it stays reachable while scrolling.
+            * The CTA stays in the bar at its desktop size and keeps its place
+            * to the left of the hamburger. It used to detach into a floating
+            * pill, which grew the button and covered the menu control.
             */
             &__buttons {
 
-                position: fixed;
-                z-index: 1;
-
-                right: rem(16);
-                bottom: rem(16);
-
-                padding: 0;
-
-                .btn-apply {
-
-                    /* Larger than the in-bar version so it stays a comfortable touch target */
-                    height: rem(48);
-
-                    padding-left: rem(24);
-                    padding-right: rem(24);
-
-                    @include brd-radius-all(
-                        $brd-radius: rem(100)
-                    );
-
-                    @include block-shaddow;
-                }
+                padding-left: 0;
+                padding-right: rem(16);
             }
         }
     }
 }
+
+/*
+* Offsetting the fixed bar stays with the page templates: page.php prints
+* .spacer when the page has no hero, and the hero deliberately sits behind the
+* bar. $spacer is therefore kept in sync with $header-height.
+*/

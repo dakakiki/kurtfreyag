@@ -31,6 +31,12 @@ Tags: KurtFreyAG
 }
 /* Page */
 /*
+* Header
+* XD: white bar is 100px tall on the 1440 artboards.
+* The responsive bar keeps the logo readable at 414px.
+*/
+/* Footer (XD desktop / mobile) */
+/*
 * Breakpoints
 */
 /*
@@ -76,7 +82,18 @@ Tags: KurtFreyAG
 /* Generic helper for any property */
 /* Fluid property multiple values */
 /* fluid with calculations */
-/* Example: @include fluid-calc-prop('height', "100vh - 90px", 60, 80, $min-resize, $max-resize, $unit: px); */
+/* Example: @include fluid-calc-prop('height', "100vh - 100px", 60, 80, $min-resize, $max-resize, $unit: px); */
+/*
+* Pill buttons
+*
+* XD component "button_small": fully rounded (r = 100), 82x31 in the header,
+* 132/152x31 for the footer contact pills, 162/182x41 on the 414 artboards.
+*/
+/* Header CTA - blue pill, white bold label */
+/* Footer contact pills - ice background, blue label, sits on the blue block */
+/*
+* Visible focus ring for keyboard users, on any background.
+*/
 /*
 Theme Name: KurtFreyAG
 Author: Homepage
@@ -86,17 +103,53 @@ Tags: KurtFreyAG
 */
 /*
 * Header
+*
+* XD reference (1440 artboard):
+*   bar          1440 x 100, white
+*   logo         170 x 61 at x140 / y23
+*   nav links    Lato Regular 16, #00529E, ~34px apart
+*   CTA          blue pill 82 x 31, Lato Bold 14 white, right edge at x1300
+*
+* container-fluid(1160, 16, 48) puts the inner content at 140 -> 1300 on a
+* 1440 viewport, which is exactly the XD grid.
 */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 10000;
+  padding: 0.75rem 1.25rem;
+  background-color: #00529E;
+  color: #ffffff;
+  text-decoration: none;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}
+
 header {
   position: fixed;
   z-index: 9999;
   top: 0;
+  left: 0;
   display: flex;
   width: 100%;
-  height: 90px;
+  height: 100px;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.92);
+}
+@supports (backdrop-filter: blur(10px)) {
+  header {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+@media (max-width: 1024px) {
+  header {
+    height: 64px;
+  }
 }
 header .header {
   display: flex;
@@ -127,19 +180,26 @@ header .header__logo a {
   display: block;
   width: fit-content;
 }
+header .header__logo a:focus-visible {
+  outline: 2px solid #FFB500;
+  outline-offset: 3px;
+}
 header .header__logo a img {
   display: block;
   height: auto;
-  width: clamp(110px, -300.4733727811px + 41.4201183432vw, 180px);
+  /* XD: 170px wide at 1440 */
+  width: clamp(120px, -173.1952662722px + 29.5857988166vw, 170px);
+}
+@media (max-width: 1024px) {
+  header .header__logo a img {
+    width: 6.875rem;
+  }
 }
 header .header__nav {
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-}
-header .header__lng-items {
-  display: block;
 }
 header .header__hamburger {
   display: none;
@@ -151,81 +211,88 @@ header .header__hamburger {
   -webkit-appearance: none;
   width: 1.875rem;
   height: 1.875rem;
-  margin-left: auto;
+  flex: 0 0 auto;
+  color: #00529E;
   cursor: pointer;
+}
+header .header__hamburger:focus-visible {
+  outline: 2px solid #FFB500;
+  outline-offset: 3px;
 }
 header .header__buttons {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: clamp(0px, 0px + 0vw, 0px) clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
+  padding: clamp(0px, 0px + 0vw, 0px) clamp(0px, 0px + 0vw, 0px) clamp(0px, 0px + 0vw, 0px) clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
 }
 header .header__buttons .btn-apply {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: fit-content;
-  height: clamp(32px, -61.8224852071px + 9.4674556213vw, 48px);
-  font-size: clamp(14px, -0.847826087px + 1.0869565217vw, 16px);
-  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
-  color: #00529E;
-  font-weight: 400;
-  text-decoration: none;
-  font-family: "Lato", sans-serif;
+  height: clamp(31px, 31px + 0vw, 31px);
+  padding-left: clamp(16px, -7.4556213018px + 2.3668639053vw, 20px);
+  padding-right: clamp(16px, -7.4556213018px + 2.3668639053vw, 20px);
+  box-sizing: border-box;
   white-space: nowrap;
-  cursor: pointer;
   text-decoration: none;
-  padding-left: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
-  padding-right: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
-  border: none;
-  border-collapse: collapse;
-  border: 1px solid #ffffff;
-  background-color: #ffffff;
-  -webkit-border-radius: 0.1875rem;
-  -moz-border-radius: 0.1875rem;
-  border-radius: 0.1875rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
   -moz-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-header .header__buttons .btn-apply:hover {
-  background-color: #00529E;
-  border: 1px solid #00529E;
-  color: #ffffff;
+header .header__buttons .btn-apply:hover, header .header__buttons .btn-apply:focus-visible {
   text-decoration: none;
 }
+header .header__buttons .btn-apply {
+  font-size: clamp(13px, 7.1360946746px + 0.5917159763vw, 14px);
+  line-height: clamp(18px, 6.2721893491px + 1.1834319527vw, 20px);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  background-color: #00529E;
+  border-color: #00529E;
+}
+header .header__buttons .btn-apply:hover, header .header__buttons .btn-apply:focus-visible {
+  background-color: #EDF6FC;
+  color: #00529E;
+}
+header .header__buttons .btn-apply:focus-visible {
+  outline: 2px solid #FFB500;
+  outline-offset: 3px;
+}
+header .header__buttons .btn-apply {
+  /* XD: 82 x 31 */
+  min-width: 5.125rem;
+}
 @media (max-width: 1024px) {
-  header .header__nav, header .header__lng-items {
+  header .header__nav {
     display: none;
   }
   header .header {
     /*
-    * The header CTA leaves the bar and floats over the page,
-    * bottom right, so it stays reachable while scrolling.
+    * The CTA stays in the bar at its desktop size and keeps its place
+    * to the left of the hamburger. It used to detach into a floating
+    * pill, which grew the button and covered the menu control.
     */
   }
   header .header__buttons {
-    position: fixed;
-    z-index: 1;
-    right: 1rem;
-    bottom: 1rem;
-    padding: 0;
-  }
-  header .header__buttons .btn-apply {
-    /* Larger than the in-bar version so it stays a comfortable touch target */
-    height: 3rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    -webkit-border-radius: 6.25rem;
-    -moz-border-radius: 6.25rem;
-    border-radius: 6.25rem;
-    -webkit-box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
-    -moz-box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
-    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+    padding-left: 0;
+    padding-right: 1rem;
   }
 }
 
+/*
+* Offsetting the fixed bar stays with the page templates: page.php prints
+* .spacer when the page has no hero, and the hero deliberately sits behind the
+* bar. $spacer is therefore kept in sync with $header-height.
+*/
 /*
 Theme Name: KurtFreyAG
 Author: Homepage
@@ -235,21 +302,22 @@ Tags: KurtFreyAG
 */
 /*
 * Footer
+*
+* XD reference:
+*   desktop  blue block #00529E (434px on the homepage), "Kontakt" Lato Bold 53,
+*            ice-blue contact pills, hours in a second column at x532/x711,
+*            menu row inside the blue block, white bottom bar 1440 x 80 with the
+*            copyright at x140 and the social icon at x1269
+*   mobile   same order, but hours and billing collapse into 57px accordion rows
+*            and the bottom bar is 135px with everything centred
 */
-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+footer.footer {
+  display: block;
   width: 100%;
-  background-color: #00529E;
+  background-color: #ffffff;
 }
-footer .footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-top: clamp(36px, -175.100591716px + 21.3017751479vw, 72px);
-  padding-bottom: clamp(24px, -116.7337278107px + 14.201183432vw, 48px);
+footer.footer .footer__container {
+  /* Same bleed as the header bar, so both edges line up at every width. */
   --container-bleed: clamp(
     16px,
     calc(16px + 32 * ((100vw - 991px) / 169)),
@@ -261,150 +329,466 @@ footer .footer {
   padding-inline: var(--container-bleed);
   box-sizing: border-box;
 }
-footer .footer__cta {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding-bottom: clamp(24px, -22.9112426036px + 4.7337278107vw, 32px);
-  gap: clamp(24px, -22.9112426036px + 4.7337278107vw, 32px);
+footer.footer {
+  /* ---------------------------------------------------------- blue block */
 }
-footer .footer__cta h3 {
+footer.footer .footer__main {
+  position: relative;
+  background-color: #00529E;
+  padding-top: clamp(40px, -147.6449704142px + 18.9349112426vw, 72px);
+  padding-bottom: clamp(32px, -108.7337278107px + 14.201183432vw, 56px);
+}
+footer.footer .footer__main > .footer__container {
+  position: relative;
+  z-index: 1;
+}
+footer.footer .footer__title {
   display: block;
-  font-size: clamp(16px, -7.4556213018px + 2.3668639053vw, 20px);
-  line-height: clamp(21px, -2.4556213018px + 2.3668639053vw, 25px);
-  color: #00529E;
+  font-size: clamp(40px, -36.2307692308px + 7.6923076923vw, 53px);
+  line-height: clamp(46px, -36.0946745562px + 8.2840236686vw, 60px);
+  color: #ffffff;
   font-weight: 700;
   text-decoration: none;
   font-family: "Lato", sans-serif;
-  color: #ffffff;
+  margin-bottom: clamp(24px, -69.8224852071px + 9.4674556213vw, 40px);
 }
-footer .footer__cta .btn-contact {
+footer.footer .footer__grid {
+  display: grid;
+  /*
+  * XD: the contact column runs 140 -> 418 (278px) and the opening hours
+  * start at 532, so the gap between them is 114 at 1440.
+  */
+  grid-template-columns: minmax(0, 278px) minmax(0, 1fr);
+  column-gap: clamp(40px, -393.9289940828px + 43.7869822485vw, 114px);
+  row-gap: 2rem;
+  align-items: start;
+}
+footer.footer .footer__col {
+  min-width: 0;
+}
+footer.footer {
+  /*
+  * Once the grid collapses to one column the contact rows would stretch the
+  * full width, so the column keeps its 278px measure. Below 640 that reads
+  * as cramped, and the pills move out to the right edge instead.
+  */
+}
+@media (max-width: 991px) {
+  footer.footer .footer__col--contact {
+    max-width: 17.375rem;
+  }
+}
+@media (max-width: 640px) {
+  footer.footer .footer__col--contact {
+    max-width: none;
+  }
+}
+footer.footer {
+  /* ------------------------------------------------------ contact column */
+}
+footer.footer .footer__line {
   display: flex;
+  align-items: center;
+  /* XD: both pills end at x418, the right edge of this column. */
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0 0 0.875rem;
+}
+footer.footer .footer__label {
+  font-size: clamp(15px, 9.1360946746px + 0.5917159763vw, 16px);
+  line-height: clamp(22px, 10.2721893491px + 1.1834319527vw, 24px);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  /*
+  * XD: "Adresse:" is part of a single regular weight text block, unlike
+  * the two bold labels above it.
+  */
+}
+footer.footer .footer__label--plain {
+  display: block;
+  font-weight: 400;
+  margin-bottom: 0.125rem;
+}
+footer.footer .footer__pill {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: fit-content;
-  height: clamp(32px, -61.8224852071px + 9.4674556213vw, 48px);
-  font-size: clamp(14px, -0.847826087px + 1.0869565217vw, 16px);
-  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  height: clamp(31px, 31px + 0vw, 31px);
+  padding-left: clamp(16px, -7.4556213018px + 2.3668639053vw, 20px);
+  padding-right: clamp(16px, -7.4556213018px + 2.3668639053vw, 20px);
+  box-sizing: border-box;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+footer.footer .footer__pill:hover, footer.footer .footer__pill:focus-visible {
+  text-decoration: none;
+}
+footer.footer .footer__pill {
+  font-size: clamp(14px, 14px + 0vw, 14px);
+  line-height: clamp(20px, 20px + 0vw, 20px);
   color: #00529E;
   font-weight: 400;
   text-decoration: none;
   font-family: "Lato", sans-serif;
-  white-space: nowrap;
-  cursor: pointer;
-  text-decoration: none;
-  padding-left: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
-  padding-right: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
-  border: none;
-  border-collapse: collapse;
-  border: 1px solid #ffffff;
+  background-color: #EDF6FC;
+  border-color: #EDF6FC;
+}
+footer.footer .footer__pill:hover, footer.footer .footer__pill:focus-visible {
   background-color: #ffffff;
-  -webkit-border-radius: 0.1875rem;
-  -moz-border-radius: 0.1875rem;
-  border-radius: 0.1875rem;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  -webkit-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+  border-color: #FFB500;
 }
-footer .footer__cta .btn-contact:hover {
-  background-color: #00529E;
-  border: 1px solid #00529E;
+@media (max-width: 991px) {
+  footer.footer .footer__pill {
+    height: 2.5625rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+footer.footer .footer__pill:focus-visible {
+  outline: 2px solid #FFB500;
+  outline-offset: 3px;
+}
+footer.footer .footer__pill {
+  /*
+  * Hover empties the pill: the fill drops away and only a white outline
+  * and white label are left on the blue block.
+  */
+}
+footer.footer .footer__pill:hover, footer.footer .footer__pill:focus-visible {
+  background-color: transparent;
+  border-color: #ffffff;
   color: #ffffff;
-  text-decoration: none;
 }
-footer .footer__contact-info {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  font-size: clamp(11px, 11px + 0vw, 11px);
-  line-height: clamp(14px, 14px + 0vw, 14px);
+footer.footer .footer__address {
+  /* XD: 3px more than the gap between the two rows above it. */
+  margin-top: clamp(4px, -7.7278106509px + 1.1834319527vw, 6px);
+  font-size: clamp(15px, 9.1360946746px + 0.5917159763vw, 16px);
+  line-height: clamp(22px, 10.2721893491px + 1.1834319527vw, 24px);
   color: #ffffff;
   font-weight: 400;
   text-decoration: none;
   font-family: "Lato", sans-serif;
 }
-footer .footer__contact-info p {
+footer.footer .footer__address p {
   margin: 0;
-  font-size: clamp(11px, 11px + 0vw, 11px);
-  line-height: clamp(14px, 14px + 0vw, 14px);
-  color: #ffffff;
-  font-weight: 400;
-  text-decoration: none;
-  font-family: "Lato", sans-serif;
+  color: inherit;
+  font: inherit;
 }
-footer .footer__contact-info p a {
+footer.footer .footer__address a {
   color: #ffffff;
-  text-decoration: none;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  -webkit-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+  text-decoration: underline;
 }
-footer .footer__contact-info p a:hover {
+footer.footer .footer__address a:hover {
   color: #FFB500;
 }
-footer .footer__contact-info p:first-of-type {
+footer.footer {
+  /* --------------------------------------------- hours / billing blocks */
+}
+footer.footer .footer__block + .footer__block {
+  margin-top: 1.75rem;
+}
+footer.footer .footer__block-title {
+  margin: 0 0 0.75rem;
+}
+footer.footer .footer__toggle {
   display: flex;
   align-items: center;
-  gap: 8px;
-  width: min-content;
-  margin-bottom: 0.5rem;
-  font-size: clamp(10px, 10px + 0vw, 10px);
-  line-height: clamp(10px, 10px + 0vw, 10px);
+  justify-content: space-between;
+  width: 100%;
+  /* Reset the default button chrome - it reads as a heading on desktop */
+  padding: 0;
+  border: none;
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+  text-align: left;
+  font-size: clamp(16px, 16px + 0vw, 16px);
+  line-height: clamp(24px, 24px + 0vw, 24px);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  cursor: default;
+}
+footer.footer .footer__toggle:focus-visible {
+  outline: 2px solid #FFB500;
+  outline-offset: 3px;
+}
+footer.footer .footer__chevron {
+  display: none;
+  flex: 0 0 auto;
+  /* XD: footer mobile arrow, 23 x 21 */
+  width: 1.4375rem;
+  height: 1.3125rem;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+footer.footer .footer__hours {
+  display: grid;
+  grid-template-columns: minmax(0, 179px) minmax(0, 1fr);
+  gap: 0.125rem 1rem;
+  margin: 0;
+}
+footer.footer .footer__hours dt,
+footer.footer .footer__hours dd {
+  margin: 0;
+  font-size: clamp(15px, 9.1360946746px + 0.5917159763vw, 16px);
+  line-height: clamp(22px, 10.2721893491px + 1.1834319527vw, 24px);
+  color: #ffffff;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+footer.footer .footer__note {
+  /*
+  * The emergency note belongs to the 414 accordion and to the Kontakt
+  * page block. The desktop footer in the XD stops after the hours.
+  */
+}
+@media (min-width: 991px) {
+  footer.footer .footer__note {
+    display: none;
+  }
+}
+footer.footer .footer__note {
+  margin-top: 1rem;
+  font-size: clamp(15px, 9.1360946746px + 0.5917159763vw, 16px);
+  line-height: clamp(22px, 10.2721893491px + 1.1834319527vw, 24px);
   color: #A7D8F4;
   font-weight: 400;
   text-decoration: none;
   font-family: "Lato", sans-serif;
+  font-style: italic;
 }
-footer .footer__contact-info p:first-of-type a {
-  flex-shrink: 0;
+footer.footer .footer__note p {
+  margin: 0;
+  color: inherit;
+  font: inherit;
 }
-footer .footer__contact-info p:first-of-type img {
-  display: block;
-  height: 20px;
-  width: auto;
+footer.footer {
+  /*
+  * Billing addresses appear in the 414 footer and on the Kontakt artboard,
+  * but not in the desktop footer block. Keeping the desktop rule in one
+  * place makes it a one-line change if that decision is revisited.
+  */
 }
-footer .footer__row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 100%;
+@media (min-width: 991px) {
+  footer.footer .footer__block--billing {
+    display: none;
+  }
 }
-footer .footer__left {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-footer .footer__left--copy {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  font-size: clamp(10px, 10px + 0vw, 10px);
-  line-height: clamp(15px, 15px + 0vw, 15px);
-  color: #00529E;
+footer.footer .footer__block--billing .footer__panel {
+  font-size: clamp(15px, 9.1360946746px + 0.5917159763vw, 16px);
+  line-height: clamp(22px, 10.2721893491px + 1.1834319527vw, 24px);
+  color: #ffffff;
   font-weight: 400;
   text-decoration: none;
   font-family: "Lato", sans-serif;
 }
-footer .footer__left--copy:after {
-  content: "|";
-  padding: 0 3px;
+footer.footer .footer__block--billing .footer__panel p {
+  margin: 0 0 1rem;
+  color: inherit;
+  font: inherit;
 }
-footer .footer__sn {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  width: 100%;
-  padding: 1rem 0;
+footer.footer .footer__block--billing .footer__panel p:last-child {
+  margin-bottom: 0;
+}
+footer.footer {
+  /* -------------------------------------------------------- watermark */
+}
+footer.footer .footer__watermark {
+  position: absolute;
+  /*
+  * right: 0 resolves against the padding box, which put the logo on the
+  * viewport edge. Offsetting by the container bleed keeps it on the same
+  * line as the content, and as the right edge of the header.
+  */
+  right: var(--container-bleed, 0px);
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+footer.footer .footer__watermark img {
+  display: block;
+  height: auto;
+  width: clamp(130px, -274.6094674556px + 40.8284023669vw, 199px);
+  opacity: 0.9;
 }
 @media (max-width: 991px) {
-  footer .footer__row {
-    flex-direction: column;
-    gap: 1.5rem;
+  footer.footer .footer__watermark {
+    display: none;
   }
+}
+footer.footer {
+  /* ------------------------------------------------------------- menu */
+}
+footer.footer .footer__nav {
+  background-color: #00529E;
+  padding-top: clamp(24px, -22.9112426036px + 4.7337278107vw, 32px);
+  padding-bottom: clamp(24px, -34.6390532544px + 5.9171597633vw, 34px);
+}
+footer.footer {
+  /* ------------------------------------------------------ bottom bar */
+}
+footer.footer .footer__bottom {
+  display: flex;
+  align-items: center;
+  min-height: 80px;
+  background-color: #ffffff;
+}
+footer.footer .footer__bottom > .footer__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+@media (max-width: 991px) {
+  footer.footer .footer__bottom {
+    min-height: 135px;
+    padding: 1.5rem 0;
+  }
+  footer.footer .footer__bottom > .footer__container {
+    flex-direction: column-reverse;
+    justify-content: center;
+    gap: 1.25rem;
+  }
+}
+footer.footer .footer__copy {
+  font-size: clamp(14px, 2.2721893491px + 1.1834319527vw, 16px);
+  line-height: clamp(20px, -3.4556213018px + 2.3668639053vw, 24px);
+  color: rgba(0, 82, 158, 0.5);
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+footer.footer .footer__copy p {
+  margin: 0;
+  color: inherit;
+  font: inherit;
+}
+footer.footer .footer__copy a {
+  color: rgba(0, 82, 158, 0.5);
+  text-decoration: none;
+}
+footer.footer .footer__copy a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.1875rem;
+}
+footer.footer .footer__sn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  /*
+  * XD: the social icon is 31 x 30 and sits flush with the right edge of
+  * the container. Scoped here so the header panel keeps its own size.
+  */
+}
+footer.footer .footer__sn .sn-items a {
+  width: 1.875rem;
+  height: 1.875rem;
+}
+footer.footer .footer__sn .sn-items a svg,
+footer.footer .footer__sn .sn-items a img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+footer.footer {
+  /* ------------------------------------------------------- 414 states */
+}
+@media (max-width: 991px) {
+  footer.footer .footer__grid {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1.75rem;
+  }
+  footer.footer .footer__col--blocks {
+    /*
+    * The accordion rows run edge to edge in the XD, so they break out
+    * of the container padding.
+    */
+    margin-inline: calc(var(--container-bleed) * -1);
+  }
+  footer.footer .footer__block {
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+  }
+  footer.footer .footer__block + .footer__block {
+    margin-top: 0;
+  }
+  footer.footer .footer__block:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  }
+  footer.footer .footer__block-title {
+    margin: 0;
+  }
+  footer.footer .footer__toggle {
+    min-height: 3.5625rem;
+    padding-inline: var(--container-bleed);
+    cursor: pointer;
+  }
+  footer.footer .footer__chevron {
+    display: block;
+  }
+  footer.footer .footer__panel {
+    padding: 0 var(--container-bleed) 1.5rem;
+  }
+  footer.footer .footer__hours {
+    grid-template-columns: minmax(0, 140px) minmax(0, 1fr);
+  }
+  footer.footer {
+    /*
+    * Collapsed state. Only applied once the script has taken over, so the
+    * content stays readable if the bundle fails.
+    */
+  }
+  footer.footer .footer__block.is-collapsible .footer__panel {
+    display: none;
+  }
+  footer.footer .footer__block.is-collapsible.is-open .footer__panel {
+    display: block;
+  }
+  footer.footer .footer__block.is-collapsible.is-open .footer__chevron {
+    transform: rotate(180deg);
+  }
+}
+footer.footer {
+  /*
+  * Two columns of times stop fitting here, so each interval sits above its
+  * own hours and the pairs are separated instead of the columns.
+  *
+  * Declared last on purpose: media queries add no specificity, so an earlier
+  * copy of this rule was simply overwritten by the base grid further down.
+  */
+}
+@media (max-width: 640px) {
+  footer.footer .footer__hours {
+    display: block;
+  }
+  footer.footer .footer__hours dd {
+    margin: 0 0 0.5rem;
+  }
+  footer.footer .footer__hours dd:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Compact variant: menu strip and bottom bar only (Kontakt artboard) */
+footer.footer--compact .footer__nav {
+  padding-top: clamp(28px, -7.1834319527px + 3.550295858vw, 34px);
+  padding-bottom: clamp(28px, -7.1834319527px + 3.550295858vw, 34px);
 }
 
 /*
@@ -416,6 +800,14 @@ Tags: KurtFreyAG
 */
 /*
 * Navigation
+*
+* XD reference (1440 artboard):
+*   links     Lato Regular 16, #00529E, item gap ~34px
+*   caret     16 x 14 icon button next to items that own a submenu
+*   dropdown  196px wide, white, radius 3, no shadow, right aligned to the
+*             toggle icon, ~8px below the item
+*   rows      45px (63px when the label wraps), each with a 1px inside stroke
+*             in #A7D8F4; neighbouring rows overlap so the lines collapse
 */
 .nav-wrap {
   display: block;
@@ -430,12 +822,14 @@ Tags: KurtFreyAG
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: clamp(16px, -28.5434782609px + 3.2608695652vw, 22px);
+  gap: clamp(20px, -62.0946745562px + 8.2840236686vw, 34px);
 }
 .nav-wrap__menu > li {
   position: relative;
-  padding: 0 5px;
-  border-bottom: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0;
   -moz-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
   -webkit-transition: all 0.2s ease-in-out;
@@ -443,6 +837,7 @@ Tags: KurtFreyAG
 }
 .nav-wrap__menu > li > a {
   display: block;
+  padding: 0.375rem 0;
   font-size: clamp(14px, 2.2721893491px + 1.1834319527vw, 16px);
   line-height: clamp(22px, 10.2721893491px + 1.1834319527vw, 24px);
   color: #00529E;
@@ -451,26 +846,206 @@ Tags: KurtFreyAG
   font-family: "Lato", sans-serif;
   text-decoration: none;
 }
-.nav-wrap__menu > li.current_page_item, .nav-wrap__menu > li.current-menu-item, .nav-wrap__menu > li.is-active, .nav-wrap__menu > li:hover {
+.nav-wrap__menu > li > a:focus-visible {
+  outline: 2px solid #FFB500;
+  outline-offset: 3px;
+}
+.nav-wrap__menu > li.current_page_item > a, .nav-wrap__menu > li.current-menu-item > a, .nav-wrap__menu > li.current-menu-ancestor > a, .nav-wrap__menu > li.current_page_ancestor > a, .nav-wrap__menu > li.is-active > a, .nav-wrap__menu > li:hover > a {
   text-decoration: underline;
+  text-underline-offset: 0.25rem;
 }
-
-footer .nav-wrap__menu {
-  gap: 1rem;
+.nav-wrap__menu {
+  /*
+  * Submenu toggle
+  *
+  * A real button, not a pseudo element on the link: the link keeps
+  * navigating to its own page and only this control opens the panel.
+  */
 }
-footer .nav-wrap__menu > li {
-  padding: 0 3px;
+.nav-wrap__menu .nav-wrap__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  /* Reset the default button chrome - this is an icon control */
+  padding: 0;
+  border: none;
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.75rem;
+  height: 1.75rem;
+  cursor: pointer;
 }
-footer .nav-wrap__menu > li > a {
-  font-size: clamp(10px, 10px + 0vw, 10px);
-  line-height: clamp(15px, 15px + 0vw, 15px);
+.nav-wrap__menu .nav-wrap__toggle:focus-visible {
+  outline: 2px solid #FFB500;
+  outline-offset: 3px;
+}
+.nav-wrap__menu .nav-wrap__toggle-icon {
+  display: block;
+  width: 1rem;
+  height: 0.875rem;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.nav-wrap__menu > li.is-open > .nav-wrap__toggle .nav-wrap__toggle-icon {
+  transform: rotate(180deg);
+}
+.nav-wrap__menu {
+  /*
+  * Dropdown
+  *
+  * Hidden with visibility so the links stay out of the tab order while
+  * closed. Nothing here reacts to hover: the panel is shown only when
+  * the toggle button has set .is-open on the parent item.
+  */
+}
+.nav-wrap__menu .sub-menu {
+  position: absolute;
+  z-index: 10;
+  /*
+  * XD: the panel hangs under the item and its right edge lines up
+  * with the right edge of the toggle icon.
+  */
+  top: calc(100% + 0.5rem);
+  right: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 196px;
+  background-color: #ffffff;
+  -webkit-border-radius: 0.1875rem;
+  -moz-border-radius: 0.1875rem;
+  border-radius: 0.1875rem;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-0.375rem);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s linear 0.2s;
+}
+.nav-wrap__menu .sub-menu li {
+  display: block;
+}
+.nav-wrap__menu .sub-menu li a {
+  display: flex;
+  align-items: center;
+  /* XD: 196 x 45, two line rows grow to 63 */
+  min-height: 2.8125rem;
+  width: 100%;
+  padding: 0.6875rem 1.5rem;
+  box-sizing: border-box;
+  /* XD: 1px inside stroke #A7D8F4 on every row */
+  border: 1px solid #A7D8F4;
+  font-size: clamp(15px, 9.1360946746px + 0.5917159763vw, 16px);
+  line-height: clamp(20px, 14.1360946746px + 0.5917159763vw, 21px);
   color: #00529E;
   font-weight: 400;
   text-decoration: none;
   font-family: "Lato", sans-serif;
+  text-decoration: none;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
-footer .nav-wrap__menu > li.ftr-active {
+.nav-wrap__menu .sub-menu li a:focus-visible {
+  outline: 2px solid #FFB500;
+  outline-offset: 3px;
+}
+.nav-wrap__menu .sub-menu li a:hover {
+  background-color: #EDF6FC;
+}
+.nav-wrap__menu .sub-menu li {
+  /* Neighbouring rows share one line, as they do in the XD. */
+}
+.nav-wrap__menu .sub-menu li + li a {
+  margin-top: -1px;
+}
+.nav-wrap__menu .sub-menu li:first-child a {
+  -webkit-border-top-left-radius: 0.1875rem;
+  -webkit-border-top-right-radius: 0.1875rem;
+  -moz-border-radius-topleft: 0.1875rem;
+  -moz-border-radius-topright: 0.1875rem;
+  border-top-left-radius: 0.1875rem;
+  border-top-right-radius: 0.1875rem;
+}
+.nav-wrap__menu .sub-menu li:last-child a {
+  -webkit-border-bottom-right-radius: 0.1875rem;
+  -webkit-border-bottom-left-radius: 0.1875rem;
+  -moz-border-radius-bottomright: 0.1875rem;
+  -moz-border-radius-bottomleft: 0.1875rem;
+  border-bottom-right-radius: 0.1875rem;
+  border-bottom-left-radius: 0.1875rem;
+}
+.nav-wrap__menu .sub-menu li.current-menu-item > a {
+  background-color: #EDF6FC;
+}
+.nav-wrap__menu > li.is-open > .sub-menu {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s;
+}
+
+/*
+* Footer menu
+*
+* XD: single white 16px row on the blue strip, two columns at 414px.
+*/
+.nav-footer-wrap {
   display: block;
+  width: 100%;
+}
+.nav-footer-wrap__menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  column-gap: clamp(32px, -143.9171597633px + 17.7514792899vw, 62px);
+  row-gap: 1rem;
+}
+.nav-footer-wrap__menu > li > a {
+  display: block;
+  font-size: clamp(15px, 9.1360946746px + 0.5917159763vw, 16px);
+  line-height: clamp(22px, 10.2721893491px + 1.1834319527vw, 24px);
+  color: #ffffff;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  text-decoration: none;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.nav-footer-wrap__menu > li > a:focus-visible {
+  outline: 2px solid #FFB500;
+  outline-offset: 3px;
+}
+.nav-footer-wrap__menu > li > a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+.nav-footer-wrap__menu > li.current-menu-item > a {
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+@media (max-width: 991px) {
+  .nav-footer-wrap__menu {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: flex-start;
+    align-items: start;
+    column-gap: 1.5rem;
+    row-gap: 1.75rem;
+  }
+  .nav-footer-wrap__menu > li > a {
+    text-align: left;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -490,32 +1065,37 @@ Tags: KurtFreyAG
 */
 /*
 * RSP
+*
+* The mobile panel reuses the desktop navigation colours: deep blue links and
+* the same blue CTA pill, set on a soft sky surface.
 */
 .rsp {
   position: fixed;
   z-index: 9999;
   inset: 0;
   display: block;
-  background-color: #ffffff;
+  background-color: #A7D8F4;
   /*
    * visibility keeps the closed panel out of the tab order. Without it the
    * menu sits off screen but its links are still reachable with the keyboard.
-   * The delay lets the slide-out finish before it is hidden.
+   * The delay lets the transition finish before it is hidden.
+   *
+   * The panel drops in from above; GSAP animates the same axis, so the CSS
+   * fallback and the scripted version travel in one direction.
    */
   visibility: hidden;
-  transform: translateX(100%);
-  transition: transform 0.2s ease-out, visibility 0s linear 0.2s;
+  transform: translateY(-100%);
+  transition: transform 0.25s ease-out, visibility 0s linear 0.25s;
 }
 .rsp.is-open {
   visibility: visible;
-  transform: translateX(0);
-  transition: transform 0.2s ease-out, visibility 0s;
+  transform: translateY(0);
+  transition: transform 0.25s ease-out, visibility 0s;
 }
 .rsp {
   /*
    * Set once GSAP is available. It drives the transform frame by frame, so
    * the CSS transition would try to smooth values that are already animated.
-   * The slide above stays as the fallback when the bundle does not load.
    */
 }
 .rsp.rsp--animated {
@@ -528,9 +1108,9 @@ Tags: KurtFreyAG
   justify-content: space-between;
   width: 100%;
   height: 100%;
-  padding: 2rem 1.5rem;
+  padding: 1.25rem 1.5rem 2rem;
   box-sizing: border-box;
-  background-color: #00529E;
+  background-color: #A7D8F4;
 }
 .rsp__header {
   display: flex;
@@ -541,7 +1121,7 @@ Tags: KurtFreyAG
 .rsp__logo a img {
   display: block;
   height: auto;
-  width: clamp(110px, -300.4733727811px + 41.4201183432vw, 180px);
+  width: 6.875rem;
 }
 .rsp__close {
   cursor: pointer;
@@ -552,6 +1132,12 @@ Tags: KurtFreyAG
   appearance: none;
   -webkit-appearance: none;
   line-height: 0;
+  /* Matches the hamburger it replaces */
+  color: #00529E;
+}
+.rsp__close:focus-visible {
+  outline: 2px solid #FFB500;
+  outline-offset: 3px;
 }
 .rsp__content {
   display: flex;
@@ -559,32 +1145,38 @@ Tags: KurtFreyAG
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
+  margin-top: clamp(32px, -61.8224852071px + 9.4674556213vw, 48px);
 }
 .rsp__content .nav-wrap {
   padding-top: 0;
   margin-left: 0;
-  padding-left: 1rem;
+  width: 100%;
 }
 .rsp__content .nav-wrap__menu {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 1.5rem;
+  width: 100%;
+  gap: 1.25rem;
+}
+.rsp__content .nav-wrap__menu > li {
+  /*
+  * The link and its toggle sit on one line, the submenu
+  * wraps onto the next. Without this the panel tried to put
+  * the whole submenu beside the link, so it never showed.
+  */
+  flex-wrap: wrap;
+  width: 100%;
 }
 .rsp__content .nav-wrap__menu > li > a {
-  font-size: clamp(14px, 2.2721893491px + 1.1834319527vw, 16px);
-  line-height: clamp(22px, 10.2721893491px + 1.1834319527vw, 24px);
+  font-size: clamp(18px, 6.2721893491px + 1.1834319527vw, 20px);
+  line-height: clamp(26px, 14.2721893491px + 1.1834319527vw, 28px);
   color: #00529E;
   font-weight: 400;
   text-decoration: none;
   font-family: "Lato", sans-serif;
   text-transform: none;
-  color: #ffffff;
-  font-weight: 400;
   margin-bottom: 0;
-}
-.rsp__content .nav-wrap__menu > li.ftr-active {
-  display: block;
 }
 .rsp__footer {
   display: flex;
@@ -592,10 +1184,178 @@ Tags: KurtFreyAG
   justify-content: space-between;
   width: 100%;
 }
-@media (min-width: 1160px) {
+.rsp {
+  /*
+  * The bar swaps to the hamburger at 1024px, so the panel has to stay
+  * available up to that same width. respond-min(xxl) left a dead zone
+  * between 1024 and 1160 where neither navigation was reachable.
+  */
+}
+@media (min-width: 1025px) {
   .rsp {
     display: none;
   }
+}
+.rsp {
+  /*
+  * Submenus stay in flow and expand in place. The same toggle button drives
+  * them, so the parent link keeps navigating to its own page.
+  */
+}
+.rsp .sub-menu {
+  position: static;
+  display: block;
+  /* Full width of the item, on its own row below the link */
+  flex: 0 0 100%;
+  width: 100%;
+  visibility: visible;
+  transform: none;
+  /*
+  * Collapsed by default. The script writes an explicit pixel height so
+  * the transition has something to travel to, then hands back to auto.
+  */
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: height 0.32s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease-out, margin 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 0 0 0;
+  padding: 0 0 0 1rem;
+  background-color: transparent;
+  border-left: 1px solid rgba(0, 82, 158, 0.3);
+}
+.rsp .sub-menu li a {
+  min-height: 0;
+  width: auto;
+  padding: 0.4375rem 0;
+  border: none;
+  font-size: clamp(15px, 9.1360946746px + 0.5917159763vw, 16px);
+  line-height: clamp(22px, 10.2721893491px + 1.1834319527vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.rsp .sub-menu li a:hover {
+  background-color: transparent;
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+.rsp .sub-menu li + li a {
+  margin-top: 0;
+}
+.rsp .sub-menu li:first-child a, .rsp .sub-menu li:last-child a {
+  border-radius: 0;
+}
+.rsp .sub-menu li.current-menu-item > a {
+  background-color: transparent;
+  font-weight: 700;
+}
+.rsp .nav-wrap__menu > li.is-open > .sub-menu {
+  opacity: 1;
+  margin: 0.875rem 0 0.25rem;
+}
+.rsp {
+  /*
+  * Rows arrive one after another as the panel opens. Plain transition
+  * delays rather than a script, so the effect costs nothing extra.
+  */
+}
+.rsp .sub-menu > li {
+  opacity: 0;
+  transform: translateY(-0.5rem);
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+.rsp .nav-wrap__menu > li.is-open > .sub-menu > li {
+  opacity: 1;
+  transform: translateY(0);
+}
+.rsp .nav-wrap__menu > li.is-open > .sub-menu > li:nth-child(1) {
+  transition-delay: 0.06s;
+}
+.rsp .nav-wrap__menu > li.is-open > .sub-menu > li:nth-child(2) {
+  transition-delay: 0.105s;
+}
+.rsp .nav-wrap__menu > li.is-open > .sub-menu > li:nth-child(3) {
+  transition-delay: 0.15s;
+}
+.rsp .nav-wrap__menu > li.is-open > .sub-menu > li:nth-child(4) {
+  transition-delay: 0.195s;
+}
+.rsp .nav-wrap__menu > li.is-open > .sub-menu > li:nth-child(5) {
+  transition-delay: 0.24s;
+}
+.rsp .nav-wrap__menu > li.is-open > .sub-menu > li:nth-child(6) {
+  transition-delay: 0.285s;
+}
+.rsp .nav-wrap__menu > li.is-open > .sub-menu > li:nth-child(7) {
+  transition-delay: 0.33s;
+}
+.rsp .nav-wrap__menu > li.is-open > .sub-menu > li:nth-child(8) {
+  transition-delay: 0.375s;
+}
+.rsp {
+  /*
+  * Motion is decoration here: with reduced motion the submenu simply
+  * appears at its full height.
+  */
+}
+@media (prefers-reduced-motion: reduce) {
+  .rsp .sub-menu,
+  .rsp .sub-menu > li {
+    transition: none;
+  }
+  .rsp .nav-wrap__menu > li.is-open > .sub-menu {
+    height: auto;
+  }
+}
+.rsp .nav-wrap__toggle {
+  width: 2rem;
+  height: 2rem;
+}
+.rsp__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: clamp(31px, 31px + 0vw, 31px);
+  padding-left: clamp(16px, -7.4556213018px + 2.3668639053vw, 20px);
+  padding-right: clamp(16px, -7.4556213018px + 2.3668639053vw, 20px);
+  box-sizing: border-box;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.rsp__cta:hover, .rsp__cta:focus-visible {
+  text-decoration: none;
+}
+.rsp__cta {
+  font-size: clamp(13px, 7.1360946746px + 0.5917159763vw, 14px);
+  line-height: clamp(18px, 6.2721893491px + 1.1834319527vw, 20px);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  background-color: #00529E;
+  border-color: #00529E;
+}
+.rsp__cta:hover, .rsp__cta:focus-visible {
+  background-color: #EDF6FC;
+  color: #00529E;
+}
+.rsp__cta:focus-visible {
+  outline: 2px solid #FFB500;
+  outline-offset: 3px;
+}
+.rsp__cta {
+  min-width: 5.125rem;
 }
 
 /*

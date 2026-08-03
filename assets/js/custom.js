@@ -236,6 +236,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function animateOpen() {
+
     if (!hasGsap) {
       return;
     }
@@ -248,19 +249,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
     timeline = window.gsap.timeline({ defaults: { ease: "power3.out" } });
 
+    /*
+     * The panel drops in from above and settles, then the rows unfold
+     * downwards one after another while the logo and the footer fade up.
+     */
     timeline
       .fromTo(rspMenu,
-        { xPercent: 100 },
-        { xPercent: 0, duration: 0.5 * m() })
+        { yPercent: -100 },
+        { yPercent: 0, duration: 0.45 * m() })
       .fromTo(rspHeader,
-        { autoAlpha: 0, y: -12 },
-        { autoAlpha: 1, y: 0, duration: 0.4 * m() }, 0.15 * m())
+        { autoAlpha: 0, y: -16 },
+        { autoAlpha: 1, y: 0, duration: 0.35 * m() }, 0.2 * m())
       .fromTo(rspItems,
-        { autoAlpha: 0, x: 28 },
-        { autoAlpha: 1, x: 0, duration: 0.45 * m(), stagger: 0.06 * m() }, 0.2 * m())
+        { autoAlpha: 0, y: 24, rotateX: -40, transformOrigin: "50% 0%" },
+        {
+          autoAlpha: 1,
+          y: 0,
+          rotateX: 0,
+          duration: 0.5 * m(),
+          stagger: 0.07 * m()
+        }, 0.25 * m())
       .fromTo(rspFooter,
-        { autoAlpha: 0 },
-        { autoAlpha: 1, duration: 0.4 * m() }, 0.35 * m());
+        { autoAlpha: 0, y: 16 },
+        { autoAlpha: 1, y: 0, duration: 0.4 * m() }, 0.4 * m());
 
     return parts;
   }
@@ -285,23 +296,22 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    /* The exit mirrors the entrance but runs tighter and in reverse order,
-       so the panel starts sliding while the last items are still leaving. */
+    /* The exit mirrors the entrance, tighter and in reverse order. */
     timeline
       .to(rspFooter,
-        { autoAlpha: 0, duration: 0.15 * m(), ease: "power1.in" }, 0)
+        { autoAlpha: 0, y: 12, duration: 0.15 * m(), ease: "power1.in" }, 0)
       .to(rspItems,
         {
           autoAlpha: 0,
-          x: 20,
-          duration: 0.25 * m(),
+          y: 16,
+          duration: 0.22 * m(),
           ease: "power1.in",
-          stagger: { each: 0.035 * m(), from: "end" }
+          stagger: { each: 0.04 * m(), from: "end" }
         }, 0.05 * m())
       .to(rspHeader,
-        { autoAlpha: 0, y: -10, duration: 0.2 * m(), ease: "power1.in" }, 0.1 * m())
+        { autoAlpha: 0, y: -12, duration: 0.2 * m(), ease: "power1.in" }, 0.1 * m())
       .to(rspMenu,
-        { xPercent: 100, duration: 0.35 * m(), ease: "power2.in" }, 0.18 * m());
+        { yPercent: -100, duration: 0.35 * m(), ease: "power2.in" }, 0.18 * m());
   }
 
   /* Hiding the body scrollbar widens the viewport, which would shove the fixed
@@ -408,4 +418,295 @@ document.addEventListener("DOMContentLoaded", function () {
       first.focus();
     }
   });
+});
+
+/*
+* Submenus
+*
+* The parent link is left alone so it always navigates to its own page.
+* Opening and closing is entirely the job of the toggle button next to it,
+* which works the same in the fixed bar and inside the mobile panel.
+*/
+document.addEventListener("DOMContentLoaded", function () {
+
+    var toggles = Array.prototype.slice.call(
+        document.querySelectorAll(".nav-wrap__toggle")
+    );
+
+    if (!toggles.length) {
+        return;
+    }
+
+    function parentOf(toggle) {
+        return toggle.closest("li");
+    }
+
+    /*
+     * Inside the mobile panel the submenu expands in flow, so it needs a real
+     * height to animate between. CSS cannot transition to auto, so the height
+     * is written in pixels for the duration of the transition and handed back
+     * to auto once it lands - otherwise a submenu that later changes size
+     * would stay stuck at its old height.
+     */
+    function isInPanel(li) {
+        return !!li.closest(".rsp");
+    }
+
+    /*
+     * A single pending transitionend handler per submenu. Without this, a
+     * close that interrupts an unfinished open would still receive the open
+     * handler when the collapse finishes, and it would set the height back to
+     * auto - leaving an empty gap the size of the submenu.
+     */
+    function clearPending(ul) {
+
+        if (ul.heightHandler) {
+            ul.removeEventListener("transitionend", ul.heightHandler);
+            ul.heightHandler = null;
+        }
+    }
+
+    function onHeightEnd(ul, done) {
+
+        clearPending(ul);
+
+        ul.heightHandler = function (e) {
+
+            if (e.propertyName !== "height" || e.target !== ul) {
+                return;
+            }
+
+            clearPending(ul);
+            done();
+        };
+
+        ul.addEventListener("transitionend", ul.heightHandler);
+    }
+
+    function expand(ul) {
+
+        onHeightEnd(ul, function () {
+
+            /* Back to auto so later content changes are not clipped. */
+            ul.style.height = "auto";
+        });
+
+        ul.style.height = ul.scrollHeight + "px";
+    }
+
+    function collapse(ul) {
+
+        onHeightEnd(ul, function () {
+
+            /* Hand the height back to the stylesheet. */
+            ul.style.height = "";
+        });
+
+        /* From auto to a measured height, forced through layout, then to zero. */
+        ul.style.height = ul.scrollHeight + "px";
+
+        void ul.offsetHeight;
+
+        ul.style.height = "0px";
+    }
+
+    function panelOf(li) {
+        return li.querySelector(".sub-menu");
+    }
+
+    function close(li) {
+
+        if (!li) {
+            return;
+        }
+
+        if (li.classList.contains("is-open") && isInPanel(li)) {
+
+            var ul = panelOf(li);
+
+            if (ul) {
+                collapse(ul);
+            }
+        }
+
+        li.classList.remove("is-open");
+
+        var toggle = li.querySelector(".nav-wrap__toggle");
+
+        if (toggle) {
+            toggle.setAttribute("aria-expanded", "false");
+        }
+    }
+
+    function closeAll(except) {
+
+        toggles.forEach(function (toggle) {
+
+            var li = parentOf(toggle);
+
+            if (li && li !== except) {
+                close(li);
+            }
+        });
+    }
+
+    toggles.forEach(function (toggle) {
+
+        toggle.addEventListener("click", function (e) {
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            var li = parentOf(toggle);
+
+            if (!li) {
+                return;
+            }
+
+            var open = !li.classList.contains("is-open");
+
+            /*
+             * Only one panel open at a time in the fixed bar. Inside the mobile
+             * panel the rows behave as an accordion for the same reason.
+             */
+            closeAll(li);
+
+            if (isInPanel(li)) {
+
+                var ul = panelOf(li);
+
+                if (ul) {
+                    if (open) {
+                        expand(ul);
+                    } else {
+                        collapse(ul);
+                    }
+                }
+            }
+
+            li.classList.toggle("is-open", open);
+            toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+    });
+
+    /* A click anywhere outside a menu closes whatever is open. */
+    document.addEventListener("click", function (e) {
+
+        if (!e.target.closest(".nav-wrap")) {
+            closeAll(null);
+        }
+    });
+
+    document.addEventListener("keydown", function (e) {
+
+        if (e.key !== "Escape") {
+            return;
+        }
+
+        var open = document.querySelector(".nav-wrap li.is-open");
+
+        if (open) {
+            var toggle = open.querySelector(".nav-wrap__toggle");
+
+            closeAll(null);
+
+            /* Send focus back to the control that opened the panel. */
+            if (toggle) {
+                toggle.focus();
+            }
+        }
+    });
+
+    /*
+     * Tabbing out of an open submenu closes it, so the panel never lingers
+     * over the page once the keyboard has moved on.
+     */
+    document.addEventListener("focusin", function (e) {
+
+        var li = e.target.closest(".nav-wrap li.is-open");
+
+        if (!li) {
+            closeAll(null);
+        }
+    });
+});
+
+
+/*
+* Footer accordions
+*
+* Opening hours and billing addresses collapse below 991px, matching the 414
+* footer states. Above that width they are plain headings with the content
+* always visible, so the toggle is only active while the query matches.
+*/
+document.addEventListener("DOMContentLoaded", function () {
+
+    var blocks = Array.prototype.slice.call(
+        document.querySelectorAll(".footer__block[data-footer-block]")
+    );
+
+    if (!blocks.length) {
+        return;
+    }
+
+    var mq = window.matchMedia("(max-width: 991px)");
+
+    function apply() {
+
+        blocks.forEach(function (block) {
+
+            var toggle = block.querySelector(".footer__toggle");
+            var panel = block.querySelector(".footer__panel");
+
+            if (!toggle || !panel) {
+                return;
+            }
+
+            if (mq.matches) {
+                block.classList.add("is-collapsible");
+                toggle.removeAttribute("aria-disabled");
+                toggle.setAttribute(
+                    "aria-expanded",
+                    block.classList.contains("is-open") ? "true" : "false"
+                );
+            } else {
+                block.classList.remove("is-collapsible");
+                toggle.setAttribute("aria-expanded", "true");
+                toggle.setAttribute("aria-disabled", "true");
+            }
+        });
+    }
+
+    blocks.forEach(function (block) {
+
+        var toggle = block.querySelector(".footer__toggle");
+
+        if (!toggle) {
+            return;
+        }
+
+        /* Preserve the authored default before the first apply() run. */
+        if (toggle.getAttribute("aria-expanded") === "true") {
+            block.classList.add("is-open");
+        }
+
+        toggle.addEventListener("click", function () {
+
+            if (!mq.matches) {
+                return;
+            }
+
+            var open = block.classList.toggle("is-open");
+
+            toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+    });
+
+    apply();
+
+    if (typeof mq.addEventListener === "function") {
+        mq.addEventListener("change", apply);
+    } else if (typeof mq.addListener === "function") {
+        mq.addListener(apply);
+    }
 });

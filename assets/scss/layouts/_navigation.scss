@@ -2,7 +2,17 @@
 
 /*
 * Navigation
+*
+* XD reference (1440 artboard):
+*   links     Lato Regular 16, #00529E, item gap ~34px
+*   caret     16 x 14 icon button next to items that own a submenu
+*   dropdown  196px wide, white, radius 3, no shadow, right aligned to the
+*             toggle icon, ~8px below the item
+*   rows      45px (63px when the label wraps), each with a 1px inside stroke
+*             in #A7D8F4; neighbouring rows overlap so the lines collapse
 */
+
+$dropdown-width: 196px;
 
 .nav-wrap {
 
@@ -23,22 +33,27 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        
-        @include fluid-prop('gap', 16, 22, $min-resize-sec, $max-resize-sec, $unit: px);
+
+        @include fluid-prop('gap', 20, 34, $min-resize, $max-resize, $unit: px);
 
         > li {
 
             position: relative;
 
-            padding: 0 5px;
+            display: flex;
+            align-items: center;
 
-            border-bottom: 1px solid transparent;
+            gap: rem(6);
+
+            padding: 0;
 
             @include trans;
 
             > a {
 
                 display: block;
+
+                padding: rem(6) 0;
 
                 @include format-text (
                     $max-size: 16,
@@ -52,54 +67,259 @@
                 );
 
                 text-decoration: none;
+
+                @include focus-ring;
             }
 
             &.current_page_item,
             &.current-menu-item,
+            &.current-menu-ancestor,
+            &.current_page_ancestor,
             &.is-active,
             &:hover {
 
-                text-decoration: underline;
-            }
-        }
-    }
-}
-
-footer {
-
-    .nav-wrap {
-
-        &__menu {
-
-            gap: rem(16);
-
-            > li {
-
-                padding: 0 3px;
-
                 > a {
 
+                    text-decoration: underline;
+                    text-underline-offset: rem(4);
+                }
+            }
+        }
+
+        /*
+        * Submenu toggle
+        *
+        * A real button, not a pseudo element on the link: the link keeps
+        * navigating to its own page and only this control opens the panel.
+        */
+        .nav-wrap__toggle {
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex: 0 0 auto;
+
+            /* Reset the default button chrome - this is an icon control */
+            padding: 0;
+            border: none;
+            background: none;
+            appearance: none;
+            -webkit-appearance: none;
+
+            width: rem(28);
+            height: rem(28);
+
+            cursor: pointer;
+
+            @include focus-ring;
+        }
+
+        .nav-wrap__toggle-icon {
+
+            display: block;
+
+            width: rem(16);
+            height: rem(14);
+
+            @include trans;
+        }
+
+        > li.is-open > .nav-wrap__toggle .nav-wrap__toggle-icon {
+
+            transform: rotate(180deg);
+        }
+
+        /*
+        * Dropdown
+        *
+        * Hidden with visibility so the links stay out of the tab order while
+        * closed. Nothing here reacts to hover: the panel is shown only when
+        * the toggle button has set .is-open on the parent item.
+        */
+        .sub-menu {
+
+            position: absolute;
+            z-index: 10;
+
+            /*
+            * XD: the panel hangs under the item and its right edge lines up
+            * with the right edge of the toggle icon.
+            */
+            top: calc(100% + #{rem(8)});
+            right: 0;
+
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            width: $dropdown-width;
+
+            background-color: theme-color(bg-white);
+
+            @include brd-radius-all($brd-radius: rem(3));
+
+            visibility: hidden;
+            opacity: 0;
+            transform: translateY(#{rem(-6)});
+
+            transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s linear 0.2s;
+
+            li {
+
+                display: block;
+
+                a {
+
+                    display: flex;
+                    align-items: center;
+
+                    /* XD: 196 x 45, two line rows grow to 63 */
+                    min-height: rem(45);
+                    width: 100%;
+
+                    padding: rem(11) rem(24);
+                    box-sizing: border-box;
+
+                    /* XD: 1px inside stroke #A7D8F4 on every row */
+                    border: 1px solid theme-color(brd-sky);
+
                     @include format-text (
-                        $max-size: 10,
-                        $min-size: 10,
-                        $max-height: 15,
-                        $min-height: 15,
+                        $max-size: 16,
+                        $min-size: 15,
+                        $max-height: 21,
+                        $min-height: 20,
                         $tx-color: theme-color(text-blue),
                         $tx-weight: 400,
                         $max-rsp: $max-resize,
                         $min-rsp: $min-resize,
                     );
+
+                    text-decoration: none;
+
+                    @include trans;
+                    @include focus-ring;
+
+                    &:hover {
+
+                        background-color: theme-color(bg-ice);
+                    }
                 }
 
-                &.ftr-active {
+                /* Neighbouring rows share one line, as they do in the XD. */
+                & + li a {
 
-                    display: block;
+                    margin-top: -1px;
+                }
+
+                &:first-child a {
+
+                    @include brd-radius-top($brd-radius: rem(3));
+                }
+
+                &:last-child a {
+
+                    @include brd-radius-bottom($brd-radius: rem(3));
+                }
+
+                &.current-menu-item > a {
+
+                    background-color: theme-color(bg-ice);
                 }
             }
+        }
+
+        > li.is-open > .sub-menu {
+
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+
+            transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s;
         }
     }
 }
 
+/*
+* Footer menu
+*
+* XD: single white 16px row on the blue strip, two columns at 414px.
+*/
+.nav-footer-wrap {
+
+    display: block;
+    width: 100%;
+
+    &__menu {
+
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        display: flex;
+        flex-wrap: wrap;
+
+        align-items: center;
+        justify-content: center;
+
+        @include fluid-prop('column-gap', 32, 62, $min-resize, $max-resize, $unit: px);
+
+        row-gap: rem(16);
+
+        > li {
+
+            > a {
+
+                display: block;
+
+                @include format-text (
+                    $max-size: 16,
+                    $min-size: 15,
+                    $max-height: 24,
+                    $min-height: 22,
+                    $tx-color: theme-color(text-white),
+                    $tx-weight: 400,
+                    $max-rsp: $max-resize,
+                    $min-rsp: $min-resize,
+                );
+
+                text-decoration: none;
+
+                @include trans;
+                @include focus-ring(theme-color(brd-golden));
+
+                &:hover {
+
+                    text-decoration: underline;
+                    text-underline-offset: rem(4);
+                }
+            }
+
+            &.current-menu-item > a {
+
+                text-decoration: underline;
+                text-underline-offset: rem(4);
+            }
+        }
+
+        @include respond-max(lg) {
+
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+
+            justify-content: flex-start;
+            align-items: start;
+
+            column-gap: rem(24);
+            row-gap: rem(28);
+
+            > li > a {
+
+                text-align: left;
+            }
+        }
+    }
+}
 
 @include respond-max(xl) {
 

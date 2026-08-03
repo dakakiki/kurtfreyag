@@ -2,70 +2,344 @@
 
 /*
 * Footer
+*
+* XD reference:
+*   desktop  blue block #00529E (434px on the homepage), "Kontakt" Lato Bold 53,
+*            ice-blue contact pills, hours in a second column at x532/x711,
+*            menu row inside the blue block, white bottom bar 1440 x 80 with the
+*            copyright at x140 and the social icon at x1269
+*   mobile   same order, but hours and billing collapse into 57px accordion rows
+*            and the bottom bar is 135px with everything centred
 */
 
-footer {
+footer.footer {
 
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
+    display: block;
     width: 100%;
 
-    background-color: theme-color(bg-footer);
+    background-color: theme-color(bg-white);
 
-    .footer {
+    .footer__container {
+
+        /* Same bleed as the header bar, so both edges line up at every width. */
+        @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+    }
+
+    /* ---------------------------------------------------------- blue block */
+
+    .footer__main {
+
+        position: relative;
+
+        background-color: theme-color(bg-footer);
+
+        @include fluid-prop('padding-top', 40, 72, $min-resize, $max-resize, $unit: px);
+        @include fluid-prop('padding-bottom', 32, 56, $min-resize, $max-resize, $unit: px);
+
+        > .footer__container {
+
+            position: relative;
+            z-index: 1;
+        }
+    }
+
+    .footer__title {
+
+        display: block;
+
+        @include format-text (
+            $max-size: 53,
+            $min-size: 40,
+            $max-height: 60,
+            $min-height: 46,
+            $tx-color: theme-color(title-white),
+            $tx-weight: 700,
+            $max-rsp: $max-resize,
+            $min-rsp: $min-resize,
+        );
+
+        @include fluid-prop('margin-bottom', 24, 40, $min-resize, $max-resize, $unit: px);
+    }
+
+    .footer__grid {
+
+        display: grid;
+
+        /*
+        * XD: the contact column runs 140 -> 418 (278px) and the opening hours
+        * start at 532, so the gap between them is 114 at 1440.
+        */
+        grid-template-columns: minmax(0, 278px) minmax(0, 1fr);
+
+        @include fluid-prop('column-gap', 40, 114, $min-resize, $max-resize, $unit: px);
+
+        row-gap: rem(32);
+
+        align-items: start;
+    }
+
+    .footer__col {
+
+        min-width: 0;
+    }
+
+    /*
+    * Once the grid collapses to one column the contact rows would stretch the
+    * full width, so the column keeps its 278px measure. Below 640 that reads
+    * as cramped, and the pills move out to the right edge instead.
+    */
+    @include respond-max(lg) {
+
+        .footer__col--contact {
+
+            max-width: rem(278);
+        }
+    }
+
+    @include respond-max(sm) {
+
+        .footer__col--contact {
+
+            max-width: none;
+        }
+    }
+
+    /* ------------------------------------------------------ contact column */
+
+    .footer__line {
 
         display: flex;
-        flex-direction: column;
-        
         align-items: center;
-        justify-content: center;
 
-        @include fluid-prop('padding-top', 36, 72, $min-resize, $max-resize, $unit: px);
-        @include fluid-prop('padding-bottom', 24, 48, $min-resize, $max-resize, $unit: px);
+        /* XD: both pills end at x418, the right edge of this column. */
+        justify-content: space-between;
 
-        @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+        gap: rem(12);
 
-        &__cta {
+        margin: 0 0 rem(14);
+    }
 
-            display: flex;
-            flex-direction: column;
+    .footer__label {
 
-            align-items: center;
-            justify-content: center;
+        @include format-text (
+            $max-size: 16,
+            $min-size: 15,
+            $max-height: 24,
+            $min-height: 22,
+            $tx-color: theme-color(text-white),
+            $tx-weight: 700,
+            $max-rsp: $max-resize,
+            $min-rsp: $min-resize,
+        );
 
-            width: 100%;
-
-            @include fluid-prop('padding-bottom', 24, 32, $min-resize, $max-resize, $unit: px);
-
-            @include fluid-prop('gap', 24, 32, $min-resize, $max-resize, $unit: px);
-
-            h3 {
-
-                @include t-h3;
-                color: theme-color(title-white);
-            }
-
-            .btn-contact {
-
-                @include btn-secondary;
-            }
-        }
-
-        &__contact-info {
+        /*
+        * XD: "Adresse:" is part of a single regular weight text block, unlike
+        * the two bold labels above it.
+        */
+        &--plain {
 
             display: block;
 
-            width: 100%;
-            box-sizing: border-box;
+            font-weight: 400;
+
+            margin-bottom: rem(2);
+        }
+    }
+
+    .footer__pill {
+
+        @include btn-pill-light;
+        @include focus-ring;
+
+        /*
+        * Hover empties the pill: the fill drops away and only a white outline
+        * and white label are left on the blue block.
+        */
+        &:hover,
+        &:focus-visible {
+
+            background-color: transparent;
+            border-color: theme-color(brd-white);
+
+            color: theme-color(text-white);
+        }
+    }
+
+    .footer__address {
+
+        /* XD: 3px more than the gap between the two rows above it. */
+        @include fluid-prop('margin-top', 4, 6, $min-resize, $max-resize, $unit: px);
+
+        @include format-text (
+            $max-size: 16,
+            $min-size: 15,
+            $max-height: 24,
+            $min-height: 22,
+            $tx-color: theme-color(text-white),
+            $tx-weight: 400,
+            $max-rsp: $max-resize,
+            $min-rsp: $min-resize,
+        );
+
+        p {
+
+            margin: 0;
+            color: inherit;
+            font: inherit;
+        }
+
+        a {
+
+            color: theme-color(text-white);
+            text-decoration: underline;
+
+            &:hover {
+
+                color: theme-color(text-golden);
+            }
+        }
+    }
+
+    /* --------------------------------------------- hours / billing blocks */
+
+    .footer__block {
+
+        & + .footer__block {
+
+            margin-top: rem(28);
+        }
+    }
+
+    .footer__block-title {
+
+        margin: 0 0 rem(12);
+    }
+
+    .footer__toggle {
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        width: 100%;
+
+        /* Reset the default button chrome - it reads as a heading on desktop */
+        padding: 0;
+        border: none;
+        background: none;
+        appearance: none;
+        -webkit-appearance: none;
+        text-align: left;
+
+        @include format-text (
+            $max-size: 16,
+            $min-size: 16,
+            $max-height: 24,
+            $min-height: 24,
+            $tx-color: theme-color(text-white),
+            $tx-weight: 700,
+            $max-rsp: $max-resize,
+            $min-rsp: $min-resize,
+        );
+
+        cursor: default;
+
+        @include focus-ring;
+    }
+
+    .footer__chevron {
+
+        display: none;
+
+        flex: 0 0 auto;
+
+        /* XD: footer mobile arrow, 23 x 21 */
+        width: rem(23);
+        height: rem(21);
+
+        @include trans;
+    }
+
+    .footer__hours {
+
+        display: grid;
+        grid-template-columns: minmax(0, 179px) minmax(0, 1fr);
+
+        gap: rem(2) rem(16);
+
+        margin: 0;
+
+        dt,
+        dd {
+
+            margin: 0;
 
             @include format-text (
-                $max-size: 11,
-                $min-size: 11,
-                $max-height: 14,
-                $min-height: 14,
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 24,
+                $min-height: 22,
+                $tx-color: theme-color(text-white),
+                $tx-weight: 400,
+                $max-rsp: $max-resize,
+                $min-rsp: $min-resize,
+            );
+        }
+    }
+
+    .footer__note {
+
+        /*
+        * The emergency note belongs to the 414 accordion and to the Kontakt
+        * page block. The desktop footer in the XD stops after the hours.
+        */
+        @include respond-min(lg) {
+
+            display: none;
+        }
+
+        margin-top: rem(16);
+
+        @include format-text (
+            $max-size: 16,
+            $min-size: 15,
+            $max-height: 24,
+            $min-height: 22,
+            $tx-color: theme-color(text-sky),
+            $tx-weight: 400,
+            $max-rsp: $max-resize,
+            $min-rsp: $min-resize,
+        );
+
+        font-style: italic;
+
+        p {
+
+            margin: 0;
+            color: inherit;
+            font: inherit;
+        }
+    }
+
+    /*
+    * Billing addresses appear in the 414 footer and on the Kontakt artboard,
+    * but not in the desktop footer block. Keeping the desktop rule in one
+    * place makes it a one-line change if that decision is revisited.
+    */
+    .footer__block--billing {
+
+        @include respond-min(lg) {
+
+            display: none;
+        }
+
+        .footer__panel {
+
+            @include format-text (
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 24,
+                $min-height: 22,
                 $tx-color: theme-color(text-white),
                 $tx-weight: 400,
                 $max-rsp: $max-resize,
@@ -74,127 +348,279 @@ footer {
 
             p {
 
-                margin: 0;
+                margin: 0 0 rem(16);
+                color: inherit;
+                font: inherit;
 
-                @include format-text (
-                    $max-size: 11,
-                    $min-size: 11,
-                    $max-height: 14,
-                    $min-height: 14,
-                    $tx-color: theme-color(text-white),
-                    $tx-weight: 400,
-                    $max-rsp: $max-resize,
-                    $min-rsp: $min-resize,
-                );
+                &:last-child {
 
-                a {
-
-                    color: theme-color(text-white);
-                    text-decoration: none;
-
-                    @include trans;
-
-                    &:hover {
-
-                        color: theme-color(text-golden);
-                    }
-                }
-
-                &:first-of-type {
-
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    width: min-content;
-
-                    margin-bottom: rem(8);
-
-                    @include format-text (
-                        $max-size: 10,
-                        $min-size: 10,
-                        $max-height: 10,
-                        $min-height: 10,
-                        $tx-color: theme-color(text-sky),
-                        $tx-weight: 400,
-                        $max-rsp: $max-resize,
-                        $min-rsp: $min-resize,
-                    );
-
-                    a {
-                        flex-shrink: 0;
-                    }
-
-                    img {
-                        display: block;
-                        height: 20px;
-                        width: auto;
-                    }
+                    margin-bottom: 0;
                 }
             }
         }
+    }
 
-        &__row {
+    /* -------------------------------------------------------- watermark */
 
-            display: flex;
+    .footer__watermark {
 
-            align-items: flex-start;
-            justify-content: space-between;
+        position: absolute;
 
-            width: 100%;
-        }
+        /*
+        * right: 0 resolves against the padding box, which put the logo on the
+        * viewport edge. Offsetting by the container bleed keeps it on the same
+        * line as the content, and as the right edge of the header.
+        */
+        right: var(--container-bleed, 0px);
+        top: 50%;
 
-        &__left {
+        transform: translateY(-50%);
 
-            display: flex;
+        pointer-events: none;
 
-            align-items: center;
-            justify-content: flex-start;
+        img {
 
-            &--copy {
+            display: block;
 
-                display: flex;
+            height: auto;
 
-                align-items: center;
-                justify-content: flex-start;
+            @include fluid-prop('width', 130, 199, $min-resize, $max-resize, $unit: px);
 
-                @include format-text (
-                    $max-size: 10,
-                    $min-size: 10,
-                    $max-height: 15,
-                    $min-height: 15,
-                    $tx-color: theme-color(text-blue),
-                    $tx-weight: 400,
-                    $max-rsp: $max-resize,
-                    $min-rsp: $min-resize,
-                );
-
-                &:after {
-
-                    content: "|";
-                    padding: 0 3px;
-                }
-            }
-        }
-
-        &__sn {
-
-            display: flex;
-
-            align-items: flex-start;
-            justify-content: flex-start;
-
-            width: 100%;
-
-            padding: rem(16) 0;
+            opacity: 0.9;
         }
 
         @include respond-max(lg) {
 
-            &__row {
+            display: none;
+        }
+    }
 
-                flex-direction: column;
-                gap: rem(24);
+    /* ------------------------------------------------------------- menu */
+
+    .footer__nav {
+
+        background-color: theme-color(bg-footer);
+
+        @include fluid-prop('padding-top', 24, 32, $min-resize, $max-resize, $unit: px);
+        @include fluid-prop('padding-bottom', 24, 34, $min-resize, $max-resize, $unit: px);
+    }
+
+    /* ------------------------------------------------------ bottom bar */
+
+    .footer__bottom {
+
+        display: flex;
+        align-items: center;
+
+        min-height: $footer-bottom-height;
+
+        background-color: theme-color(bg-white);
+
+        > .footer__container {
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: rem(16);
+        }
+
+        @include respond-max(lg) {
+
+            min-height: $footer-bottom-height-rsp;
+
+            padding: rem(24) 0;
+
+            > .footer__container {
+
+                flex-direction: column-reverse;
+                justify-content: center;
+
+                gap: rem(20);
             }
         }
+    }
+
+    .footer__copy {
+
+        @include format-text (
+            $max-size: 16,
+            $min-size: 14,
+            $max-height: 24,
+            $min-height: 20,
+            $tx-color: color-alpha(text-blue, 0.5),
+            $tx-weight: 400,
+            $max-rsp: $max-resize,
+            $min-rsp: $min-resize,
+        );
+
+        p {
+
+            margin: 0;
+            color: inherit;
+            font: inherit;
+        }
+
+        a {
+
+            color: color-alpha(text-blue, 0.5);
+            text-decoration: none;
+
+            &:hover {
+
+                text-decoration: underline;
+                text-underline-offset: rem(3);
+            }
+        }
+    }
+
+    .footer__sn {
+
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        /*
+        * XD: the social icon is 31 x 30 and sits flush with the right edge of
+        * the container. Scoped here so the header panel keeps its own size.
+        */
+        .sn-items a {
+
+            width: rem(30);
+            height: rem(30);
+
+            svg,
+            img {
+
+                display: block;
+
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+
+    /* ------------------------------------------------------- 414 states */
+
+    @include respond-max(lg) {
+
+        .footer__grid {
+
+            grid-template-columns: minmax(0, 1fr);
+            row-gap: rem(28);
+        }
+
+        .footer__col--blocks {
+
+            /*
+            * The accordion rows run edge to edge in the XD, so they break out
+            * of the container padding.
+            */
+            margin-inline: calc(var(--container-bleed) * -1);
+        }
+
+        .footer__block {
+
+            border-top: 1px solid color-alpha(brd-white, 0.25);
+
+            & + .footer__block {
+
+                margin-top: 0;
+            }
+
+            &:last-child {
+
+                border-bottom: 1px solid color-alpha(brd-white, 0.25);
+            }
+        }
+
+        .footer__block-title {
+
+            margin: 0;
+        }
+
+        .footer__toggle {
+
+            min-height: rem(57);
+
+            padding-inline: var(--container-bleed);
+
+            cursor: pointer;
+        }
+
+        .footer__chevron {
+
+            display: block;
+        }
+
+        .footer__panel {
+
+            padding: 0 var(--container-bleed) rem(24);
+        }
+
+        .footer__hours {
+
+            grid-template-columns: minmax(0, 140px) minmax(0, 1fr);
+        }
+
+        /*
+        * Collapsed state. Only applied once the script has taken over, so the
+        * content stays readable if the bundle fails.
+        */
+        .footer__block.is-collapsible {
+
+            .footer__panel {
+
+                display: none;
+            }
+
+            &.is-open {
+
+                .footer__panel {
+
+                    display: block;
+                }
+
+                .footer__chevron {
+
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+
+    /*
+    * Two columns of times stop fitting here, so each interval sits above its
+    * own hours and the pairs are separated instead of the columns.
+    *
+    * Declared last on purpose: media queries add no specificity, so an earlier
+    * copy of this rule was simply overwritten by the base grid further down.
+    */
+    @include respond-max(sm) {
+
+        .footer__hours {
+
+            display: block;
+
+            dd {
+
+                margin: 0 0 rem(8);
+            }
+
+            dd:last-child {
+
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+/* Compact variant: menu strip and bottom bar only (Kontakt artboard) */
+footer.footer--compact {
+
+    .footer__nav {
+
+        @include fluid-prop('padding-top', 28, 34, $min-resize, $max-resize, $unit: px);
+        @include fluid-prop('padding-bottom', 28, 34, $min-resize, $max-resize, $unit: px);
     }
 }

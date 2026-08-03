@@ -2,6 +2,9 @@
 
 /*
 * RSP
+*
+* The mobile panel reuses the desktop navigation colours: deep blue links and
+* the same blue CTA pill, set on a soft sky surface.
 */
 
 .rsp {
@@ -13,28 +16,30 @@
 
     display: block;
 
-    background-color: theme-color(bg-white);
+    background-color: theme-color(bg-sky);
 
     /*
      * visibility keeps the closed panel out of the tab order. Without it the
      * menu sits off screen but its links are still reachable with the keyboard.
-     * The delay lets the slide-out finish before it is hidden.
+     * The delay lets the transition finish before it is hidden.
+     *
+     * The panel drops in from above; GSAP animates the same axis, so the CSS
+     * fallback and the scripted version travel in one direction.
      */
     visibility: hidden;
-    transform: translateX(100%);
-    transition: transform 0.2s ease-out, visibility 0s linear 0.2s;
+    transform: translateY(-100%);
+    transition: transform 0.25s ease-out, visibility 0s linear 0.25s;
 
     &.is-open {
 
         visibility: visible;
-        transform: translateX(0);
-        transition: transform 0.2s ease-out, visibility 0s;
+        transform: translateY(0);
+        transition: transform 0.25s ease-out, visibility 0s;
     }
 
     /*
      * Set once GSAP is available. It drives the transform frame by frame, so
      * the CSS transition would try to smooth values that are already animated.
-     * The slide above stays as the fallback when the bundle does not load.
      */
     &.rsp--animated {
 
@@ -52,10 +57,10 @@
         width: 100%;
         height: 100%;
 
-        padding: rem(32) rem(24);
+        padding: rem(20) rem(24) rem(32);
         box-sizing: border-box;
 
-        background-color: theme-color(bg-blue);
+        background-color: theme-color(bg-sky);
     }
 
     &__header {
@@ -74,9 +79,11 @@
 
             img {
 
-                @include logo-format;
+                display: block;
+                height: auto;
+                width: rem(110);
             }
-        }   
+        }
     }
 
     &__close {
@@ -91,6 +98,11 @@
         -webkit-appearance: none;
 
         line-height: 0;
+
+        /* Matches the hamburger it replaces */
+        color: theme-color(text-blue);
+
+        @include focus-ring;
     }
 
     &__content {
@@ -103,12 +115,14 @@
 
         width: 100%;
 
+        @include fluid-prop('margin-top', 32, 48, $min-resize, $max-resize, $unit: px);
+
         .nav-wrap {
 
             padding-top: 0;
             margin-left: 0;
 
-            padding-left: rem(16);
+            width: 100%;
 
             &__menu {
 
@@ -117,33 +131,37 @@
                 align-items: flex-start;
                 justify-content: flex-start;
 
-                gap: rem(24);
+                width: 100%;
+
+                gap: rem(20);
 
                 > li {
 
+                    /*
+                    * The link and its toggle sit on one line, the submenu
+                    * wraps onto the next. Without this the panel tried to put
+                    * the whole submenu beside the link, so it never showed.
+                    */
+                    flex-wrap: wrap;
+
+                    width: 100%;
+
                     > a {
 
-                        @include format-text;
+                        @include format-text (
+                            $max-size: 20,
+                            $min-size: 18,
+                            $max-height: 28,
+                            $min-height: 26,
+                            $tx-color: theme-color(primary-nav),
+                            $tx-weight: 400,
+                            $max-rsp: $max-resize,
+                            $min-rsp: $min-resize,
+                        );
 
                         text-transform: none;
-                        color: theme-color(text-white);
-                        font-weight: 400;
 
                         margin-bottom: 0;
-                    }
-
-                    &.current_page_item,
-                    &.current-menu-item,
-                    &.is-active {
-                        > a {
-                            
-                            
-                        }
-                    }
-
-                    &.ftr-active {
-
-                        display: block;
                     }
                 }
             }
@@ -160,9 +178,165 @@
         width: 100%;
     }
 
-    @include respond-min(xxl) {
+    /*
+    * The bar swaps to the hamburger at 1024px, so the panel has to stay
+    * available up to that same width. respond-min(xxl) left a dead zone
+    * between 1024 and 1160 where neither navigation was reachable.
+    */
+    @media (min-width: 1025px) {
 
         display: none;
+    }
+
+    /*
+    * Submenus stay in flow and expand in place. The same toggle button drives
+    * them, so the parent link keeps navigating to its own page.
+    */
+    .sub-menu {
+
+        position: static;
+
+        display: block;
+
+        /* Full width of the item, on its own row below the link */
+        flex: 0 0 100%;
+        width: 100%;
+
+        visibility: visible;
+        transform: none;
+
+        /*
+        * Collapsed by default. The script writes an explicit pixel height so
+        * the transition has something to travel to, then hands back to auto.
+        */
+        height: 0;
+        overflow: hidden;
+        opacity: 0;
+
+        transition:
+            height 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+            opacity 0.2s ease-out,
+            margin 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+
+        margin: 0 0 0;
+        padding: 0 0 0 rem(16);
+
+        background-color: transparent;
+
+        border-left: 1px solid color-alpha(brd-blue, 0.3);
+
+        li {
+
+            a {
+
+                min-height: 0;
+                width: auto;
+
+                padding: rem(7) 0;
+
+                border: none;
+
+                @include format-text (
+                    $max-size: 16,
+                    $min-size: 15,
+                    $max-height: 24,
+                    $min-height: 22,
+                    $tx-color: theme-color(text-blue),
+                    $tx-weight: 400,
+                    $max-rsp: $max-resize,
+                    $min-rsp: $min-resize,
+                );
+
+                &:hover {
+
+                    background-color: transparent;
+                    text-decoration: underline;
+                    text-underline-offset: rem(4);
+                }
+            }
+
+            & + li a {
+
+                margin-top: 0;
+            }
+
+            &:first-child a,
+            &:last-child a {
+
+                border-radius: 0;
+            }
+
+            &.current-menu-item > a {
+
+                background-color: transparent;
+                font-weight: 700;
+            }
+        }
+    }
+
+    .nav-wrap__menu > li.is-open > .sub-menu {
+
+        opacity: 1;
+
+        margin: rem(14) 0 rem(4);
+    }
+
+    /*
+    * Rows arrive one after another as the panel opens. Plain transition
+    * delays rather than a script, so the effect costs nothing extra.
+    */
+    .sub-menu > li {
+
+        opacity: 0;
+        transform: translateY(#{rem(-8)});
+
+        transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+    }
+
+    .nav-wrap__menu > li.is-open > .sub-menu > li {
+
+        opacity: 1;
+        transform: translateY(0);
+
+        @for $i from 1 through 8 {
+
+            &:nth-child(#{$i}) {
+
+                transition-delay: #{0.06 + ($i - 1) * 0.045}s;
+            }
+        }
+    }
+
+    /*
+    * Motion is decoration here: with reduced motion the submenu simply
+    * appears at its full height.
+    */
+    @media (prefers-reduced-motion: reduce) {
+
+        .sub-menu,
+        .sub-menu > li {
+
+            transition: none;
+        }
+
+        .nav-wrap__menu > li.is-open > .sub-menu {
+
+            height: auto;
+        }
+    }
+
+    .nav-wrap__toggle {
+
+        width: rem(32);
+        height: rem(32);
+    }
+
+    &__cta {
+
+        @include btn-pill-primary;
+        @include focus-ring;
+
+        min-width: rem(82);
     }
 }
 

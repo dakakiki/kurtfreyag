@@ -1,0 +1,118 @@
+@use 'colors' as *;
+@use 'fonts' as *;
+@use 'variables' as *;
+@use 'functions' as *;
+@use 'mixins' as *;
+@use 'breakpoints' as *;
+
+/*
+* Pill buttons
+*
+* XD component "button_small": fully rounded (r = 100), 82x31 in the header,
+* 132/152x31 for the footer contact pills, 162/182x41 on the 414 artboards.
+*/
+
+@mixin btn-pill-base {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: fit-content;
+
+    @include fluid-prop('height', 31, 31, $min-resize, $max-resize, $unit: px);
+    @include fluid-prop('padding-left', 16, 20, $min-resize, $max-resize, $unit: px);
+    @include fluid-prop('padding-right', 16, 20, $min-resize, $max-resize, $unit: px);
+
+    box-sizing: border-box;
+
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+
+    border: 1px solid transparent;
+
+    @include brd-radius-all($brd-radius: 100px);
+
+    @include trans;
+
+    &:hover,
+    &:focus-visible {
+
+        text-decoration: none;
+    }
+}
+
+/* Header CTA - blue pill, white bold label */
+@mixin btn-pill-primary {
+
+    @include btn-pill-base;
+
+    @include format-text(
+        $max-size: 14,
+        $min-size: 13,
+        $max-height: 20,
+        $min-height: 18,
+        $tx-color: theme-color(text-white),
+        $tx-weight: 700,
+        $max-rsp: $max-resize,
+        $min-rsp: $min-resize,
+    );
+
+    background-color: theme-color(bg-blue);
+    border-color: theme-color(brd-blue);
+
+    &:hover,
+    &:focus-visible {
+
+        background-color: theme-color(bg-ice);
+        color: theme-color(text-blue);
+    }
+}
+
+/* Footer contact pills - ice background, blue label, sits on the blue block */
+@mixin btn-pill-light {
+
+    @include btn-pill-base;
+
+    @include format-text(
+        $max-size: 14,
+        $min-size: 14,
+        $max-height: 20,
+        $min-height: 20,
+        $tx-color: theme-color(text-blue),
+        $tx-weight: 400,
+        $max-rsp: $max-resize,
+        $min-rsp: $min-resize,
+    );
+
+    background-color: theme-color(bg-ice);
+    border-color: theme-color(brd-ice);
+
+    &:hover,
+    &:focus-visible {
+
+        background-color: theme-color(bg-white);
+        border-color: theme-color(brd-golden);
+    }
+
+    @include respond-max(lg) {
+
+        height: rem(41);
+
+        padding-left: rem(20);
+        padding-right: rem(20);
+    }
+}
+
+/*
+* Visible focus ring for keyboard users, on any background.
+*/
+@mixin focus-ring($color: theme-color(brd-golden)) {
+
+    &:focus-visible {
+
+        outline: 2px solid $color;
+        outline-offset: 3px;
+    }
+}

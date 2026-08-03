@@ -28,136 +28,145 @@
 
 	<?php wp_head(); ?>
 
-    <?php
-        $general_options = getGeneralOptions();
-    ?>
+	<?php $general_options = getGeneralOptions(); ?>
 
-    <?php if(!empty($general_options['code_head'])): ?>
-        <?= $general_options['code_head']; ?>
-    <?php endif; ?>
+	<?php if ( ! empty( $general_options['code_head'] ) ) : ?>
+		<?= $general_options['code_head']; ?>
+	<?php endif; ?>
 
 </head>
 
-<body id="top">
+<body id="top" <?php body_class(); ?>>
 
 <?php wp_body_open(); ?>
 
-<?php if(!empty($general_options['code_body'])): ?>
-    <?= $general_options['code_body']; ?>
+<?php if ( ! empty( $general_options['code_body'] ) ) : ?>
+	<?= $general_options['code_body']; ?>
 <?php endif; ?>
 
+<a class="skip-link" href="#main"><?php esc_html_e( 'Zum Inhalt springen', 'KurtFreyAG' ); ?></a>
+
 <?php
+	$headerElements = getHeaderSettings();
 
-    $headerElements = getHeaderSettings();
+	$logo         = $headerElements['h_logo'] ?? null;
+	$headerButton = $headerElements['h_button'] ?? null;
 
-    $logoURL = get_home_url();
-    $logoURLtitle = get_bloginfo('name');
-    $logoTarget = '_self';
+	$logoURL      = home_url( '/' );
+	$logoURLtitle = get_bloginfo( 'name' );
 ?>
 
 <header>
 
-    <div class="header">
+	<div class="header">
 
-        <div class="header__all">
+		<div class="header__all">
 
-            <?php if(isset($headerElements['h_logo']) && $headerElements['h_logo'] != ''): ?>
-            <div class="header__logo">
-                <a href="<?php echo $logoURL; ?>" title="<?php echo $logoURLtitle; ?>" target="<?= $logoTarget; ?>">
-                    <img loading="eager" fetchpriority="high" src="<?php echo $headerElements['h_logo']['url']; ?>" width="116px" height="144px" alt="<?php echo $logoURLtitle; ?>">
-                </a>
-            </div>
-            <?php endif; ?>
+			<?php if ( ! empty( $logo ) ) : ?>
+				<div class="header__logo">
+					<a href="<?= esc_url( $logoURL ); ?>" title="<?= esc_attr( $logoURLtitle ); ?>">
+						<?= theme_acf_image( $logo, 'medium', array(
+							'loading'       => 'eager',
+							'fetchpriority' => 'high',
+							'alt'           => $logoURLtitle,
+						) ); ?>
+					</a>
+				</div>
+			<?php endif; ?>
 
-            <div class="header__nav">
-                <?php
-                    include 'template_parts/main_menu.php';
-                ?>
-            </div>
+			<nav class="header__nav" aria-label="<?php esc_attr_e( 'Hauptnavigation', 'KurtFreyAG' ); ?>">
+				<?php get_template_part( 'template_parts/main_menu' ); ?>
+			</nav>
 
-            <?php if(isset($headerElements['h_button']) && $headerElements['h_button'] != '' && isset($headerElements['h_button']['url'])): ?>
-            <div class="header__buttons">
-                <a
-                    class="btn-apply" 
-                    href="<?= esc_url($headerElements['h_button']['url']); ?>" 
-                    title="<?= esc_attr($headerElements['h_button']['title']); ?>" 
-                    target="_self"
-                    >
+			<?php if ( ! empty( $headerButton['url'] ) ) : ?>
+				<div class="header__buttons">
+					<a
+						class="btn-apply"
+						href="<?= esc_url( $headerButton['url'] ); ?>"
+						target="<?= esc_attr( ! empty( $headerButton['target'] ) ? $headerButton['target'] : '_self' ); ?>"
+						<?= ( ! empty( $headerButton['target'] ) && $headerButton['target'] === '_blank' ) ? 'rel="noopener"' : ''; ?>
+					>
+						<span><?= esc_html( $headerButton['title'] ); ?></span>
+					</a>
+				</div>
+			<?php endif; ?>
 
-                    <span><?= esc_attr($headerElements['h_button']['title']); ?></span>
-                </a>
-            </div>
-            <?php endif; ?>
+			<button
+				type="button"
+				class="header__hamburger"
+				aria-controls="rsp-menu"
+				aria-expanded="false"
+				aria-label="<?php esc_attr_e( 'Menü öffnen', 'KurtFreyAG' ); ?>"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" width="30" height="17" viewBox="0 0 40 21" aria-hidden="true" focusable="false">
+					<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1">
+						<line x1="0.5" y1="0.5" x2="39.5" y2="0.5"/>
+						<line x1="0.5" y1="10.5" x2="39.5" y2="10.5"/>
+						<line x1="0.5" y1="20.5" x2="39.5" y2="20.5"/>
+					</g>
+				</svg>
+			</button>
 
-            <button
-                type="button"
-                class="header__hamburger"
-                aria-controls="rsp-menu"
-                aria-expanded="false"
-                aria-label="<?php echo esc_attr__( 'Open menu', 'KurtFreyAG' ); ?>"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 40 21" aria-hidden="true" focusable="false">
-                <g id="Group_433" data-name="Group 433" transform="translate(-315 -43)">
-                    <line id="Line_31" data-name="Line 31" x2="39" transform="translate(315.5 43.5)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
-                    <line id="Line_32" data-name="Line 32" x2="39" transform="translate(315.5 53.5)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
-                    <line id="Line_33" data-name="Line 33" x2="39" transform="translate(315.5 63.5)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
-                </g>
-                </svg>
-            </button>
+		</div>
 
-        </div>
-
-    </div>
+	</div>
 
 </header>
 
 <div class="rsp" id="rsp-menu">
 
-    <div class="rsp__elements">
+	<div class="rsp__elements">
 
-        <div class="rsp__header">
+		<div class="rsp__header">
 
-            <?php if (!empty($headerElements['h_logo'])): ?>
-            <div class="rsp__logo">
+			<?php if ( ! empty( $logo ) ) : ?>
+				<div class="rsp__logo">
+					<a href="<?= esc_url( $logoURL ); ?>" title="<?= esc_attr( $logoURLtitle ); ?>">
+						<?= theme_acf_image( $logo, 'medium', array(
+							'loading' => 'lazy',
+							'alt'     => $logoURLtitle,
+						) ); ?>
+					</a>
+				</div>
+			<?php endif; ?>
 
-                <a href="<?php echo $logoURL; ?>" title="<?php echo $logoURLtitle; ?>" target="<?= $logoTarget; ?>">
-                    <img loading="eager" fetchpriority="high" src="<?php echo $headerElements['h_logo']['url']; ?>" width="116px" height="144px" alt="<?php echo $logoURLtitle; ?>">
-                </a>
+			<button
+				type="button"
+				class="rsp__close"
+				aria-label="<?php esc_attr_e( 'Menü schliessen', 'KurtFreyAG' ); ?>"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" width="14" height="15" viewBox="0 0 12.413 13.413" aria-hidden="true" focusable="false">
+					<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1">
+						<line y1="12" x2="11" transform="translate(0.7 0.7)"/>
+						<line x2="11" y2="12" transform="translate(0.7 0.7)"/>
+					</g>
+				</svg>
+			</button>
 
-            </div>
-            <?php endif; ?>
+		</div>
 
-            <button
-                type="button"
-                class="rsp__close"
-                aria-label="<?php echo esc_attr__( 'Close menu', 'KurtFreyAG' ); ?>"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" width="12.413" height="13.413" viewBox="0 0 12.413 13.413" aria-hidden="true" focusable="false">
-                <g id="Group_434" data-name="Group 434" transform="translate(-332.794 -790.794)">
-                    <line id="Line_72" data-name="Line 72" y1="12" x2="11" transform="translate(333.5 791.5)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
-                    <line id="Line_73" data-name="Line 73" x2="11" y2="12" transform="translate(333.5 791.5)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
-                </g>
-                </svg>
-            </button>
+		<div class="rsp__content">
+			<?php get_template_part( 'template_parts/main_menu' ); ?>
+		</div>
 
-        </div>
+		<div class="rsp__footer">
 
-        <div class="rsp__content">
-            <?php
-                include 'template_parts/main_menu.php';
-            ?>
-        </div>
+			<?php if ( ! empty( $headerButton['url'] ) ) : ?>
+				<a
+					class="rsp__cta"
+					href="<?= esc_url( $headerButton['url'] ); ?>"
+					target="<?= esc_attr( ! empty( $headerButton['target'] ) ? $headerButton['target'] : '_self' ); ?>"
+				>
+					<?= esc_html( $headerButton['title'] ); ?>
+				</a>
+			<?php endif; ?>
 
-        <div class="rsp__footer">
+			<div class="rsp__sn">
+				<?php get_template_part( 'template_parts/sn' ); ?>
+			</div>
 
-            <div class="rsp__sn">
-                <?php
-                    include 'template_parts/sn.php';
-                ?>
-            </div>
+		</div>
 
-        </div>
-
-    </div>
+	</div>
 
 </div>
