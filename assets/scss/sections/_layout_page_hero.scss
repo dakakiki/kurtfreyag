@@ -2,7 +2,26 @@
 
 /*
 * Block - Page Hero (layout_page_hero)
+*
+* XD reference (1440 x 800):
+*   image     starts at x373 (25.9%), runs to the right edge, 150px radius
+*             on the bottom right corner only
+*   overlay   #00529E quad: (0,0) (488,0) (755,800) (0,800), so the right
+*             edge is a diagonal - this is the "cut" look
+*   title     Lato Bold 58, white, at x140
+*   lead      Lato Regular 16, white
+*   button    white pill 213 x 48, Lato Bold 16 #00529E,
+*             hover turns the pill golden and keeps the blue label
+*
+* Element scaling runs on $min-resize-sec / $max-resize-sec (1366 -> 1550).
+* The container mixin keeps the primary range so the hero text starts on the
+* same left edge as the header and the footer.
 */
+
+/* 373 / 1440 and the two diagonal x positions, as shares of the viewport */
+$hero-image-left: 25.9%;
+$hero-cut-top: 33.89%;
+$hero-cut-bottom: 52.43%;
 
 .layout-page-hero {
 
@@ -20,10 +39,56 @@
 
         align-items: center;
 
+        /* The fixed bar sits over the hero, so the content clears it. */
+        padding-top: $header-height;
+        box-sizing: border-box;
+
+        &__image {
+
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            right: 0;
+
+            width: calc(100% - #{$hero-image-left});
+            height: 100%;
+
+            overflow: hidden;
+
+            /* XD: 150px on the bottom right corner only */
+            @include fluid-prop('border-bottom-right-radius', 60, 150, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            img {
+
+                @include image-cover;
+            }
+        }
+
+        /*
+        * The blue shape. A clip-path rather than a rotated block, so the
+        * diagonal keeps its exact XD angle at any width and nothing spills
+        * outside the hero.
+        */
+        &__overlay {
+
+            position: absolute;
+            z-index: 2;
+            inset: 0;
+
+            background-color: theme-color(bg-blue);
+
+            clip-path: polygon(
+                0 0,
+                #{$hero-cut-top} 0,
+                #{$hero-cut-bottom} 100%,
+                0 100%
+            );
+        }
+
         &__content {
 
             position: relative;
-            z-index: 2;
+            z-index: 3;
 
             display: flex;
 
@@ -43,7 +108,7 @@
             align-items: flex-start;
             justify-content: flex-start;
 
-            max-width: rem(670);
+            max-width: rem(430);
             width: 100%;
 
             .section-label {
@@ -59,21 +124,40 @@
 
             h1 {
 
-                @include t-h1;
+                display: block;
+
+                /* XD: 58px bold, not the 72px of the global h1 scale */
+                @include format-text(
+                    $max-size: 58,
+                    $min-size: 40,
+                    $max-height: 66,
+                    $min-height: 46,
+                    $tx-color: theme-color(title-white),
+                    $tx-weight: 700,
+                    $max-rsp: $max-resize-sec,
+                    $min-rsp: $min-resize-sec,
+                );
+
+                strong {
+
+                    font-weight: 700;
+                }
             }
 
             &--text {
 
-                @include fluid-prop('margin-top', 16, 20, $min-resize, $max-resize, $unit: px);
+                @include fluid-prop('margin-top', 12, 16, $min-resize-sec, $max-resize-sec, $unit: px);
 
                 p {
 
                     @include format-text(
-                        $max-size: 26,
-                        $min-size: 20,
-                        $max-height: 36,
-                        $min-height: 30,
+                        $max-size: 16,
+                        $min-size: 15,
+                        $max-height: 24,
+                        $min-height: 22,
                         $tx-color: theme-color(text-white),
+                        $max-rsp: $max-resize-sec,
+                        $min-rsp: $min-resize-sec,
                     );
                 }
             }
@@ -86,52 +170,73 @@
                 align-items: center;
                 gap: rem(16);
 
-                @include fluid-prop('margin-top', 40, 56, $min-resize, $max-resize, $unit: px);
+                /*
+                * The gap above the buttons is the largest measure in the hero,
+                * so it scales across the whole desktop band rather than only
+                * between 1366 and 1550 - otherwise it sits at a fixed 56px on
+                * every laptop width and crowds the lead text.
+                */
+                @include fluid-prop('margin-top', 32, 88, $min-resize, $max-resize-sec, $unit: px);
 
                 a {
 
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    box-sizing: border-box;
+
+                    /* XD: 48px tall pill */
+                    @include fluid-prop('height', 44, 48, $min-resize-sec, $max-resize-sec, $unit: px);
+                    @include fluid-prop('padding-left', 28, 40, $min-resize-sec, $max-resize-sec, $unit: px);
+                    @include fluid-prop('padding-right', 28, 40, $min-resize-sec, $max-resize-sec, $unit: px);
+
+                    @include format-text(
+                        $max-size: 16,
+                        $min-size: 15,
+                        $max-height: 24,
+                        $min-height: 22,
+                        $tx-color: theme-color(text-blue),
+                        $tx-weight: 700,
+                        $max-rsp: $max-resize-sec,
+                        $min-rsp: $min-resize-sec,
+                    );
+
                     text-decoration: none;
+                    white-space: nowrap;
 
-                    &.b-dark {
+                    border: 1px solid transparent;
 
-                        @include btn-primary;
-                    }
+                    @include brd-radius-all($brd-radius: 100px);
 
+                    @include trans;
+                    @include focus-ring(theme-color(brd-white));
+
+                    /* XD default: white pill, blue label */
                     &.b-light {
 
-                        @include btn-secondary;
+                        background-color: theme-color(bg-white);
+                        border-color: theme-color(brd-white);
+                        color: theme-color(text-blue);
+                    }
+
+                    /* Secondary weight for a hero that needs two buttons */
+                    &.b-dark {
+
+                        background-color: transparent;
+                        border-color: theme-color(brd-white);
+                        color: theme-color(text-white);
+                    }
+
+                    /* XD hover state: golden pill, label stays blue */
+                    &:hover,
+                    &:focus-visible {
+
+                        background-color: theme-color(bg-golden);
+                        border-color: theme-color(brd-golden);
+                        color: theme-color(text-blue);
                     }
                 }
-            }
-        }
-
-        &__image {
-
-            position: absolute;
-            z-index: 1;
-            top: 0;
-            right: 0;
-
-            width: 100%;
-            height: 100%;
-
-            &--overlay {
-
-                position: absolute;
-                z-index: 2;
-                top: 0;
-                left: 0;
-
-                width: 100%;
-                height: 100%;
-            }
-
-            img {
-
-                @include image-cover;
-
-                position: relative;
-                z-index: 1;
             }
         }
 
@@ -139,9 +244,27 @@
 
             flex-direction: column;
 
-            &__content {
+            padding-top: $header-height-rsp;
 
-                order: 2;
+            /* The diagonal has no room here: image on top, content on blue. */
+            background-color: theme-color(bg-blue);
+
+            &__overlay {
+
+                display: none;
+            }
+
+            &__image {
+
+                position: relative;
+
+                width: 100%;
+                height: fluid(280, 420, 360, 991);
+
+                @include fluid-prop('border-bottom-right-radius', 40, 80, 360, 991, $unit: px);
+            }
+
+            &__content {
 
                 max-width: 100%;
 
@@ -157,16 +280,6 @@
                     @include break-word;
                 }
             }
-
-            &__image {
-
-                order: 1;
-
-                position: relative;
-
-                width: 100%;
-                height: fluid(280, 420, 360, 991);
-            }
         }
     }
 
@@ -176,6 +289,7 @@
         .page-hero {
 
             min-height: 100vh;
+            min-height: 100svh;
 
             @include respond-max(lg) {
 

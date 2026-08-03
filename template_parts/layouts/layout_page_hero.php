@@ -1,79 +1,98 @@
 <?php
+/**
+ * Layout: layout_page_hero
+ *
+ * XD composition (1440 x 800 artboard):
+ *   image    x373 -> 1440, full height, 150px radius on the bottom right
+ *   overlay  blue quad, straight left edge, diagonal right edge from x488
+ *            at the top to x755 at the bottom - the "cut" shape
+ *   content  sits on the blue, title at x140
+ *
+ * The image sits under the overlay, so both are painted before the content.
+ */
 
-    $r_no = get_row_index();
+$hero_row     = get_row_index();
+$hero_styles  = get_sub_field( 'styles' );
+$hero_content = get_sub_field( 'content' );
+$hero_image   = get_sub_field( 'image' );
 
-    $ph_style[$r_no] = get_sub_field('styles');
+$hero_anchor = sanitize_title( (string) get_sub_field( 'anchor' ) );
 
-    $ph_hero_height[$r_no] = (!empty($ph_style[$r_no]['style_layout_height']) && $ph_style[$r_no]['style_layout_height'] == 'h-full')
-        ? 'h-full'
-        : 'h-page';
-
-    $ph_content[$r_no] = get_sub_field('content');
-    $ph_image[$r_no] = get_sub_field('image');
+$hero_height = ( ! empty( $hero_styles['style_layout_height'] ) && $hero_styles['style_layout_height'] === 'h-full' )
+	? 'h-full'
+	: 'h-page';
 ?>
 
-<div id="<?php echo the_sub_field('anchor'); ?>" class="layout-page-hero <?= $ph_hero_height[$r_no]; ?>">
+<section
+	<?php if ( $hero_anchor ) : ?>id="<?= esc_attr( $hero_anchor ); ?>"<?php endif; ?>
+	class="layout-page-hero <?= esc_attr( $hero_height ); ?>"
+>
 
-    <div id="lyt-<?= $r_no; ?>" class="page-hero">
+	<div class="page-hero" id="lyt-<?= (int) $hero_row; ?>">
 
-        <div class="page-hero__content">
+		<?php if ( ! empty( $hero_image ) ) : ?>
+			<div class="page-hero__image fade-right">
+				<?= theme_acf_image(
+					$hero_image,
+					'full',
+					array(
+						'loading'       => 'eager',
+						'fetchpriority' => 'high',
+						'sizes'         => '(max-width: 991px) 100vw, 75vw',
+					)
+				); ?>
+			</div>
+		<?php endif; ?>
 
-            <div class="page-hero__wrap group-fade-up">
+		<div class="page-hero__overlay" aria-hidden="true"></div>
 
-                <?php if (!empty($ph_content[$r_no]['title'])): ?>
-                    <h1 class="fade-up"><?= wp_kses_post($ph_content[$r_no]['title']); ?></h1>
-                <?php endif; ?>
+		<div class="page-hero__content">
 
-                <?php if (!empty($ph_content[$r_no]['text'])): ?>
-                    <div class="page-hero__wrap--text fade-up"><?= wp_kses_post($ph_content[$r_no]['text']); ?></div>
-                <?php endif; ?>
+			<div class="page-hero__wrap group-fade-up">
 
-                <?php if (!empty($ph_content[$r_no]['buttons'])): ?>
+				<?php if ( ! empty( $hero_content['title'] ) ) : ?>
+					<h1 class="fade-up"><?= wp_kses_post( $hero_content['title'] ); ?></h1>
+				<?php endif; ?>
 
-                    <div class="page-hero__wrap--btns fade-up">
+				<?php if ( ! empty( $hero_content['text'] ) ) : ?>
+					<div class="page-hero__wrap--text fade-up"><?= wp_kses_post( $hero_content['text'] ); ?></div>
+				<?php endif; ?>
 
-                        <?php foreach ($ph_content[$r_no]['buttons'] as $b => $lnk): ?>
-                            
-                            <?php if (!empty($lnk['button_link'])): ?>
-                                <a 
-                                    class="<?= $lnk['button_style']; ?>"
-                                    href="<?= esc_url($lnk['button_link']['url']); ?>" 
-                                    title="<?= esc_html($lnk['button_link']['title']); ?>" 
-                                    target="<?= esc_attr($lnk['button_link']['target']); ?>"
-                                >
+				<?php if ( ! empty( $hero_content['buttons'] ) ) : ?>
 
-                                    <span><?= esc_html($lnk['button_link']['title']); ?></span>
+					<div class="page-hero__wrap--btns fade-up">
 
-                                </a>
-                            <?php endif; ?>
-                            
-                        <?php endforeach; ?>
+						<?php foreach ( $hero_content['buttons'] as $button ) : ?>
 
-                    </div>
+							<?php
+							if ( empty( $button['button_link']['url'] ) ) {
+								continue;
+							}
 
-                <?php endif; ?>
+							$link   = $button['button_link'];
+							$style  = ! empty( $button['button_style'] ) ? $button['button_style'] : 'b-light';
+							$target = ! empty( $link['target'] ) ? $link['target'] : '_self';
+							?>
 
-            </div>
+							<a
+								class="<?= esc_attr( $style ); ?>"
+								href="<?= esc_url( $link['url'] ); ?>"
+								target="<?= esc_attr( $target ); ?>"
+								<?= $target === '_blank' ? 'rel="noopener"' : ''; ?>
+							>
+								<span><?= esc_html( $link['title'] ); ?></span>
+							</a>
 
-        </div>
+						<?php endforeach; ?>
 
-        <?php if (!empty($ph_image[$r_no])): ?>
-        <div class="page-hero__image fade-right">
+					</div>
 
-            <div class="page-hero__image--overlay"></div>
+				<?php endif; ?>
 
-            <?= theme_acf_image(
-                    $ph_image[$r_no],
-                    'full',
-                    array(
-                        'loading'       => 'eager',
-                        'fetchpriority' => 'high',
-                        'sizes'         => '100vw',
-                    )
-                ); ?>
-        </div>
-        <?php endif; ?>
+			</div>
 
-    </div>
+		</div>
 
-</div>
+	</div>
+
+</section>

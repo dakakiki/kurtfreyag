@@ -1468,7 +1468,22 @@ Tags: KurtFreyAG
 */
 /*
 * Block - Page Hero (layout_page_hero)
+*
+* XD reference (1440 x 800):
+*   image     starts at x373 (25.9%), runs to the right edge, 150px radius
+*             on the bottom right corner only
+*   overlay   #00529E quad: (0,0) (488,0) (755,800) (0,800), so the right
+*             edge is a diagonal - this is the "cut" look
+*   title     Lato Bold 58, white, at x140
+*   lead      Lato Regular 16, white
+*   button    white pill 213 x 48, Lato Bold 16 #00529E,
+*             hover turns the pill golden and keeps the blue label
+*
+* Element scaling runs on $min-resize-sec / $max-resize-sec (1366 -> 1550).
+* The container mixin keeps the primary range so the hero text starts on the
+* same left edge as the header and the footer.
 */
+/* 373 / 1440 and the two diagonal x positions, as shares of the viewport */
 .layout-page-hero {
   position: relative;
   overflow: hidden;
@@ -1478,10 +1493,45 @@ Tags: KurtFreyAG
   position: relative;
   display: flex;
   align-items: center;
+  /* The fixed bar sits over the hero, so the content clears it. */
+  padding-top: 100px;
+  box-sizing: border-box;
+}
+.layout-page-hero .page-hero__image {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  width: calc(100% - 25.9%);
+  height: 100%;
+  overflow: hidden;
+  /* XD: 150px on the bottom right corner only */
+  border-bottom-right-radius: clamp(60px, -608.152173913px + 48.9130434783vw, 150px);
+}
+.layout-page-hero .page-hero__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+.layout-page-hero .page-hero {
+  /*
+  * The blue shape. A clip-path rather than a rotated block, so the
+  * diagonal keeps its exact XD angle at any width and nothing spills
+  * outside the hero.
+  */
+}
+.layout-page-hero .page-hero__overlay {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background-color: #00529E;
+  clip-path: polygon(0 0, 33.89% 0, 52.43% 100%, 0 100%);
 }
 .layout-page-hero .page-hero__content {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -1502,7 +1552,7 @@ Tags: KurtFreyAG
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  max-width: 41.875rem;
+  max-width: 26.875rem;
   width: 100%;
 }
 .layout-page-hero .page-hero__wrap .section-label {
@@ -1519,9 +1569,10 @@ Tags: KurtFreyAG
 }
 .layout-page-hero .page-hero__wrap h1 {
   display: block;
-  font-size: clamp(52px, -65.2781065089px + 11.8343195266vw, 72px);
-  line-height: clamp(56px, -61.2781065089px + 11.8343195266vw, 76px);
-  color: #00529E;
+  /* XD: 58px bold, not the 72px of the global h1 scale */
+  font-size: clamp(40px, -93.6304347826px + 9.7826086957vw, 58px);
+  line-height: clamp(46px, -102.4782608696px + 10.8695652174vw, 66px);
+  color: #ffffff;
   font-weight: 700;
   text-decoration: none;
   font-family: "Lato", sans-serif;
@@ -1530,11 +1581,11 @@ Tags: KurtFreyAG
   font-weight: 700;
 }
 .layout-page-hero .page-hero__wrap--text {
-  margin-top: clamp(16px, -7.4556213018px + 2.3668639053vw, 20px);
+  margin-top: clamp(12px, -17.6956521739px + 2.1739130435vw, 16px);
 }
 .layout-page-hero .page-hero__wrap--text p {
-  font-size: clamp(20px, -15.1834319527px + 3.550295858vw, 26px);
-  line-height: clamp(30px, -5.1834319527px + 3.550295858vw, 36px);
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
   color: #ffffff;
   font-weight: 400;
   text-decoration: none;
@@ -1545,112 +1596,85 @@ Tags: KurtFreyAG
   flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
-  margin-top: clamp(40px, -53.8224852071px + 9.4674556213vw, 56px);
+  /*
+  * The gap above the buttons is the largest measure in the hero,
+  * so it scales across the whole desktop band rather than only
+  * between 1366 and 1550 - otherwise it sits at a fixed 56px on
+  * every laptop width and crowds the lead text.
+  */
+  margin-top: clamp(32px, -67.2772808587px + 10.0178890877vw, 88px);
 }
 .layout-page-hero .page-hero__wrap--btns a {
-  text-decoration: none;
-}
-.layout-page-hero .page-hero__wrap--btns a.b-dark {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: fit-content;
-  height: clamp(32px, -61.8224852071px + 9.4674556213vw, 48px);
-  font-size: clamp(14px, -0.847826087px + 1.0869565217vw, 16px);
+  box-sizing: border-box;
+  /* XD: 48px tall pill */
+  height: clamp(44px, 14.3043478261px + 2.1739130435vw, 48px);
+  padding-left: clamp(28px, -61.0869565217px + 6.5217391304vw, 40px);
+  padding-right: clamp(28px, -61.0869565217px + 6.5217391304vw, 40px);
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
   line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
-  color: #ffffff;
-  font-weight: 400;
+  color: #00529E;
+  font-weight: 700;
   text-decoration: none;
   font-family: "Lato", sans-serif;
-  white-space: nowrap;
-  cursor: pointer;
   text-decoration: none;
-  padding-left: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
-  padding-right: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
-  border: none;
-  border-collapse: collapse;
-  background-color: #00529E;
-  border: 1px solid #00529E;
-  -webkit-border-radius: 0.1875rem;
-  -moz-border-radius: 0.1875rem;
-  border-radius: 0.1875rem;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
   -moz-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-.layout-page-hero .page-hero__wrap--btns a.b-dark:hover {
-  background-color: #ffffff;
-  border: 1px solid #00529E;
-  color: #00529E;
-  text-decoration: none;
+.layout-page-hero .page-hero__wrap--btns a:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+.layout-page-hero .page-hero__wrap--btns a {
+  /* XD default: white pill, blue label */
 }
 .layout-page-hero .page-hero__wrap--btns a.b-light {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: fit-content;
-  height: clamp(32px, -61.8224852071px + 9.4674556213vw, 48px);
-  font-size: clamp(14px, -0.847826087px + 1.0869565217vw, 16px);
-  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
-  color: #00529E;
-  font-weight: 400;
-  text-decoration: none;
-  font-family: "Lato", sans-serif;
-  white-space: nowrap;
-  cursor: pointer;
-  text-decoration: none;
-  padding-left: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
-  padding-right: clamp(16px, -77.8224852071px + 9.4674556213vw, 32px);
-  border: none;
-  border-collapse: collapse;
-  border: 1px solid #ffffff;
   background-color: #ffffff;
-  -webkit-border-radius: 0.1875rem;
-  -moz-border-radius: 0.1875rem;
-  border-radius: 0.1875rem;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  -webkit-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+  border-color: #ffffff;
+  color: #00529E;
 }
-.layout-page-hero .page-hero__wrap--btns a.b-light:hover {
-  background-color: #00529E;
-  border: 1px solid #00529E;
+.layout-page-hero .page-hero__wrap--btns a {
+  /* Secondary weight for a hero that needs two buttons */
+}
+.layout-page-hero .page-hero__wrap--btns a.b-dark {
+  background-color: transparent;
+  border-color: #ffffff;
   color: #ffffff;
-  text-decoration: none;
 }
-.layout-page-hero .page-hero__image {
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
+.layout-page-hero .page-hero__wrap--btns a {
+  /* XD hover state: golden pill, label stays blue */
 }
-.layout-page-hero .page-hero__image--overlay {
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-.layout-page-hero .page-hero__image img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  position: relative;
-  z-index: 1;
+.layout-page-hero .page-hero__wrap--btns a:hover, .layout-page-hero .page-hero__wrap--btns a:focus-visible {
+  background-color: #FFB500;
+  border-color: #FFB500;
+  color: #00529E;
 }
 @media (max-width: 991px) {
   .layout-page-hero .page-hero {
     flex-direction: column;
+    padding-top: 64px;
+    /* The diagonal has no room here: image on top, content on blue. */
+    background-color: #00529E;
+  }
+  .layout-page-hero .page-hero__overlay {
+    display: none;
+  }
+  .layout-page-hero .page-hero__image {
+    position: relative;
+    width: 100%;
+    height: clamp(280px, 200.1267828843px + 22.1870047544vw, 420px);
+    border-bottom-right-radius: clamp(40px, 17.1790808241px + 6.3391442155vw, 80px);
   }
   .layout-page-hero .page-hero__content {
-    order: 2;
     max-width: 100%;
     padding-top: clamp(24px, 19.4358161648px + 1.2678288431vw, 32px);
   }
@@ -1662,18 +1686,13 @@ Tags: KurtFreyAG
     overflow-wrap: break-word;
     word-wrap: break-word;
   }
-  .layout-page-hero .page-hero__image {
-    order: 1;
-    position: relative;
-    width: 100%;
-    height: clamp(280px, 200.1267828843px + 22.1870047544vw, 420px);
-  }
 }
 .layout-page-hero {
   /* Layout height style */
 }
 .layout-page-hero.h-full .page-hero {
   min-height: 100vh;
+  min-height: 100svh;
 }
 @media (max-width: 991px) {
   .layout-page-hero.h-full .page-hero {
