@@ -198,12 +198,12 @@ function my_acf_enqueue_layout_assets() {
      * Map ACF layouts to their JS files
      */
     $layout_scripts = [
-        // 'layout_hero' => [
-        //     'min'         => 'js/layout_hero.min.js',
-        //     'file'        => 'js/layout_hero.js',
-        //     'deps'        => [ 'jquery' ],
-        //     'needs_slick' => true,
-        // ],
+        'layout_news_slider' => [
+            'min'         => 'js/layout_news_slider.min.js',
+            'file'        => 'js/layout_news_slider.js',
+            'deps'        => [ 'jquery' ],
+            'needs_slick' => true,
+        ],
     ];
 
     /*

@@ -4,6 +4,7 @@ import { exec } from "child_process";
 const files = [
     "assets/js/custom.js",
     "assets/js/slick.min.js",
+    "assets/js/layout_news_slider.min.js",
 
     "assets/js/gsap.js",
 ];
