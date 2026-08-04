@@ -1,0 +1,226 @@
+@use '../abstracts' as *;
+
+/*
+* Block - News slider (layout_news_slider)
+*
+* XD reference (homepage, 1440 artboard):
+*   frame     x140 -> 1300, 3px #00529E border, 60px radius, no fill
+*   icon      ~110 x 82, sits on the top border, 142 from the right edge
+*   title     Lato Bold 53 #00529E, centred, baseline 130 below the frame top
+*   viewport  996 wide, so the frame has 82 of padding on each side
+*   card      310 x 464, 33 between cards - the card itself now lives in
+*             components/_news-card.scss, shared with the archive
+*   dots      moved to vendor/_slick.scss - shared by every slider
+*
+* Element scaling uses the secondary range, as in the hero.
+*/
+
+/* 33 between cards, split across the two slide halves */
+$news-gutter: 16.5px;
+
+.layout-news-slider {
+
+    position: relative;
+
+    width: 100%;
+
+    /*
+    * Block spacing. The top value also has to clear the icon, which hangs
+    * above the frame, so it is never smaller than the icon overhang.
+    */
+    @include fluid-prop('margin-top', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+    @include fluid-prop('margin-bottom', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    @include respond-max(lg) {
+
+        margin-top: fluid(56, 80, 360, 991);
+        margin-bottom: fluid(56, 80, 360, 991);
+    }
+
+    .news {
+
+        @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+
+        &__frame {
+
+            position: relative;
+            z-index: 1;
+
+            /* XD: outlined frame, nothing behind it */
+            border: 3px solid theme-color(brd-blue);
+
+            @include brd-radius-all($brd-radius: rem(60));
+
+            @include fluid-prop('padding-top', 48, 77, $min-resize-sec, $max-resize-sec, $unit: px);
+            @include fluid-prop('padding-bottom', 48, 78, $min-resize-sec, $max-resize-sec, $unit: px);
+            @include fluid-prop('padding-left', 32, 82, $min-resize-sec, $max-resize-sec, $unit: px);
+            @include fluid-prop('padding-right', 32, 82, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            @include respond-max(lg) {
+
+                @include brd-radius-all($brd-radius: rem(30));
+
+                padding: fluid(40, 56, 360, 991) fluid(20, 32, 360, 991);
+            }
+        }
+
+        /*
+        * The icon straddles the top border. Anchored to the frame rather than
+        * the title, so it stays put whatever the heading does.
+        */
+        /*
+        * The icon straddles the top border, sitting mostly inside the frame.
+        *
+        * XD bounding box (computed from the path data, not the node origin):
+        * 114 x 104 at x1104..1218, y884..988. The frame starts at y920, so
+        * only 36 of the icon rises above the border - roughly a third of its
+        * height - and its right edge lands on x1218, which is exactly where
+        * the card grid ends. Both are therefore tied to the frame padding.
+        */
+        &__icon {
+
+            position: absolute;
+            top: 0;
+            z-index: 2;
+
+            @include fluid-prop('right', 32, 82, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            transform: translateY(-34.5%);
+
+            line-height: 0;
+
+            img {
+
+                display: block;
+
+                height: auto;
+
+                @include fluid-prop('width', 76, 114, $min-resize-sec, $max-resize-sec, $unit: px);
+            }
+
+            @include respond-max(lg) {
+
+                right: fluid(20, 32, 360, 991);
+
+                img {
+
+                    width: fluid(56, 76, 360, 991);
+                }
+            }
+        }
+
+        &__title {
+
+            display: block;
+
+            text-align: center;
+
+            @include format-text(
+                $max-size: 53,
+                $min-size: 34,
+                $max-height: 62,
+                $min-height: 42,
+                $tx-color: theme-color(title-blue),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            @include fluid-prop('margin-bottom', 32, 46, $min-resize-sec, $max-resize-sec, $unit: px);
+        }
+
+        /*
+        * Slider
+        *
+        * Before Slick runs, the slides are laid out as a plain grid so the
+        * block is readable if the script never arrives. Slick replaces that
+        * with its own track once it initialises.
+        */
+        &__slides {
+
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+
+            gap: rem(33);
+
+            &.slick-initialized {
+
+                display: block;
+            }
+
+            /*
+            * Equal height cards.
+            *
+            * slick-same-height leaves the slides on `height: inherit`, which
+            * resolves to auto against an auto height track, so the cards keep
+            * their natural heights. Stretching the track does the job.
+            */
+            .slick-track {
+
+                display: flex !important;
+
+                align-items: stretch;
+            }
+
+            .slick-list {
+
+                margin-left: -$news-gutter;
+                margin-right: -$news-gutter;
+            }
+
+            /*
+            * Equal height, part two.
+            *
+            * height: 100% resolves against the parent's height, and every
+            * parent in the Slick chain is auto, so the percentages collapsed
+            * and the cards kept their natural heights. Flex stretch does not
+            * need a resolved height, so the chain is flex the whole way down:
+            * slide -> Slick's own wrapper div -> article -> card.
+            */
+            .slick-slide {
+
+                height: auto !important;
+
+                display: flex;
+
+                padding-left: $news-gutter;
+                padding-right: $news-gutter;
+
+                box-sizing: border-box;
+
+                > div {
+
+                    display: flex;
+
+                    width: 100%;
+                }
+            }
+
+            @include respond-max(lg) {
+
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+
+                gap: rem(20);
+            }
+
+            @include respond-max(sm) {
+
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        /*
+        * The slide is the news card itself: layout_news_slider.php passes
+        * this class through to template_parts/news/card.php. Only the row
+        * behaviour belongs here - the card's own look is in
+        * components/_news-card.scss.
+        */
+        &__slide {
+
+            display: flex;
+
+            flex: 1 1 auto;
+        }
+
+    }
+}

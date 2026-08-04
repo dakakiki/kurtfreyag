@@ -1,0 +1,77 @@
+@use '../abstracts' as *;
+
+/*
+* Slick - theme skin
+*
+* The plugin stylesheet (assets/css/slick.min.css, copied to dist by the
+* copy:css step) only handles positioning and the track mechanics. Everything
+* visual lives here so every slider in the theme looks the same.
+*
+* XD reference (homepage news slider):
+*   dots   21px circles, 12px apart, centred
+*          active #00529E, the rest #A7D8F4
+*/
+
+.slick-dots {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: rem(12);
+
+    list-style: none;
+
+    margin: 0;
+    padding: 0;
+
+    @include fluid-prop('margin-top', 36, 52, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    li {
+
+        display: block;
+
+        line-height: 0;
+    }
+
+    /*
+    * Slick renders <li><button>1</button></li>. The number stays in the DOM
+    * for assistive tech and is pushed out of sight rather than removed.
+    */
+    button {
+
+        display: block;
+
+        /* Reset the default button chrome - these are plain circles */
+        padding: 0;
+        border: none;
+        appearance: none;
+        -webkit-appearance: none;
+
+        width: rem(21);
+        height: rem(21);
+
+        background-color: theme-color(bg-sky);
+
+        @include brd-radius-all($brd-radius: 50%);
+
+        cursor: pointer;
+        overflow: hidden;
+
+        text-indent: -9999px;
+
+        @include trans;
+        @include focus-ring(theme-color(brd-blue));
+
+        &:hover {
+
+            background-color: theme-color(bg-blue);
+        }
+    }
+
+    .slick-active button {
+
+        background-color: theme-color(bg-blue);
+    }
+}

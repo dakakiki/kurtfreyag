@@ -367,3 +367,4 @@ require_once THEME_PATH . '/inc/helpers/debug.php';
 
 require_once THEME_PATH . '/inc/options-page.php';
 require_once THEME_PATH . '/inc/nav-submenu-toggle.php';
+require_once THEME_PATH . '/inc/news.php';

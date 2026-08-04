@@ -1467,6 +1467,111 @@ Version: 1.0.2
 Tags: KurtFreyAG
 */
 /*
+* Component - News card
+*
+* Paired with template_parts/news/card.php. Written as a standalone block, not
+* nested under a layout, so the slider, the archive and any related-posts
+* block can all render it.
+*
+* XD reference (homepage news slider):
+*   card    310 x 464, #EDF6FC, 3px radius
+*   media   310 x 309, rounded on the top corners only
+*   date    Lato Regular 16, 16 in from the card edge
+*   title   Lato Bold 25
+*
+* The card fills whatever box it is given: it stretches to the tallest sibling
+* in a flex or grid row rather than setting a height of its own.
+*/
+.news-card {
+  display: flex;
+  /* Stretch inside the parent row, whether that is Slick or a plain grid */
+  flex: 1 1 auto;
+}
+.news-card__link {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  background-color: #EDF6FC;
+  -webkit-border-radius: 0.1875rem;
+  -moz-border-radius: 0.1875rem;
+  border-radius: 0.1875rem;
+  overflow: hidden;
+  text-decoration: none;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.news-card__link:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+.news-card__link:hover .news-card__media img, .news-card__link:focus-visible .news-card__media img {
+  transform: scale(1.1);
+}
+.news-card__media {
+  display: block;
+  /* Never squeezed when a taller neighbour stretches the card */
+  flex: 0 0 auto;
+  /* XD: 310 x 309, so effectively square */
+  aspect-ratio: 310/309;
+  width: 100%;
+  background-color: #A7D8F4;
+  /* Keeps the zoomed image inside the card's rounded top corners */
+  overflow: hidden;
+}
+.news-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transform-origin: center center;
+  transition: transform 0.5s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .news-card__media img {
+    transition: none;
+  }
+}
+.news-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: clamp(24px, -13.1195652174px + 2.7173913043vw, 29px) clamp(16px, 16px + 0vw, 16px) clamp(32px, -19.9673913043px + 3.8043478261vw, 39px);
+}
+.news-card__date {
+  display: block;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  margin-bottom: clamp(12px, -32.5434782609px + 3.2608695652vw, 18px);
+}
+.news-card__title {
+  display: block;
+  font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
+  line-height: clamp(26px, -3.6956521739px + 2.1739130435vw, 30px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
 * Block - Page Hero (layout_page_hero)
 *
 * XD reference (1440 x 800):
@@ -1723,6 +1828,204 @@ Version: 1.0.2
 Tags: KurtFreyAG
 */
 /*
+* Block - News slider (layout_news_slider)
+*
+* XD reference (homepage, 1440 artboard):
+*   frame     x140 -> 1300, 3px #00529E border, 60px radius, no fill
+*   icon      ~110 x 82, sits on the top border, 142 from the right edge
+*   title     Lato Bold 53 #00529E, centred, baseline 130 below the frame top
+*   viewport  996 wide, so the frame has 82 of padding on each side
+*   card      310 x 464, 33 between cards - the card itself now lives in
+*             components/_news-card.scss, shared with the archive
+*   dots      moved to vendor/_slick.scss - shared by every slider
+*
+* Element scaling uses the secondary range, as in the hero.
+*/
+/* 33 between cards, split across the two slide halves */
+.layout-news-slider {
+  position: relative;
+  width: 100%;
+  /*
+  * Block spacing. The top value also has to clear the icon, which hangs
+  * above the frame, so it is never smaller than the icon overhang.
+  */
+  margin-top: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+  margin-bottom: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+}
+@media (max-width: 991px) {
+  .layout-news-slider {
+    margin-top: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+    margin-bottom: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+  }
+}
+.layout-news-slider .news {
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+.layout-news-slider .news__frame {
+  position: relative;
+  z-index: 1;
+  /* XD: outlined frame, nothing behind it */
+  border: 3px solid #00529E;
+  -webkit-border-radius: 3.75rem;
+  -moz-border-radius: 3.75rem;
+  border-radius: 3.75rem;
+  padding-top: clamp(48px, -167.2934782609px + 15.7608695652vw, 77px);
+  padding-bottom: clamp(48px, -174.7173913043px + 16.3043478261vw, 78px);
+  padding-left: clamp(32px, -339.1956521739px + 27.1739130435vw, 82px);
+  padding-right: clamp(32px, -339.1956521739px + 27.1739130435vw, 82px);
+}
+@media (max-width: 991px) {
+  .layout-news-slider .news__frame {
+    -webkit-border-radius: 1.875rem;
+    -moz-border-radius: 1.875rem;
+    border-radius: 1.875rem;
+    padding: clamp(40px, 30.8716323296px + 2.5356576862vw, 56px) clamp(20px, 13.1537242472px + 1.9017432647vw, 32px);
+  }
+}
+.layout-news-slider .news {
+  /*
+  * The icon straddles the top border. Anchored to the frame rather than
+  * the title, so it stays put whatever the heading does.
+  */
+  /*
+  * The icon straddles the top border, sitting mostly inside the frame.
+  *
+  * XD bounding box (computed from the path data, not the node origin):
+  * 114 x 104 at x1104..1218, y884..988. The frame starts at y920, so
+  * only 36 of the icon rises above the border - roughly a third of its
+  * height - and its right edge lands on x1218, which is exactly where
+  * the card grid ends. Both are therefore tied to the frame padding.
+  */
+}
+.layout-news-slider .news__icon {
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  right: clamp(32px, -339.1956521739px + 27.1739130435vw, 82px);
+  transform: translateY(-34.5%);
+  line-height: 0;
+}
+.layout-news-slider .news__icon img {
+  display: block;
+  height: auto;
+  width: clamp(76px, -206.1086956522px + 20.652173913vw, 114px);
+}
+@media (max-width: 991px) {
+  .layout-news-slider .news__icon {
+    right: clamp(20px, 13.1537242472px + 1.9017432647vw, 32px);
+  }
+  .layout-news-slider .news__icon img {
+    width: clamp(56px, 44.589540412px + 3.1695721078vw, 76px);
+  }
+}
+.layout-news-slider .news__title {
+  display: block;
+  text-align: center;
+  font-size: clamp(34px, -107.0543478261px + 10.3260869565vw, 53px);
+  line-height: clamp(42px, -106.4782608696px + 10.8695652174vw, 62px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  margin-bottom: clamp(32px, -71.9347826087px + 7.6086956522vw, 46px);
+}
+.layout-news-slider .news {
+  /*
+  * Slider
+  *
+  * Before Slick runs, the slides are laid out as a plain grid so the
+  * block is readable if the script never arrives. Slick replaces that
+  * with its own track once it initialises.
+  */
+}
+.layout-news-slider .news__slides {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.0625rem;
+}
+.layout-news-slider .news__slides.slick-initialized {
+  display: block;
+}
+.layout-news-slider .news__slides {
+  /*
+  * Equal height cards.
+  *
+  * slick-same-height leaves the slides on `height: inherit`, which
+  * resolves to auto against an auto height track, so the cards keep
+  * their natural heights. Stretching the track does the job.
+  */
+}
+.layout-news-slider .news__slides .slick-track {
+  display: flex !important;
+  align-items: stretch;
+}
+.layout-news-slider .news__slides .slick-list {
+  margin-left: -16.5px;
+  margin-right: -16.5px;
+}
+.layout-news-slider .news__slides {
+  /*
+  * Equal height, part two.
+  *
+  * height: 100% resolves against the parent's height, and every
+  * parent in the Slick chain is auto, so the percentages collapsed
+  * and the cards kept their natural heights. Flex stretch does not
+  * need a resolved height, so the chain is flex the whole way down:
+  * slide -> Slick's own wrapper div -> article -> card.
+  */
+}
+.layout-news-slider .news__slides .slick-slide {
+  height: auto !important;
+  display: flex;
+  padding-left: 16.5px;
+  padding-right: 16.5px;
+  box-sizing: border-box;
+}
+.layout-news-slider .news__slides .slick-slide > div {
+  display: flex;
+  width: 100%;
+}
+@media (max-width: 991px) {
+  .layout-news-slider .news__slides {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+@media (max-width: 640px) {
+  .layout-news-slider .news__slides {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.layout-news-slider .news {
+  /*
+  * The slide is the news card itself: layout_news_slider.php passes
+  * this class through to template_parts/news/card.php. Only the row
+  * behaviour belongs here - the card's own look is in
+  * components/_news-card.scss.
+  */
+}
+.layout-news-slider .news__slide {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
 * Single, Page
 */
 .spacer {
@@ -1917,6 +2220,76 @@ Tags: KurtFreyAG
   -webkit-box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
   -moz-box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
+* Slick - theme skin
+*
+* The plugin stylesheet (assets/css/slick.min.css, copied to dist by the
+* copy:css step) only handles positioning and the track mechanics. Everything
+* visual lives here so every slider in the theme looks the same.
+*
+* XD reference (homepage news slider):
+*   dots   21px circles, 12px apart, centred
+*          active #00529E, the rest #A7D8F4
+*/
+.slick-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-top: clamp(36px, -82.7826086957px + 8.6956521739vw, 52px);
+}
+.slick-dots li {
+  display: block;
+  line-height: 0;
+}
+.slick-dots {
+  /*
+  * Slick renders <li><button>1</button></li>. The number stays in the DOM
+  * for assistive tech and is pushed out of sight rather than removed.
+  */
+}
+.slick-dots button {
+  display: block;
+  /* Reset the default button chrome - these are plain circles */
+  padding: 0;
+  border: none;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.3125rem;
+  height: 1.3125rem;
+  background-color: #A7D8F4;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  cursor: pointer;
+  overflow: hidden;
+  text-indent: -9999px;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.slick-dots button:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+.slick-dots button:hover {
+  background-color: #00529E;
+}
+.slick-dots .slick-active button {
+  background-color: #00529E;
 }
 
 body {

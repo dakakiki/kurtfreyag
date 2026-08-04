@@ -1,0 +1,134 @@
+@use '../abstracts' as *;
+
+/*
+* Component - News card
+*
+* Paired with template_parts/news/card.php. Written as a standalone block, not
+* nested under a layout, so the slider, the archive and any related-posts
+* block can all render it.
+*
+* XD reference (homepage news slider):
+*   card    310 x 464, #EDF6FC, 3px radius
+*   media   310 x 309, rounded on the top corners only
+*   date    Lato Regular 16, 16 in from the card edge
+*   title   Lato Bold 25
+*
+* The card fills whatever box it is given: it stretches to the tallest sibling
+* in a flex or grid row rather than setting a height of its own.
+*/
+
+.news-card {
+
+    display: flex;
+
+    /* Stretch inside the parent row, whether that is Slick or a plain grid */
+    flex: 1 1 auto;
+
+    &__link {
+
+        display: flex;
+        flex-direction: column;
+
+        flex: 1 1 auto;
+
+        width: 100%;
+
+        background-color: theme-color(bg-ice);
+
+        @include brd-radius-all($brd-radius: rem(3));
+
+        overflow: hidden;
+
+        text-decoration: none;
+
+        @include trans;
+        @include focus-ring(theme-color(brd-blue));
+
+        &:hover,
+        &:focus-visible {
+
+            .news-card__media img {
+
+                transform: scale(1.1);
+            }
+        }
+    }
+
+    &__media {
+
+        display: block;
+
+        /* Never squeezed when a taller neighbour stretches the card */
+        flex: 0 0 auto;
+
+        /* XD: 310 x 309, so effectively square */
+        aspect-ratio: 310 / 309;
+
+        width: 100%;
+
+        background-color: theme-color(bg-sky);
+
+        /* Keeps the zoomed image inside the card's rounded top corners */
+        overflow: hidden;
+
+        img {
+
+            @include image-cover;
+
+            transform-origin: center center;
+
+            transition: transform 0.5s ease-out;
+
+            @media (prefers-reduced-motion: reduce) {
+
+                transition: none;
+            }
+        }
+    }
+
+    &__body {
+
+        display: flex;
+        flex-direction: column;
+
+        flex: 1 1 auto;
+
+        @include fluid-prop-multi('padding', 24 16 32, 29 16 39, $min-resize-sec, $max-resize-sec, $unit: px, $base: 16);
+    }
+
+    &__date {
+
+        display: block;
+
+        @include format-text(
+            $max-size: 16,
+            $min-size: 15,
+            $max-height: 24,
+            $min-height: 22,
+            $tx-color: theme-color(text-blue),
+            $tx-weight: 400,
+            $max-rsp: $max-resize-sec,
+            $min-rsp: $min-resize-sec,
+        );
+
+        @include fluid-prop('margin-bottom', 12, 18, $min-resize-sec, $max-resize-sec, $unit: px);
+    }
+
+    &__title {
+
+        display: block;
+
+        @include format-text(
+            $max-size: 25,
+            $min-size: 20,
+            $max-height: 30,
+            $min-height: 26,
+            $tx-color: theme-color(title-blue),
+            $tx-weight: 700,
+            $max-rsp: $max-resize-sec,
+            $min-rsp: $min-resize-sec,
+        );
+
+        @include break-word;
+    }
+}
