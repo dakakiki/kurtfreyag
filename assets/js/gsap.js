@@ -203,7 +203,28 @@ window.initPathAnimations = function (scope = document) {
     });
 };
 
+/**
+ * Blocks that are already on screen when the page loads.
+ *
+ * A ScrollTrigger with start "top bottom" is pointless above the fold: the
+ * trigger point is already passed, so the animation depends on a refresh
+ * landing at the right moment instead of simply running. Anything marked with
+ * data-animate-now is initialised first and plays straight away.
+ *
+ * Items are tagged with the -initialized class as they are picked up, so the
+ * document wide pass that follows skips them and nothing animates twice.
+ */
+function initializeAboveFoldAnimations() {
+    const immediate = document.querySelectorAll("[data-animate-now]");
+
+    immediate.forEach((scope) => {
+        window.initFadeUpAnimations(scope, true);
+    });
+}
+
 function initializeScrollAnimations() {
+    initializeAboveFoldAnimations();
+
     window.initFadeUpAnimations(document);
     window.initPathAnimations(document);
 

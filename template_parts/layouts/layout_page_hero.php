@@ -26,6 +26,7 @@ $hero_height = ( ! empty( $hero_styles['style_layout_height'] ) && $hero_styles[
 <section
 	<?php if ( $hero_anchor ) : ?>id="<?= esc_attr( $hero_anchor ); ?>"<?php endif; ?>
 	class="layout-page-hero <?= esc_attr( $hero_height ); ?>"
+	data-animate-now
 >
 
 	<div class="page-hero" id="lyt-<?= (int) $hero_row; ?>">

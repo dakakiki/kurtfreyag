@@ -1484,6 +1484,11 @@ Tags: KurtFreyAG
 * same left edge as the header and the footer.
 */
 /* 373 / 1440 and the two diagonal x positions, as shares of the viewport */
+/*
+* The diagonal sits further right than the XD artboard puts it. The shift is
+* applied to both ends, so the angle stays exactly as drawn - nudge this one
+* value to move the cut, do not edit the two positions separately.
+*/
 .layout-page-hero {
   position: relative;
   overflow: hidden;
@@ -1527,7 +1532,7 @@ Tags: KurtFreyAG
   z-index: 2;
   inset: 0;
   background-color: #00529E;
-  clip-path: polygon(0 0, 33.89% 0, 52.43% 100%, 0 100%);
+  clip-path: polygon(0 0, 38.99% 0, 57.53% 100%, 0 100%);
 }
 .layout-page-hero .page-hero__content {
   position: relative;

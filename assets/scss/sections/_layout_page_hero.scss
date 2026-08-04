@@ -20,8 +20,16 @@
 
 /* 373 / 1440 and the two diagonal x positions, as shares of the viewport */
 $hero-image-left: 25.9%;
-$hero-cut-top: 33.89%;
-$hero-cut-bottom: 52.43%;
+
+/*
+* The diagonal sits further right than the XD artboard puts it. The shift is
+* applied to both ends, so the angle stays exactly as drawn - nudge this one
+* value to move the cut, do not edit the two positions separately.
+*/
+$hero-cut-shift: 5.1%;
+
+$hero-cut-top: 33.89% + $hero-cut-shift;
+$hero-cut-bottom: 52.43% + $hero-cut-shift;
 
 .layout-page-hero {
 
