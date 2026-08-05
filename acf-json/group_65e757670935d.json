@@ -753,7 +753,7 @@
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
-                                "width": "",
+                                "width": "50",
                                 "class": "",
                                 "id": ""
                             },
@@ -790,7 +790,7 @@
                                     "label": "Image position",
                                     "name": "image_position",
                                     "aria-label": "",
-                                    "type": "true_false",
+                                    "type": "button_group",
                                     "instructions": "",
                                     "required": 0,
                                     "conditional_logic": 0,
@@ -799,12 +799,15 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "message": "",
-                                    "default_value": 0,
+                                    "choices": {
+                                        "Left from the content": "Left from the content",
+                                        "Right from the content": "Right from the content"
+                                    },
+                                    "default_value": "",
+                                    "return_format": "value",
+                                    "allow_null": 0,
                                     "allow_in_bindings": 0,
-                                    "ui_on_text": "Left from text",
-                                    "ui_off_text": "Right from text",
-                                    "ui": 1
+                                    "layout": "horizontal"
                                 }
                             ]
                         },
@@ -2600,5 +2603,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785910515
+    "modified": 1785914846
 }

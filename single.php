@@ -1,6 +1,14 @@
 <?php
 /**
- * The template for Single
+ * Single post dispatcher.
+ *
+ * Every single view routes through here and is rendered by a per post type
+ * part in template_parts/single/. Adding a type means adding one file there,
+ * with no change to this template.
+ *
+ *   news      -> template_parts/single/news.php
+ *   referenz  -> template_parts/single/referenz.php
+ *   anything else, or a missing part -> template_parts/single/default.php
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
  *
@@ -12,45 +20,30 @@
 get_header();
 ?>
 
-<main>
- 
- <?php while (have_posts()): the_post(); ?>
+<main id="main">
 
-    <?php
+	<?php while ( have_posts() ) : ?>
+		<?php the_post(); ?>
 
-        $p_id = get_the_ID();
+		<?php
+		$single_type = sanitize_key( (string) get_post_type() );
+		$single_part = $single_type ? locate_template( "template_parts/single/{$single_type}.php" ) : '';
 
-        $isPageHero = isPageHeroActive($p_id);
-        $isLayout = isLayoutAnyActive($p_id);
+		if ( $single_part ) {
+			load_template( $single_part, false );
+		} else {
 
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG && $single_type ) {
+				trigger_error( "Missing single template part: template_parts/single/{$single_type}.php", E_USER_WARNING );
+			}
 
-        $thumb_id = get_post_thumbnail_id($p_id);
-        $headerIMG_page = wp_get_attachment_image_url($thumb_id, 'full');
+			get_template_part( 'template_parts/single/default' );
+		}
+		?>
 
-        $post_type = get_post_type();
-    ?>
+	<?php endwhile; ?>
 
-        <?php
-    ?>
-
-    <section id="post-<?php the_ID(); ?>">
-
-        <?php
-
-        switch ($post_type) {
-            
-            default:
-                include 'template_parts/single/default.php';
-                break;
-        }
-
-        ?>
-
-     </section>
-
- <?php endwhile; ?>
-
- <?php wp_reset_postdata(); ?>
+	<?php wp_reset_postdata(); ?>
 
 </main>
 

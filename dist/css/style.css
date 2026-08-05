@@ -2610,6 +2610,317 @@ Version: 1.0.2
 Tags: KurtFreyAG
 */
 /*
+* Page - Single news
+*
+* XD reference (News - 2 artboard, 1440 x 3303):
+*   back      pill 180 x 45, #EDF6FC, radius 100, right aligned on x1300
+*   title     Lato Bold 53 #00529E at x140, baseline y949
+*   date      Lato Regular 16 #00529E, y1057
+*   body      Lato Regular 16 #00529E, y1125
+*   image     1161 x 663, 60px radius on every corner, y1350
+*   related   blue bar 1160 x 45, radius 3, white 16 centred, then the cards
+*
+* The hero comes from the archive page's own layout row. Only its height is
+* overridden here, because that row is authored for the archive page and may
+* be set to h-page. Cards are styled in layouts/_news_card.scss.
+*/
+.single-news__hero {
+  display: block;
+}
+.single-news__hero .layout-page-hero .page-hero {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+@media (max-width: 991px) {
+  .single-news__hero .layout-page-hero .page-hero {
+    min-height: auto;
+  }
+}
+
+/* 33 between cards, split across the two slide halves - as in the slider */
+.single-news {
+  display: block;
+  width: 100%;
+  /*
+  * No padding here. post_class() puts this class on the article, which also
+  * carries the hero, so spacing at this level would push the hero away from
+  * the site header instead of only spacing the text.
+  */
+}
+.single-news__body {
+  padding-top: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+  padding-bottom: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+}
+@media (max-width: 991px) {
+  .single-news__body {
+    padding-top: clamp(48px, 34.3074484945px + 3.8034865293vw, 72px);
+    padding-bottom: clamp(48px, 34.3074484945px + 3.8034865293vw, 72px);
+  }
+}
+.single-news__container {
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+.single-news {
+  /* ------------------------------------------------------------- back */
+}
+.single-news__back-btn {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  /* XD: 180 x 45 pill, same as the year filter */
+  min-width: 11.25rem;
+  height: clamp(40px, 2.8804347826px + 2.7173913043vw, 45px);
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  text-decoration: none;
+  background-color: #EDF6FC;
+  border: 1px solid #EDF6FC;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.single-news__back-btn:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+.single-news__back-btn:hover, .single-news__back-btn:focus-visible {
+  text-decoration: none;
+  border-color: #00529E;
+}
+.single-news {
+  /* ------------------------------------------------------ title, date */
+  /*
+  * XD: the title starts at x140 and the pill ends at x1300, both on the
+  * same line - the pill's top edge is level with the first line of the
+  * title, so the row is aligned to the top rather than centred.
+  */
+}
+.single-news__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  column-gap: clamp(32px, -205.5652173913px + 17.3913043478vw, 64px);
+  margin-bottom: clamp(32px, -86.7826086957px + 8.6956521739vw, 48px);
+}
+@media (max-width: 991px) {
+  .single-news__head {
+    /* The pill moves above the title rather than beside it. */
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    row-gap: 1.5rem;
+  }
+}
+.single-news__head-main {
+  min-width: 0;
+}
+.single-news__title {
+  display: block;
+  font-size: clamp(32px, -123.902173913px + 11.4130434783vw, 53px);
+  line-height: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+.single-news__date {
+  display: block;
+  margin-top: clamp(20px, -69.0869565217px + 6.5217391304vw, 32px);
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: rgba(0, 82, 158, 0.5);
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.single-news {
+  /* ---------------------------------------------------------- content */
+}
+.single-news__content {
+  /*
+  * Editor output, so the elements are styled here rather than in the
+  * markup. Reading width is left at the full container to match the XD.
+  */
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.single-news__content p,
+.single-news__content ul,
+.single-news__content ol {
+  margin: 0 0 1.5rem;
+  color: inherit;
+  font: inherit;
+}
+.single-news__content > :last-child {
+  margin-bottom: 0;
+}
+.single-news__content ul,
+.single-news__content ol {
+  padding-left: 1.5rem;
+}
+.single-news__content li {
+  margin-bottom: 0.5rem;
+}
+.single-news__content h2,
+.single-news__content h3,
+.single-news__content h4 {
+  margin: 2.5rem 0 1rem;
+  color: #00529E;
+}
+.single-news__content a {
+  color: #00529E;
+  text-decoration: underline;
+  text-underline-offset: 0.1875rem;
+}
+.single-news__content a:hover {
+  color: #FFB500;
+}
+.single-news__content strong {
+  font-weight: 700;
+}
+.single-news {
+  /* ------------------------------------------------------------ image */
+}
+.single-news__media {
+  margin: 0;
+  margin-top: clamp(48px, -174.7173913043px + 16.3043478261vw, 78px);
+}
+.single-news__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* XD: 1161 x 663 with a 60px radius all round */
+  aspect-ratio: 1161/663;
+  object-fit: cover;
+  -webkit-border-radius: 3.75rem;
+  -moz-border-radius: 3.75rem;
+  border-radius: 3.75rem;
+}
+@media (max-width: 991px) {
+  .single-news__media img {
+    -webkit-border-radius: 1.875rem;
+    -moz-border-radius: 1.875rem;
+    border-radius: 1.875rem;
+  }
+}
+.single-news__caption {
+  margin-top: 0.75rem;
+  font-size: clamp(14px, 6.5760869565px + 0.5434782609vw, 15px);
+  line-height: clamp(20px, 5.152173913px + 1.0869565217vw, 22px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  font-style: italic;
+}
+.single-news {
+  /* ---------------------------------------------------------- related */
+}
+.single-news__related {
+  /* The body already ends with its own padding, so this is the gap on top of it. */
+  padding-bottom: clamp(80px, -291.1956521739px + 27.1739130435vw, 130px);
+}
+.single-news__related-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  /* XD: full width blue bar, 45 tall, 3px radius */
+  min-height: 2.8125rem;
+  padding: 0.625rem 1.5rem;
+  background-color: #00529E;
+  -webkit-border-radius: 0.1875rem;
+  -moz-border-radius: 0.1875rem;
+  border-radius: 0.1875rem;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #ffffff;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  text-align: center;
+  margin-bottom: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+}
+.single-news {
+  /*
+  * Slider mechanics only. Before Slick runs this is a plain grid, so the
+  * block is readable if the script never arrives, and the card itself is
+  * styled in layouts/_news_card.scss.
+  */
+}
+.single-news__related-slides {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.single-news__related-slides.slick-initialized {
+  display: block;
+}
+.single-news__related-slides .slick-track {
+  display: flex !important;
+  align-items: stretch;
+}
+.single-news__related-slides .slick-list {
+  margin-left: -16.5px;
+  margin-right: -16.5px;
+}
+.single-news__related-slides .slick-slide {
+  height: auto !important;
+  display: flex;
+  padding-left: 16.5px;
+  padding-right: 16.5px;
+  box-sizing: border-box;
+}
+.single-news__related-slides .slick-slide > div {
+  display: flex;
+  width: 100%;
+}
+@media (max-width: 991px) {
+  .single-news__related-slides {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .single-news__related-slides {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
 * Slick - theme skin
 *
 * The plugin stylesheet (assets/css/slick.min.css, copied to dist by the

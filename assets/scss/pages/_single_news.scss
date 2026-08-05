@@ -1,0 +1,412 @@
+@use '../abstracts' as *;
+
+/*
+* Page - Single news
+*
+* XD reference (News - 2 artboard, 1440 x 3303):
+*   back      pill 180 x 45, #EDF6FC, radius 100, right aligned on x1300
+*   title     Lato Bold 53 #00529E at x140, baseline y949
+*   date      Lato Regular 16 #00529E, y1057
+*   body      Lato Regular 16 #00529E, y1125
+*   image     1161 x 663, 60px radius on every corner, y1350
+*   related   blue bar 1160 x 45, radius 3, white 16 centred, then the cards
+*
+* The hero comes from the archive page's own layout row. Only its height is
+* overridden here, because that row is authored for the archive page and may
+* be set to h-page. Cards are styled in layouts/_news_card.scss.
+*/
+
+.single-news__hero {
+
+    display: block;
+
+    .layout-page-hero .page-hero {
+
+        min-height: 100vh;
+        min-height: 100svh;
+    }
+
+    @include respond-max(lg) {
+
+        .layout-page-hero .page-hero {
+
+            min-height: auto;
+        }
+    }
+}
+
+/* 33 between cards, split across the two slide halves - as in the slider */
+$single-news-gutter: 16.5px;
+
+.single-news {
+
+    display: block;
+
+    width: 100%;
+
+    /*
+    * No padding here. post_class() puts this class on the article, which also
+    * carries the hero, so spacing at this level would push the hero away from
+    * the site header instead of only spacing the text.
+    */
+
+    &__body {
+
+        @include fluid-prop('padding-top', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+        @include fluid-prop('padding-bottom', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+
+        @include respond-max(lg) {
+
+            padding-top: fluid(48, 72, 360, 991);
+            padding-bottom: fluid(48, 72, 360, 991);
+        }
+    }
+
+    &__container {
+
+        @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+    }
+
+    /* ------------------------------------------------------------- back */
+
+    &__back-btn {
+
+        display: inline-flex;
+
+        flex: 0 0 auto;
+
+        align-items: center;
+        justify-content: center;
+
+        box-sizing: border-box;
+
+        /* XD: 180 x 45 pill, same as the year filter */
+        min-width: rem(180);
+
+        @include fluid-prop('height', 40, 45, $min-resize-sec, $max-resize-sec, $unit: px);
+
+        padding-left: rem(24);
+        padding-right: rem(24);
+
+        @include format-text(
+            $max-size: 16,
+            $min-size: 15,
+            $max-height: 24,
+            $min-height: 22,
+            $tx-color: theme-color(text-blue),
+            $tx-weight: 400,
+            $max-rsp: $max-resize-sec,
+            $min-rsp: $min-resize-sec,
+        );
+
+        text-decoration: none;
+
+        background-color: theme-color(bg-ice);
+        border: 1px solid theme-color(brd-ice);
+
+        @include brd-radius-all($brd-radius: 100px);
+
+        @include trans;
+        @include focus-ring(theme-color(brd-blue));
+
+        &:hover,
+        &:focus-visible {
+
+            text-decoration: none;
+
+            border-color: theme-color(brd-blue);
+        }
+    }
+
+    /* ------------------------------------------------------ title, date */
+
+    /*
+    * XD: the title starts at x140 and the pill ends at x1300, both on the
+    * same line - the pill's top edge is level with the first line of the
+    * title, so the row is aligned to the top rather than centred.
+    */
+    &__head {
+
+        display: flex;
+
+        align-items: flex-start;
+        justify-content: space-between;
+
+        @include fluid-prop('column-gap', 32, 64, $min-resize-sec, $max-resize-sec, $unit: px);
+
+        @include fluid-prop('margin-bottom', 32, 48, $min-resize-sec, $max-resize-sec, $unit: px);
+
+        @include respond-max(lg) {
+
+            /* The pill moves above the title rather than beside it. */
+            flex-direction: column-reverse;
+
+            align-items: flex-start;
+
+            row-gap: rem(24);
+        }
+    }
+
+    &__head-main {
+
+        min-width: 0;
+    }
+
+    &__title {
+
+        display: block;
+
+        @include format-text(
+            $max-size: 53,
+            $min-size: 32,
+            $max-height: 62,
+            $min-height: 40,
+            $tx-color: theme-color(title-blue),
+            $tx-weight: 700,
+            $max-rsp: $max-resize-sec,
+            $min-rsp: $min-resize-sec,
+        );
+
+        @include break-word;
+    }
+
+    &__date {
+
+        display: block;
+
+        @include fluid-prop('margin-top', 20, 32, $min-resize-sec, $max-resize-sec, $unit: px);
+
+        @include format-text(
+            $max-size: 16,
+            $min-size: 15,
+            $max-height: 24,
+            $min-height: 22,
+            /* Half strength, so the date sits behind the title */
+            $tx-color: color-alpha(text-blue, 0.5),
+            $tx-weight: 400,
+            $max-rsp: $max-resize-sec,
+            $min-rsp: $min-resize-sec,
+        );
+    }
+
+    /* ---------------------------------------------------------- content */
+
+    &__content {
+
+        /*
+        * Editor output, so the elements are styled here rather than in the
+        * markup. Reading width is left at the full container to match the XD.
+        */
+        @include format-text(
+            $max-size: 16,
+            $min-size: 15,
+            $max-height: 26,
+            $min-height: 24,
+            $tx-color: theme-color(text-blue),
+            $tx-weight: 400,
+            $max-rsp: $max-resize-sec,
+            $min-rsp: $min-resize-sec,
+        );
+
+        p,
+        ul,
+        ol {
+
+            margin: 0 0 rem(24);
+
+            color: inherit;
+            font: inherit;
+        }
+
+        > :last-child {
+
+            margin-bottom: 0;
+        }
+
+        ul,
+        ol {
+
+            padding-left: rem(24);
+        }
+
+        li {
+
+            margin-bottom: rem(8);
+        }
+
+        h2,
+        h3,
+        h4 {
+
+            margin: rem(40) 0 rem(16);
+
+            color: theme-color(title-blue);
+        }
+
+        a {
+
+            color: theme-color(text-blue);
+            text-decoration: underline;
+            text-underline-offset: rem(3);
+
+            &:hover {
+
+                color: theme-color(text-golden);
+            }
+        }
+
+        strong {
+
+            font-weight: 700;
+        }
+    }
+
+    /* ------------------------------------------------------------ image */
+
+    &__media {
+
+        margin: 0;
+
+        @include fluid-prop('margin-top', 48, 78, $min-resize-sec, $max-resize-sec, $unit: px);
+
+        img {
+
+            display: block;
+
+            width: 100%;
+            height: auto;
+
+            /* XD: 1161 x 663 with a 60px radius all round */
+            aspect-ratio: 1161 / 663;
+
+            object-fit: cover;
+
+            @include brd-radius-all($brd-radius: rem(60));
+
+            @include respond-max(lg) {
+
+                @include brd-radius-all($brd-radius: rem(30));
+            }
+        }
+    }
+
+    &__caption {
+
+        margin-top: rem(12);
+
+        @include format-text(
+            $max-size: 15,
+            $min-size: 14,
+            $max-height: 22,
+            $min-height: 20,
+            $tx-color: theme-color(text-blue),
+            $tx-weight: 400,
+            $max-rsp: $max-resize-sec,
+            $min-rsp: $min-resize-sec,
+        );
+
+        font-style: italic;
+    }
+
+    /* ---------------------------------------------------------- related */
+
+    &__related {
+
+        /* The body already ends with its own padding, so this is the gap on top of it. */
+        @include fluid-prop('padding-bottom', 80, 130, $min-resize-sec, $max-resize-sec, $unit: px);
+    }
+
+    &__related-title {
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        box-sizing: border-box;
+
+        /* XD: full width blue bar, 45 tall, 3px radius */
+        min-height: rem(45);
+
+        padding: rem(10) rem(24);
+
+        background-color: theme-color(bg-blue);
+
+        @include brd-radius-all($brd-radius: rem(3));
+
+        @include format-text(
+            $max-size: 16,
+            $min-size: 15,
+            $max-height: 24,
+            $min-height: 22,
+            $tx-color: theme-color(title-white),
+            $tx-weight: 400,
+            $max-rsp: $max-resize-sec,
+            $min-rsp: $min-resize-sec,
+        );
+
+        text-align: center;
+
+        @include fluid-prop('margin-bottom', 40, 62, $min-resize-sec, $max-resize-sec, $unit: px);
+    }
+
+    /*
+    * Slider mechanics only. Before Slick runs this is a plain grid, so the
+    * block is readable if the script never arrives, and the card itself is
+    * styled in layouts/_news_card.scss.
+    */
+    &__related-slides {
+
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+
+        gap: rem(16);
+
+        &.slick-initialized {
+
+            display: block;
+        }
+
+        .slick-track {
+
+            display: flex !important;
+
+            align-items: stretch;
+        }
+
+        .slick-list {
+
+            margin-left: -$single-news-gutter;
+            margin-right: -$single-news-gutter;
+        }
+
+        .slick-slide {
+
+            height: auto !important;
+
+            display: flex;
+
+            padding-left: $single-news-gutter;
+            padding-right: $single-news-gutter;
+
+            box-sizing: border-box;
+
+            > div {
+
+                display: flex;
+
+                width: 100%;
+            }
+        }
+
+        @include respond-max(lg) {
+
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        @include respond-max(sm) {
+
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+}

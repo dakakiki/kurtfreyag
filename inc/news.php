@@ -360,3 +360,174 @@ add_action( 'wp_ajax_nopriv_' . KFA_NEWS_AJAX_ACTION, 'kfa_ajax_load_news' );
  * after my_acf_enqueue_layout_assets() registered the handle, and tying the
  * feature to a hook priority in another file proved too easy to break.
  */
+
+
+/* -------------------------------------------------------------------------
+ * Archive page lookup
+ *
+ * The single view borrows its hero from whichever page hosts the archive
+ * layout, so a post opened from the homepage slider looks the same as one
+ * opened from the archive itself.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * ID of the page that hosts layout_news_archive.
+ *
+ * ACF stores the flexible field's layout names inside the `layouts` meta
+ * value, so a LIKE match finds the page without loading every page's rows.
+ */
+function kfa_get_news_archive_page_id(): int {
+
+	/**
+	 * Short circuit the lookup, for a site that would rather name the page.
+	 *
+	 * @param int $page_id Page ID, or 0 to let the lookup run.
+	 */
+	$filtered = (int) apply_filters( 'kfa_news_archive_page_id', 0 );
+
+	if ( $filtered ) {
+		return $filtered;
+	}
+
+	$cached = get_transient( 'kfa_news_archive_page' );
+
+	if ( false !== $cached ) {
+		return (int) $cached;
+	}
+
+	$found = get_posts( array(
+		'post_type'              => 'page',
+		'post_status'            => 'publish',
+		'posts_per_page'         => 1,
+		'fields'                 => 'ids',
+		'no_found_rows'          => true,
+		'update_post_term_cache' => false,
+		'meta_query'             => array(
+			array(
+				'key'     => 'layouts',
+				'value'   => 'layout_news_archive',
+				'compare' => 'LIKE',
+			),
+		),
+	) );
+
+	$page_id = $found ? (int) $found[0] : 0;
+
+	set_transient( 'kfa_news_archive_page', $page_id, DAY_IN_SECONDS );
+
+	return $page_id;
+}
+
+
+/**
+ * Forget the cached archive page whenever a page is saved.
+ */
+function kfa_flush_news_archive_page( $post_id ): void {
+
+	if ( get_post_type( $post_id ) === 'page' ) {
+		delete_transient( 'kfa_news_archive_page' );
+	}
+}
+add_action( 'save_post', 'kfa_flush_news_archive_page' );
+add_action( 'deleted_post', 'kfa_flush_news_archive_page' );
+
+
+/**
+ * Permalink of the archive page, empty when there is none.
+ */
+function kfa_news_archive_link(): string {
+
+	$page_id = kfa_get_news_archive_page_id();
+
+	return $page_id ? (string) get_permalink( $page_id ) : '';
+}
+
+
+/**
+ * Render the archive page's hero row.
+ *
+ * Runs the real layout_page_hero template against the archive page's row, so
+ * the single view inherits any change made there - image, title, height - and
+ * there is no second copy of the hero markup to keep in step.
+ */
+function kfa_render_news_hero(): void {
+
+	$page_id = kfa_get_news_archive_page_id();
+
+	if ( ! $page_id || ! function_exists( 'have_rows' ) ) {
+		return;
+	}
+
+	if ( ! have_rows( 'layouts', $page_id ) ) {
+		return;
+	}
+
+	while ( have_rows( 'layouts', $page_id ) ) {
+
+		the_row();
+
+		if ( get_row_layout() !== 'layout_page_hero' ) {
+			continue;
+		}
+
+		get_template_part( 'template_parts/layouts/layout_page_hero' );
+
+		/* Only the first hero: a page could hold more than one. */
+		break;
+	}
+
+	/*
+	 * the_row() moves the global post pointer around; put it back so the rest
+	 * of the single view still reads the post being viewed.
+	 */
+	wp_reset_postdata();
+}
+
+
+/**
+ * Slick for the related posts on a single news post.
+ *
+ * my_acf_enqueue_layout_assets() only fires for ACF layouts on a page, and a
+ * single post has none, so the slider assets are requested here instead.
+ */
+function kfa_single_news_assets(): void {
+
+	if ( ! is_singular( 'news' ) ) {
+		return;
+	}
+
+	$slick_css = theme_dist_path( 'css/slick.min.css' );
+	$slick_js  = theme_dist_path( 'js/slick.min.js' );
+
+	wp_enqueue_style(
+		'slick',
+		theme_dist_uri( 'css/slick.min.css' ),
+		array(),
+		file_exists( $slick_css ) ? filemtime( $slick_css ) : null
+	);
+
+	wp_enqueue_script(
+		'slick',
+		theme_dist_uri( 'js/slick.min.js' ),
+		array( 'jquery' ),
+		file_exists( $slick_js ) ? filemtime( $slick_js ) : null,
+		array(
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		)
+	);
+
+	[ $src, $ver ] = theme_pick_dist( 'js/layout_news_slider.min.js', 'js/layout_news_slider.js' );
+
+	wp_enqueue_script(
+		'layout_news_slider',
+		$src,
+		array( 'jquery', 'slick' ),
+		$ver,
+		array(
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'kfa_single_news_assets' );
