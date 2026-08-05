@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*
 Theme Name: KurtFreyAG
 Author: Homepage
@@ -2396,6 +2397,293 @@ Tags: KurtFreyAG
   font-weight: 400;
   text-decoration: none;
   font-family: "Lato", sans-serif;
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
+* Block - Split image and content (layout_split_content)
+*
+* XD reference:
+*
+*   Homepage "Wir - die Kurt Frey AG"
+*     image 474 x 527 at x140, card 754 x 677 at x546 - so the image takes
+*     41% of the 1160 container, the card 65%, and they overlap by 68px
+*     card padding 81 top, 84 left, 82 right, 90 bottom
+*     title Lato Bold 53 white, body Lato Regular 16 white
+*     button pill 136 x 48, #EDF6FC, Lato Bold 16 #00529E
+*
+*   Über uns "Gemeinsam stark" and siblings
+*     card 573 (49%), image 768 (66%), overlapping by 179
+*     image rounded 60 on the container edge, square on the inside
+*
+* Neither section is literally 50/50 or 30/70, so the two ACF styles are
+* built to their stated ratios and the overlap is kept as a single variable.
+*/
+/*
+* Columns out of 100, so the numbers read as percentages of the container.
+* Unitless on purpose: they are used to build grid-column spans.
+*/
+/* How far the image reaches over the card, in the same 100 column units */
+/*
+* Both children sit in the same grid row and their spans deliberately
+* overlap, which is how the image reaches over the card without negative
+* margins that would need keeping in step with the padding.
+*/
+.layout-split-content {
+  position: relative;
+  width: 100%;
+  margin-top: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+  margin-bottom: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+}
+@media (max-width: 991px) {
+  .layout-split-content {
+    margin-top: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+    margin-bottom: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+  }
+}
+.layout-split-content .split-content__container {
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+.layout-split-content .split-content__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+.layout-split-content .split-content__media {
+  position: relative;
+  /* The card sits on top where the two overlap */
+  z-index: 1;
+  grid-row: 1;
+  line-height: 0;
+}
+.layout-split-content .split-content__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.layout-split-content .split-content__body {
+  position: relative;
+  z-index: 2;
+  grid-row: 1;
+  box-sizing: border-box;
+  background-color: #00529E;
+  -webkit-border-radius: 3.75rem;
+  -moz-border-radius: 3.75rem;
+  border-radius: 3.75rem;
+  padding: clamp(40px, -264.3804347826px + 22.2826086957vw, 81px) clamp(40px, -286.652173913px + 23.9130434783vw, 84px) clamp(48px, -263.8043478261px + 22.8260869565vw, 90px);
+}
+.layout-split-content .split-content__title {
+  display: block;
+  font-size: clamp(32px, -123.902173913px + 11.4130434783vw, 53px);
+  line-height: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+.layout-split-content .split-content__text {
+  margin-top: clamp(20px, -69.0869565217px + 6.5217391304vw, 32px);
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
+  color: #ffffff;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-split-content .split-content__text p,
+.layout-split-content .split-content__text ul,
+.layout-split-content .split-content__text ol {
+  margin: 0 0 1.25rem;
+  color: inherit;
+  font: inherit;
+}
+.layout-split-content .split-content__text > :last-child {
+  margin-bottom: 0;
+}
+.layout-split-content .split-content__text ul,
+.layout-split-content .split-content__text ol {
+  padding-left: 1.5rem;
+}
+.layout-split-content .split-content__text strong {
+  font-weight: 700;
+}
+.layout-split-content .split-content__text a {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 0.1875rem;
+}
+.layout-split-content .split-content__text a:hover {
+  color: #FFB500;
+}
+.layout-split-content .split-content__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  /* XD: the button ends on x1218, level with the card's right padding */
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: clamp(32px, -146.1739130435px + 13.0434782609vw, 56px);
+}
+.layout-split-content .split-content__buttons a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  /* XD: 136 x 48 pill */
+  height: clamp(44px, 14.3043478261px + 2.1739130435vw, 48px);
+  padding-left: clamp(24px, -50.2391304348px + 5.4347826087vw, 34px);
+  padding-right: clamp(24px, -50.2391304348px + 5.4347826087vw, 34px);
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  text-decoration: none;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.layout-split-content .split-content__buttons a:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+.layout-split-content .split-content__buttons a {
+  /* XD default on the blue card: ice pill, blue label */
+}
+.layout-split-content .split-content__buttons a.b-light {
+  background-color: #EDF6FC;
+  border-color: #EDF6FC;
+  color: #00529E;
+}
+.layout-split-content .split-content__buttons a.b-dark {
+  background-color: transparent;
+  border-color: #ffffff;
+  color: #ffffff;
+}
+.layout-split-content .split-content__buttons a {
+  /* Same golden hover as the hero */
+}
+.layout-split-content .split-content__buttons a:hover, .layout-split-content .split-content__buttons a:focus-visible {
+  background-color: #FFB500;
+  border-color: #FFB500;
+  color: #00529E;
+  text-decoration: none;
+}
+.layout-split-content {
+  /* --------------------------------------------------------- variants */
+  /*
+  * Desktop only. Below the breakpoint the two stack, so no overlap, no
+  * column maths, and the image goes first whichever side it was on.
+  */
+}
+@media (min-width: 991px) {
+  .layout-split-content .split-content__grid {
+    grid-template-columns: repeat(100, 1fr);
+  }
+  .layout-split-content {
+    /*
+    * Rounded on the container edge and square on the inside, where the
+    * card covers it anyway - the corner would only show if the card were
+    * ever shorter than the image.
+    */
+  }
+  .layout-split-content .split-content__media img {
+    -webkit-border-radius: 3.75rem;
+    -moz-border-radius: 3.75rem;
+    border-radius: 3.75rem;
+  }
+  .layout-split-content.img-left .split-content__media img {
+    border-top-right-radius: 0.1875rem;
+    border-bottom-right-radius: 0.1875rem;
+  }
+  .layout-split-content.img-right .split-content__media img {
+    border-top-left-radius: 0.1875rem;
+    border-bottom-left-radius: 0.1875rem;
+  }
+}
+@media (min-width: 991px) {
+  .layout-split-content.l-split-5050.img-left .split-content__media {
+    grid-column: 1/51;
+  }
+  .layout-split-content.l-split-5050.img-left .split-content__body {
+    grid-column: 45/-1;
+  }
+  .layout-split-content.l-split-5050.img-right .split-content__media {
+    grid-column: 51/-1;
+  }
+  .layout-split-content.l-split-5050.img-right .split-content__body {
+    grid-column: 1/57;
+  }
+}
+@media (min-width: 991px) {
+  .layout-split-content.l-split-3070.img-left .split-content__media {
+    grid-column: 1/35;
+  }
+  .layout-split-content.l-split-3070.img-left .split-content__body {
+    grid-column: 29/-1;
+  }
+  .layout-split-content.l-split-3070.img-right .split-content__media {
+    grid-column: 67/-1;
+  }
+  .layout-split-content.l-split-3070.img-right .split-content__body {
+    grid-column: 1/73;
+  }
+}
+.layout-split-content {
+  /* ------------------------------------------------------- responsive */
+}
+@media (max-width: 991px) {
+  .layout-split-content .split-content__grid {
+    row-gap: 0;
+  }
+  .layout-split-content .split-content__media {
+    /* Overlaps the card slightly so the two still read as one block */
+    margin-bottom: -2rem;
+  }
+  .layout-split-content .split-content__media img {
+    -webkit-border-radius: 1.875rem;
+    -moz-border-radius: 1.875rem;
+    border-radius: 1.875rem;
+  }
+  .layout-split-content .split-content__body {
+    -webkit-border-radius: 1.875rem;
+    -moz-border-radius: 1.875rem;
+    border-radius: 1.875rem;
+  }
+  .layout-split-content {
+    /* Image first on a phone, whatever side it takes on desktop */
+  }
+  .layout-split-content .split-content__media {
+    grid-row: 1;
+  }
+  .layout-split-content .split-content__body {
+    grid-row: 2;
+  }
 }
 
 /*
