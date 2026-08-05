@@ -14,6 +14,7 @@ const entries = [
   { in: "assets/js/custom.js", out: "dist/js/custom.min.js", bundle: false },
   { in: "assets/js/slick.min.js", out: "dist/js/slick.min.js", bundle: false },
   { in: "assets/js/layout_news_slider.js", out: "dist/js/layout_news_slider.min.js", bundle: false },
+  { in: "assets/js/news.js", out: "dist/js/news.min.js", bundle: false },
 
   { in: "assets/js/gsap.js", out: "dist/js/gsap.min.js", bundle: true },
 ];

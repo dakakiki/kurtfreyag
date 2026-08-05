@@ -125,6 +125,21 @@ function my_theme_enqueue_assets() {
         ]
     );
 
+    /* ---------- news.min.js (dist only) ---------- */
+    $news_rel  = 'js/news.min.js';
+    $news_path = theme_dist_path( $news_rel );
+
+    wp_enqueue_script(
+        'theme-news',
+        theme_dist_uri( $news_rel ),
+        [ 'jquery' ],
+        file_exists( $news_path ) ? filemtime( $news_path ) : null,
+        [
+            'in_footer' => true,
+            'strategy'  => 'defer',
+        ]
+    );
+
     /* ---------- gsap.min.js (dist only) ---------- */
     $gsap_rel  = 'js/gsap.min.js';
     $gsap_path = theme_dist_path( $gsap_rel );

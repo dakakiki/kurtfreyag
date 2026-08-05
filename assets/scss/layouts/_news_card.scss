@@ -86,6 +86,20 @@
         }
     }
 
+    /*
+    * Archive variant.
+    *
+    * The archive card in the XD is 376 x 464 with a 376 x 297 image, so it is
+    * wider and its media is shallower than the near square slider card.
+    */
+    &--archive {
+
+        .news-card__media {
+
+            aspect-ratio: 376 / 297;
+        }
+    }
+
     &__body {
 
         display: flex;
