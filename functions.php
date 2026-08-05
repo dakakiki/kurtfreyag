@@ -219,6 +219,12 @@ function my_acf_enqueue_layout_assets() {
             'deps'        => [ 'jquery' ],
             'needs_slick' => true,
         ],
+        'layout_news_archive' => [
+            'min'         => 'js/layout_news_archive.min.js',
+            'file'        => 'js/layout_news_archive.js',
+            'deps'        => [ 'jquery' ],
+            'needs_slick' => false,
+        ],
     ];
 
     /*

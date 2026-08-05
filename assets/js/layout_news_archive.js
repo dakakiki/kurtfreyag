@@ -1,4 +1,4 @@
-// assets/js/news.js
+// assets/js/layout_news_archive.js
 
 /*
  * News archive - load more.
