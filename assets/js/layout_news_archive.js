@@ -1,32 +1,47 @@
 // assets/js/layout_news_archive.js
 
 /*
- * News archive - load more.
+ * Block - News (archive).
  *
- * The button is a real link to the next archive page, so the list is fully
- * browsable without this script. Here it is intercepted and the next page of
- * cards is appended instead.
+ * Two controls, one request: the year pills replace the list, the load more
+ * button appends to it. Everything the request needs is read from data
+ * attributes on the block, so nothing here depends on wp_localize_script
+ * landing at the right hook priority.
  */
 (function () {
 
     "use strict";
 
-    var config = window.kfaNews;
+    var block = document.querySelector("[data-news-block]");
 
-    if (!config || !config.ajaxUrl) {
+    if (!block) {
         return;
     }
 
-    var button = document.querySelector("[data-news-more]");
-    var grid = document.querySelector("[data-news-grid]");
+    var grid = block.querySelector("[data-news-grid]");
+    var empty = block.querySelector("[data-news-empty]");
+    var moreWrap = block.querySelector("[data-news-more-wrap]");
+    var moreBtn = block.querySelector("[data-news-more]");
+    var status = block.querySelector(".news-archive__status");
+    var yearBtns = Array.prototype.slice.call(block.querySelectorAll("[data-news-year-btn]"));
+    var yearSelect = block.querySelector("[data-news-year-select]");
 
-    if (!button || !grid) {
+    var ajaxUrl = block.getAttribute("data-ajax-url");
+    var action = block.getAttribute("data-action");
+    var nonce = block.getAttribute("data-nonce");
+
+    if (!grid || !ajaxUrl || !action || !nonce) {
         return;
     }
 
-    var status = document.querySelector(".news-archive__status");
-    var page = parseInt(button.getAttribute("data-page"), 10) || 1;
-    var year = parseInt(button.getAttribute("data-year"), 10) || 0;
+    var labels = {
+        more: moreBtn ? moreBtn.getAttribute("data-label-more") || moreBtn.textContent : "",
+        loading: moreBtn ? moreBtn.getAttribute("data-label-loading") || "" : "",
+        error: moreBtn ? moreBtn.getAttribute("data-label-error") || "" : ""
+    };
+
+    var year = parseInt(block.getAttribute("data-year"), 10) || 0;
+    var page = parseInt(block.getAttribute("data-page"), 10) || 1;
     var busy = false;
 
     function say(message) {
@@ -35,26 +50,96 @@
         }
     }
 
-    function setBusy(state) {
+    function setLoading(state) {
         busy = state;
 
-        button.setAttribute("aria-busy", state ? "true" : "false");
-        button.classList.toggle("is-loading", state);
-        button.textContent = state ? config.i18n.loading : config.i18n.more;
+        block.classList.toggle("is-loading", state);
+        block.setAttribute("aria-busy", state ? "true" : "false");
+
+        if (moreBtn) {
+            moreBtn.disabled = state;
+            moreBtn.classList.toggle("is-loading", state);
+            moreBtn.textContent = state ? labels.loading : labels.more;
+        }
+
+        yearBtns.forEach(function (btn) {
+            btn.disabled = state;
+        });
+
+        if (yearSelect) {
+            yearSelect.disabled = state;
+        }
+    }
+
+    function showMore(visible) {
+        if (moreWrap) {
+            moreWrap.hidden = !visible;
+        }
+    }
+
+    function showEmpty(visible) {
+        if (empty) {
+            empty.hidden = !visible;
+        }
     }
 
     /*
-     * Move focus to the first card that just arrived. Without this, keyboard
-     * and screen reader users are left on a button whose new content sits
-     * above them, with no indication that anything happened.
+     * Keep the address bar in step with what is on screen. The state is a
+     * plain query string the server already understands, so a copied or
+     * reloaded URL lands on the same filtered list.
      */
-    function focusFirstNew(firstNode) {
+    function syncUrl() {
 
-        if (!firstNode) {
+        if (!window.history || !window.history.replaceState) {
             return;
         }
 
-        var link = firstNode.querySelector("a");
+        var url = new URL(window.location.href);
+
+        if (year) {
+            url.searchParams.set("news_year", String(year));
+        } else {
+            url.searchParams.delete("news_year");
+        }
+
+        /* Page is a scroll position, not a destination - it stays out. */
+        url.searchParams.delete("news_page");
+
+        window.history.replaceState({}, "", url.toString());
+    }
+
+    function animate(nodes) {
+
+        if (typeof window.initFadeUpAnimations !== "function") {
+            return;
+        }
+
+        /*
+         * Immediately rather than on scroll: these cards are already in view.
+         * Passing true also skips ScrollTrigger.refresh(), which recalculates
+         * every trigger on the page and can throw the viewport to the top.
+         */
+        nodes.forEach(function (node) {
+            window.initFadeUpAnimations(node, true);
+        });
+    }
+
+    function toNodes(html) {
+
+        var holder = document.createElement("div");
+
+        holder.innerHTML = String(html || "").trim();
+
+        return Array.prototype.slice.call(holder.children);
+    }
+
+    function focusFirst(node) {
+
+        if (!node) {
+            return;
+        }
+
+        var link = node.querySelector("a");
 
         if (!link) {
             return;
@@ -64,99 +149,152 @@
         link.focus({ preventScroll: true });
     }
 
-    function append(html) {
+    function request(targetPage, targetYear) {
 
-        var holder = document.createElement("div");
+        var body = new URLSearchParams();
 
-        holder.innerHTML = html.trim();
+        body.append("action", action);
+        body.append("nonce", nonce);
+        body.append("page", String(targetPage));
+        body.append("year", String(targetYear));
 
-        var added = Array.prototype.slice.call(holder.children);
+        return fetch(ajaxUrl, {
+            method: "POST",
+            credentials: "same-origin",
+            headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
+            body: body.toString()
+        }).then(function (response) {
 
-        if (!added.length) {
-            return null;
-        }
+            if (!response.ok) {
+                throw new Error("HTTP " + response.status);
+            }
 
-        added.forEach(function (node) {
-            grid.appendChild(node);
+            return response.json();
+        }).then(function (payload) {
+
+            if (!payload || !payload.success || !payload.data) {
+                throw new Error("Unexpected response");
+            }
+
+            return payload.data;
         });
-
-        /* Let the scroll animations pick up whatever just landed. */
-        if (typeof window.initFadeUpAnimations === "function") {
-            added.forEach(function (node) {
-                window.initFadeUpAnimations(node);
-            });
-        }
-
-        return added[0];
     }
 
-    function load() {
+    /* ------------------------------------------------------- load more */
+
+    function loadMore() {
 
         if (busy) {
             return;
         }
 
-        setBusy(true);
+        setLoading(true);
         say("");
 
-        var body = new URLSearchParams();
+        request(page + 1, year).then(function (data) {
 
-        body.append("action", config.action);
-        body.append("nonce", config.nonce);
-        body.append("page", String(page + 1));
-        body.append("year", String(year));
+            page = data.page || page + 1;
 
-        fetch(config.ajaxUrl, {
-            method: "POST",
-            credentials: "same-origin",
-            headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
-            body: body.toString()
-        })
-            .then(function (response) {
+            var nodes = toNodes(data.html);
+            var scrollY = window.scrollY || window.pageYOffset || 0;
 
-                if (!response.ok) {
-                    throw new Error("HTTP " + response.status);
-                }
-
-                return response.json();
-            })
-            .then(function (payload) {
-
-                if (!payload || !payload.success || !payload.data) {
-                    throw new Error("Unexpected response");
-                }
-
-                page = payload.data.page || page + 1;
-
-                var first = append(payload.data.html || "");
-
-                if (payload.data.has_more) {
-                    setBusy(false);
-
-                    button.setAttribute("data-page", String(page));
-                    button.setAttribute("href", button.getAttribute("href").replace(/\/page\/\d+/, "/page/" + (page + 1)));
-                } else {
-                    /* Nothing left to fetch: the control has served its purpose. */
-                    button.parentNode.removeChild(button);
-                }
-
-                focusFirstNew(first);
-            })
-            .catch(function () {
-
-                setBusy(false);
-
-                /*
-                 * The link still points at the next page, so a failed request
-                 * leaves the visitor with a working way forward.
-                 */
-                say(config.i18n.error);
+            nodes.forEach(function (node) {
+                grid.appendChild(node);
             });
+
+            animate(nodes);
+
+            if ((window.scrollY || window.pageYOffset || 0) !== scrollY) {
+                window.scrollTo(0, scrollY);
+            }
+
+            setLoading(false);
+            showMore(!!data.has_more);
+
+            focusFirst(nodes[0]);
+        }).catch(function () {
+
+            setLoading(false);
+            say(labels.error);
+        });
     }
 
-    button.addEventListener("click", function (event) {
+    /* ---------------------------------------------------- year filter */
 
-        event.preventDefault();
-        load();
+    function markActiveYear() {
+
+        yearBtns.forEach(function (btn) {
+
+            var isActive = (parseInt(btn.getAttribute("data-year"), 10) || 0) === year;
+
+            btn.classList.toggle("is-active", isActive);
+            btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+        });
+
+        /* The two controls are alternate views of one value, so keep them in step. */
+        if (yearSelect) {
+            yearSelect.value = String(year);
+        }
+    }
+
+    function filterYear(nextYear) {
+
+        if (busy || nextYear === year) {
+            return;
+        }
+
+        setLoading(true);
+        say("");
+
+        request(1, nextYear).then(function (data) {
+
+            year = nextYear;
+            page = 1;
+
+            markActiveYear();
+            syncUrl();
+
+            var nodes = toNodes(data.html);
+
+            /* Replace rather than append: this is a new list, not more of one. */
+            grid.innerHTML = "";
+
+            nodes.forEach(function (node) {
+                grid.appendChild(node);
+            });
+
+            animate(nodes);
+
+            setLoading(false);
+            showMore(!!data.has_more);
+            showEmpty(nodes.length === 0);
+
+            focusFirst(nodes[0]);
+        }).catch(function () {
+
+            setLoading(false);
+
+            /* Put the controls back on the year that is actually displayed. */
+            markActiveYear();
+            say(labels.error);
+        });
+    }
+
+    yearBtns.forEach(function (btn) {
+
+        btn.addEventListener("click", function () {
+            filterYear(parseInt(btn.getAttribute("data-year"), 10) || 0);
+        });
     });
+
+    if (yearSelect) {
+
+        yearSelect.addEventListener("change", function () {
+            filterYear(parseInt(yearSelect.value, 10) || 0);
+        });
+    }
+
+    if (moreBtn) {
+        moreBtn.addEventListener("click", loadMore);
+    }
 })();

@@ -3,8 +3,8 @@
  * News CPT helpers.
  *
  * Anything that reads the news post type lives here rather than inside a
- * layout or archive template, so the slider, the archive and the AJAX handler
- * all ask the same question in the same way.
+ * layout template, so the slider, the archive layout and the AJAX handler all
+ * ask the same question in the same way.
  *
  * @package KurtFreyAG
  */
@@ -21,14 +21,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 const KFA_NEWS_SLIDER_COUNT = 9;
 
 /**
- * How many posts one page of the news archive shows.
+ * How many posts one page of the news archive layout shows.
  *
  * The XD lists three rows of three before the load more control.
  */
 const KFA_NEWS_ARCHIVE_PER_PAGE = 9;
 
-/** Query string key for the year filter. */
+/** Query string keys for the archive state. */
 const KFA_NEWS_YEAR_VAR = 'news_year';
+const KFA_NEWS_PAGE_VAR = 'news_page';
 
 /** AJAX action name for the load more control. */
 const KFA_NEWS_AJAX_ACTION = 'kfa_load_news';
@@ -96,62 +97,65 @@ function kfa_get_news_slider_query(): WP_Query {
 
 
 /**
- * One page of the news archive.
+ * Year filter as a date_query fragment.
+ */
+function kfa_news_year_args( int $year ): array {
+
+	return $year ? array( 'date_query' => array( array( 'year' => $year ) ) ) : array();
+}
+
+
+/**
+ * Everything up to and including the given page.
  *
- * Used by the AJAX handler. The archive itself runs on the main query, which
- * kfa_news_archive_pre_get_posts() shapes to match.
+ * Used for the server rendered list. Cumulative rather than one page at a
+ * time, so following the load more link with JavaScript off adds posts
+ * instead of replacing them.
  *
  * @param int $page Page number, 1 based.
  * @param int $year Four digit year, or 0 for all years.
  */
-function kfa_get_news_archive_query( int $page = 1, int $year = 0 ): WP_Query {
+function kfa_get_news_archive_initial_query( int $page = 1, int $year = 0 ): WP_Query {
 
-	$args = array(
-		'posts_per_page' => KFA_NEWS_ARCHIVE_PER_PAGE,
-		'paged'          => max( 1, $page ),
+	$page = max( 1, $page );
 
-		/* Paged output needs the row count to know when to stop. */
-		'no_found_rows'  => false,
+	$args = array_merge(
+		array(
+			'posts_per_page' => KFA_NEWS_ARCHIVE_PER_PAGE * $page,
+
+			/* found_posts decides whether the load more control is shown. */
+			'no_found_rows'  => false,
+		),
+		kfa_news_year_args( $year )
 	);
 
-	if ( $year ) {
-		$args['date_query'] = array( array( 'year' => $year ) );
-	}
+	return kfa_get_news_query( KFA_NEWS_ARCHIVE_PER_PAGE * $page, $args );
+}
+
+
+/**
+ * A single page of the archive.
+ *
+ * Used by the AJAX handler, which appends one page at a time rather than
+ * re-rendering what is already on screen.
+ */
+function kfa_get_news_archive_query( int $page = 1, int $year = 0 ): WP_Query {
+
+	$args = array_merge(
+		array(
+			'posts_per_page' => KFA_NEWS_ARCHIVE_PER_PAGE,
+			'paged'          => max( 1, $page ),
+			'no_found_rows'  => false,
+		),
+		kfa_news_year_args( $year )
+	);
 
 	return kfa_get_news_query( KFA_NEWS_ARCHIVE_PER_PAGE, $args );
 }
 
 
-/**
- * Shape the main query on the news archive.
- *
- * Doing this here rather than running a second query in the template keeps
- * max_num_pages, the paged variable and the next page URL correct, so the
- * archive still works with JavaScript switched off.
- */
-function kfa_news_archive_pre_get_posts( WP_Query $query ): void {
-
-	if ( is_admin() || ! $query->is_main_query() ) {
-		return;
-	}
-
-	if ( ! $query->is_post_type_archive( 'news' ) ) {
-		return;
-	}
-
-	$query->set( 'posts_per_page', KFA_NEWS_ARCHIVE_PER_PAGE );
-
-	$year = kfa_get_current_news_year();
-
-	if ( $year ) {
-		$query->set( 'date_query', array( array( 'year' => $year ) ) );
-	}
-}
-add_action( 'pre_get_posts', 'kfa_news_archive_pre_get_posts' );
-
-
 /* -------------------------------------------------------------------------
- * Year filter
+ * Archive state
  * ---------------------------------------------------------------------- */
 
 /**
@@ -205,7 +209,8 @@ add_action( 'deleted_post', 'kfa_flush_news_years' );
  * The year currently being filtered on, or 0 for all years.
  *
  * Read from the query string rather than a rewrite, so the filtered state is
- * shareable and crawlable without new rewrite rules.
+ * shareable and crawlable without new rewrite rules - and because the layout
+ * can sit on any page.
  */
 function kfa_get_current_news_year(): int {
 
@@ -220,17 +225,60 @@ function kfa_get_current_news_year(): int {
 
 
 /**
- * Archive URL for one year, or for all years when $year is 0.
+ * How many pages deep the visitor is, 1 based.
+ *
+ * Its own variable rather than `paged`, because the layout lives on an
+ * ordinary page whose paged value belongs to WordPress.
+ */
+function kfa_get_current_news_page(): int {
+
+	$page = isset( $_GET[ KFA_NEWS_PAGE_VAR ] ) ? absint( $_GET[ KFA_NEWS_PAGE_VAR ] ) : 1;
+
+	return max( 1, $page );
+}
+
+
+/**
+ * Current URL with the archive state applied.
+ *
+ * Keeps any other query arguments and always points at the news anchor, so
+ * following the link does not drop the visitor back at the top of the page.
+ */
+function kfa_news_archive_url( int $page = 1, int $year = 0 ): string {
+
+	$base = remove_query_arg( array( KFA_NEWS_YEAR_VAR, KFA_NEWS_PAGE_VAR ) );
+
+	$args = array();
+
+	if ( $year ) {
+		$args[ KFA_NEWS_YEAR_VAR ] = $year;
+	}
+
+	if ( $page > 1 ) {
+		$args[ KFA_NEWS_PAGE_VAR ] = $page;
+	}
+
+	return $args ? add_query_arg( $args, $base ) : $base;
+}
+
+
+/**
+ * Link for one year pill. Filtering always restarts at page one.
+ *
+ * The pills are buttons driven by AJAX, so nothing calls this today. Kept
+ * because the URL format is still what the block reads on load, so this is
+ * the one place that knows how to build it.
  */
 function kfa_news_year_url( int $year = 0 ): string {
 
-	$base = get_post_type_archive_link( 'news' );
+	return kfa_news_archive_url( 1, $year );
+}
 
-	if ( ! $base ) {
-		return home_url( '/' );
-	}
 
-	return $year ? add_query_arg( KFA_NEWS_YEAR_VAR, $year, $base ) : $base;
+/** Link for the load more control. */
+function kfa_news_page_url( int $page, int $year = 0 ): string {
+
+	return kfa_news_archive_url( $page, $year );
 }
 
 
@@ -241,7 +289,7 @@ function kfa_news_year_url( int $year = 0 ): string {
 /**
  * Render the cards of a news query to a string.
  *
- * The archive prints cards straight from the loop; this exists so the AJAX
+ * The layout prints cards straight from the loop; this exists so the AJAX
  * handler produces byte for byte the same markup from the same partial.
  */
 function kfa_render_news_cards( WP_Query $query, array $card_args = array() ): string {
@@ -251,8 +299,11 @@ function kfa_render_news_cards( WP_Query $query, array $card_args = array() ): s
 	}
 
 	$card_args = wp_parse_args( $card_args, array(
-		'class' => 'news-card--archive',
-		'sizes' => '(max-width: 640px) 88vw, (max-width: 991px) 46vw, 376px',
+		/* fade-up must match the server rendered cards, or the CSS that hides
+		   uninitialised items would leave the appended ones invisible. */
+		'class'   => 'news-card--archive fade-up',
+		'heading' => 'h3',
+		'sizes'   => '(max-width: 640px) 88vw, (max-width: 991px) 46vw, 376px',
 	) );
 
 	ob_start();
@@ -286,17 +337,15 @@ function kfa_ajax_load_news(): void {
 	$page = isset( $_POST['page'] ) ? absint( $_POST['page'] ) : 1;
 	$year = isset( $_POST['year'] ) ? absint( $_POST['year'] ) : 0;
 
-	/* Only years that exist are honoured, as on the server rendered archive. */
+	/* Only years that exist are honoured, as on the server rendered list. */
 	if ( $year && ! in_array( $year, kfa_get_news_years(), true ) ) {
 		$year = 0;
 	}
 
 	$query = kfa_get_news_archive_query( $page, $year );
 
-	$html = kfa_render_news_cards( $query );
-
 	wp_send_json_success( array(
-		'html'     => $html,
+		'html'     => kfa_render_news_cards( $query ),
 		'page'     => $page,
 		'has_more' => $page < (int) $query->max_num_pages,
 	) );
@@ -305,42 +354,9 @@ add_action( 'wp_ajax_' . KFA_NEWS_AJAX_ACTION, 'kfa_ajax_load_news' );
 add_action( 'wp_ajax_nopriv_' . KFA_NEWS_AJAX_ACTION, 'kfa_ajax_load_news' );
 
 
-/**
- * Load the archive script only where it is used.
+/*
+ * The load more control carries its own AJAX URL, action and nonce in data
+ * attributes, so there is no wp_localize_script here. That call had to land
+ * after my_acf_enqueue_layout_assets() registered the handle, and tying the
+ * feature to a hook priority in another file proved too easy to break.
  */
-function kfa_news_archive_assets(): void {
-
-	if ( ! is_post_type_archive( 'news' ) ) {
-		return;
-	}
-
-	global $wp_query;
-
-	[ $src, $ver ] = theme_pick_dist( 'js/news.min.js', 'js/news.js' );
-
-	wp_enqueue_script(
-		'kfa-news',
-		$src,
-		array(),
-		$ver,
-		array(
-			'in_footer' => true,
-			'strategy'  => 'defer',
-		)
-	);
-
-	wp_localize_script( 'kfa-news', 'kfaNews', array(
-		'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
-		'action'   => KFA_NEWS_AJAX_ACTION,
-		'nonce'    => wp_create_nonce( KFA_NEWS_AJAX_ACTION ),
-		'year'     => kfa_get_current_news_year(),
-		'page'     => max( 1, (int) get_query_var( 'paged' ) ),
-		'maxPages' => (int) $wp_query->max_num_pages,
-		'i18n'     => array(
-			'loading' => __( 'Wird geladen …', 'KurtFreyAG' ),
-			'more'    => __( 'Mehr laden', 'KurtFreyAG' ),
-			'error'   => __( 'Laden fehlgeschlagen. Bitte erneut versuchen.', 'KurtFreyAG' ),
-		),
-	) );
-}
-add_action( 'wp_enqueue_scripts', 'kfa_news_archive_assets' );

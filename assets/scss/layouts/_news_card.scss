@@ -47,6 +47,13 @@
         &:hover,
         &:focus-visible {
 
+            /*
+            * The base rule sets text-decoration: none, but the global
+            * a:hover is one specificity point heavier and puts the underline
+            * back - and it propagates to the title inside the link.
+            */
+            text-decoration: none;
+
             .news-card__media img {
 
                 transform: scale(1.1);

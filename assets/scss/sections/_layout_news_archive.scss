@@ -1,0 +1,461 @@
+@use '../abstracts' as *;
+
+/*
+* Block - News archive (layout_news_archive)
+*
+* XD reference (News artboard, 1440 x 3185):
+*   years    pills 180 x 45, #EDF6FC, radius 100, 16 apart, at y863
+*   heading  Lato Bold 53 #00529E, left aligned, baseline at y1011
+*   icon     right edge on x1300, level with the heading
+*   grid     three columns, cards 376 wide, 16 between columns and rows
+*
+* The page hero above this block is its own layout row, and the card itself
+* is styled in layouts/_news_card.scss - this file only positions the things
+* around them.
+*/
+
+.layout-news-archive {
+
+    position: relative;
+
+    width: 100%;
+
+    @include fluid-prop('margin-top', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+    @include fluid-prop('margin-bottom', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    @include respond-max(lg) {
+
+        margin-top: fluid(56, 80, 360, 991);
+        margin-bottom: fluid(56, 80, 360, 991);
+    }
+
+    .news-archive {
+
+        display: block;
+
+        width: 100%;
+
+        &__container {
+
+            @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+        }
+
+        /* ------------------------------------------------------- year filter */
+
+        &__years {
+
+            display: flex;
+            flex-wrap: wrap;
+
+            align-items: center;
+
+            gap: rem(16);
+
+            @include fluid-prop('margin-bottom', 64, 100, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            /* Five pills would wrap into three rows here - the select takes over */
+            @include respond-max(lg) {
+
+                display: none;
+            }
+        }
+
+        /*
+        * Select variant
+        *
+        * Only one of the two controls is ever visible: pills from 992 up,
+        * the select below. Styled to read as one full width pill so the
+        * control still looks like the rest of the block.
+        */
+        &__years-select {
+
+            display: none;
+
+            position: relative;
+
+            width: 100%;
+
+            @include fluid-prop('margin-bottom', 64, 100, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            /* The chevron, drawn here because the native arrow is hidden */
+            &::after {
+
+                content: "";
+
+                position: absolute;
+                top: 50%;
+                right: rem(24);
+
+                width: rem(14);
+                height: rem(9);
+
+                transform: translateY(-50%);
+
+                background-color: theme-color(text-blue);
+
+                mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='M1 1l7 7 7-7' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+                mask-repeat: no-repeat;
+                mask-size: contain;
+                -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='M1 1l7 7 7-7' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+                -webkit-mask-repeat: no-repeat;
+                -webkit-mask-size: contain;
+
+                pointer-events: none;
+            }
+
+            select {
+
+                display: block;
+
+                width: 100%;
+                height: rem(45);
+
+                box-sizing: border-box;
+
+                padding: 0 rem(52) 0 rem(24);
+
+                /* Reset the native control so the pill styling shows through */
+                appearance: none;
+                -webkit-appearance: none;
+
+                font-family: inherit;
+
+                cursor: pointer;
+
+                @include format-text(
+                    $max-size: 16,
+                    $min-size: 15,
+                    $max-height: 24,
+                    $min-height: 22,
+                    $tx-color: theme-color(text-blue),
+                    $tx-weight: 400,
+                    $max-rsp: $max-resize-sec,
+                    $min-rsp: $min-resize-sec,
+                );
+
+                background-color: theme-color(bg-ice);
+                border: 1px solid theme-color(brd-ice);
+
+                @include brd-radius-all($brd-radius: 100px);
+
+                @include trans;
+                @include focus-ring(theme-color(brd-blue));
+
+                &:hover {
+
+                    border-color: theme-color(brd-blue);
+                }
+
+                &:disabled {
+
+                    cursor: default;
+                }
+            }
+
+            @include respond-max(lg) {
+
+                display: block;
+
+                margin-bottom: fluid(40, 56, 360, 991);
+            }
+        }
+
+        &__years-label {
+
+            /*
+            * Visible to assistive tech only: the pills carry a nav label, so
+            * the select needs the same context without repeating it on screen.
+            */
+            position: absolute;
+            width: 1px;
+            height: 1px;
+
+            margin: -1px;
+            padding: 0;
+
+            overflow: hidden;
+            clip-path: inset(50%);
+            white-space: nowrap;
+        }
+
+        &__year {
+
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            box-sizing: border-box;
+
+            /* Reset the default button chrome - these read as pills, not controls */
+            appearance: none;
+            -webkit-appearance: none;
+
+            font-family: inherit;
+
+            cursor: pointer;
+
+            /* XD: 180 x 45 pill */
+            min-width: rem(180);
+
+            @include fluid-prop('height', 40, 45, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            padding-left: rem(24);
+            padding-right: rem(24);
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 24,
+                $min-height: 22,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            text-decoration: none;
+
+            background-color: theme-color(bg-ice);
+            border: 1px solid theme-color(brd-ice);
+
+            @include brd-radius-all($brd-radius: 100px);
+
+            @include trans;
+            @include focus-ring(theme-color(brd-blue));
+
+            &:hover {
+
+                border-color: theme-color(brd-blue);
+            }
+
+            &:disabled {
+
+                cursor: default;
+            }
+
+            /*
+            * The XD draws every pill in the same ice blue, with no selected
+            * state. A filter that does not show what is selected is unusable, so
+            * the active one inverts.
+            */
+            &.is-active {
+
+                background-color: theme-color(bg-blue);
+                border-color: theme-color(brd-blue);
+
+                color: theme-color(text-white);
+
+                font-weight: 700;
+            }
+
+        }
+
+        /* ---------------------------------------------------------- heading */
+
+        &__head {
+
+            position: relative;
+
+            display: flex;
+
+            align-items: flex-end;
+            justify-content: space-between;
+
+            gap: rem(24);
+
+            @include fluid-prop('margin-bottom', 48, 66, $min-resize-sec, $max-resize-sec, $unit: px);
+        }
+
+        &__title {
+
+            display: block;
+
+            @include format-text(
+                $max-size: 53,
+                $min-size: 32,
+                $max-height: 62,
+                $min-height: 40,
+                $tx-color: theme-color(title-blue),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            @include break-word;
+        }
+
+        &__icon {
+
+            flex: 0 0 auto;
+
+            line-height: 0;
+
+            img {
+
+                display: block;
+
+                height: auto;
+
+                @include fluid-prop('width', 76, 114, $min-resize-sec, $max-resize-sec, $unit: px);
+            }
+
+            @include respond-max(sm) {
+
+                display: none;
+            }
+        }
+
+        /* ------------------------------------------------------------- grid */
+
+        &__grid {
+
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+
+            /* XD: cards 376 wide at x140 / 532 / 924, so 16 in both directions */
+            gap: rem(16);
+
+            align-items: stretch;
+
+            @include respond-max(lg) {
+
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            @include respond-max(sm) {
+
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        /* -------------------------------------------------------- load more */
+
+        &__more {
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: rem(12);
+
+            /*
+            * display: flex would otherwise override the hidden attribute the
+            * script toggles when there is nothing left to load.
+            */
+            &[hidden] {
+
+                display: none;
+            }
+
+            @include fluid-prop('margin-top', 48, 72, $min-resize-sec, $max-resize-sec, $unit: px);
+        }
+
+        &__more-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            box-sizing: border-box;
+
+            /* Reset the default button chrome */
+            appearance: none;
+            -webkit-appearance: none;
+
+            font-family: inherit;
+
+            cursor: pointer;
+
+            @include fluid-prop('height', 44, 48, $min-resize-sec, $max-resize-sec, $unit: px);
+            @include fluid-prop('padding-left', 28, 40, $min-resize-sec, $max-resize-sec, $unit: px);
+            @include fluid-prop('padding-right', 28, 40, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 24,
+                $min-height: 22,
+                $tx-color: theme-color(text-white),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            text-decoration: none;
+            white-space: nowrap;
+
+            background-color: theme-color(bg-blue);
+            border: 1px solid theme-color(brd-blue);
+
+            @include brd-radius-all($brd-radius: 100px);
+
+            @include trans;
+            @include focus-ring(theme-color(brd-blue));
+
+            /* Same golden hover as the hero button */
+            &:hover,
+            &:focus-visible {
+
+                background-color: theme-color(bg-golden);
+                border-color: theme-color(brd-golden);
+
+                color: theme-color(text-blue);
+            }
+
+            &.is-loading {
+
+                cursor: progress;
+
+                opacity: 0.7;
+            }
+        }
+
+        &__status {
+
+            margin: rem(12) 0 0;
+
+            text-align: center;
+
+            @include format-text(
+                $max-size: 15,
+                $min-size: 14,
+                $max-height: 22,
+                $min-height: 20,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            /* Empty until something needs saying, so it takes no space */
+            &:empty {
+
+                display: none;
+            }
+        }
+
+        &__empty {
+
+            margin: 0;
+
+            &[hidden] {
+
+                display: none;
+            }
+
+            @include format-text(
+                $max-size: 18,
+                $min-size: 16,
+                $max-height: 28,
+                $min-height: 24,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+        }
+    }
+}
