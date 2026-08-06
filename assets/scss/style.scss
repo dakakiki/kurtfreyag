@@ -36,7 +36,15 @@ body {
 
     background-color: theme-color(surface);
 
-    overflow-x: hidden;
+    /*
+    * clip, not hidden.
+    *
+    * overflow-x: hidden computes overflow-y to auto, which turns html and
+    * body into scroll containers - and a position: sticky element then sticks
+    * to that container instead of the viewport, so it never moves. clip cuts
+    * the same horizontal overflow without creating a scrollport.
+    */
+    overflow-x: clip;
 }
 
 html {
@@ -46,7 +54,9 @@ html {
     margin: 0;
     padding: 0;
     width: 100%;
-    overflow-x: hidden;
+
+    /* See the note on body - clip keeps position: sticky working. */
+    overflow-x: clip;
 }
 
 

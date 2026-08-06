@@ -10,23 +10,75 @@
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    const navLinks = document.querySelectorAll('.nav-wrap a[href*="#"]');
+    /*
+     * Every in-page link that should land below the fixed bar.
+     *
+     * The main navigation was the only one wired up, so links added by a
+     * layout - the service area jump list, for instance - fell through to the
+     * browser's own jump and landed underneath the header. Adding
+     * data-anchor-scroll to a wrapper is enough to opt a new block in.
+     */
+    const navLinks = document.querySelectorAll(
+        '.nav-wrap a[href*="#"], .areas__nav a[href*="#"], [data-anchor-scroll] a[href*="#"]'
+    );
+
     if (!navLinks.length) return;
 
     const STORAGE_KEY = "pendingHomepageAnchor";
 
-    const getScrollOffset = () => {
-        const header = document.querySelector("header");
-        const headerHeight = header ? header.offsetHeight : 0;
+    /* Breathing room between the header and whatever it scrolls to. */
+    const SCROLL_GAP = 24;
 
-        return headerHeight + 50;
+    /*
+     * How far above the target to stop.
+     *
+     * A target can ask for its own distance with scroll-margin-top, and that
+     * value wins. It is the same property the browser honours when it jumps
+     * without any script, so a pasted link and a clicked one land in exactly
+     * the same place - and a block whose artwork overhangs its top edge, like
+     * the icon on a service area card, can reserve the room it needs from its
+     * own stylesheet instead of from here.
+     */
+    const getScrollOffset = (target) => {
+
+        if (target) {
+            const declared = parseFloat(
+                window.getComputedStyle(target).scrollMarginTop
+            );
+
+            if (declared > 0) {
+                return declared;
+            }
+        }
+
+        const header = document.querySelector("header");
+
+        /*
+         * Measured on every jump rather than cached: the bar is 100 tall on
+         * desktop and 64 below 1024, and a visitor can cross that width
+         * without reloading.
+         *
+         * getBoundingClientRect() rather than offsetHeight because the value
+         * is fractional at some zoom levels, and offsetHeight rounds it.
+         */
+        const headerHeight = header ? header.getBoundingClientRect().height : 0;
+
+        return headerHeight + SCROLL_GAP;
     };
 
+    /*
+     * Relative links are resolved against the current page, not the origin.
+     *
+     * With the origin as the base, a bare "#anchor" resolved to "/" - so the
+     * handler decided the target was on another page and sent the visitor to
+     * the homepage. Menu links are absolute, which is why this only surfaced
+     * once in-page jump links appeared.
+     */
     const normalizeHash = (href) => {
         if (!href) return "";
 
         try {
-            const url = new URL(href, window.location.origin);
+            const url = new URL(href, window.location.href);
             return url.hash || "";
         } catch (e) {
             const hashIndex = href.indexOf("#");
@@ -36,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const getUrlObject = (href) => {
         try {
-            return new URL(href, window.location.origin);
+            return new URL(href, window.location.href);
         } catch (e) {
             return null;
         }
@@ -96,16 +148,41 @@ document.addEventListener("DOMContentLoaded", () => {
         requestAnimationFrame(animation);
     };
 
+    /*
+     * The highest point the target actually paints at.
+     *
+     * A block's own box is not always its visual top: the service areas hang
+     * their symbol above the card's border, so scrolling to the card alone
+     * left that symbol tucked under the header. Any descendant reaching
+     * higher is taken into account, which works for anything that overflows
+     * upwards without the script needing to know about it.
+     */
+    const getVisualTop = (target) => {
+        let top = target.getBoundingClientRect().top;
+
+        target.querySelectorAll("*").forEach((child) => {
+            const rect = child.getBoundingClientRect();
+
+            /* Skip anything not rendered - a collapsed panel, a hidden image. */
+            if (!rect.width || !rect.height) return;
+
+            if (rect.top < top) top = rect.top;
+        });
+
+        return top;
+    };
+
     const scrollToHash = (hash, duration = 600) => {
         if (!hash) return;
 
         const target = document.querySelector(hash);
         if (!target) return;
 
-        const offset = getScrollOffset();
-        const targetY = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        const offset = getScrollOffset(target);
+        const targetY = getVisualTop(target) + window.pageYOffset - offset;
 
-        smoothScrollTo(targetY, duration);
+        /* Never past the top of the document. */
+        smoothScrollTo(Math.max(0, targetY), duration);
     };
 
     const tryScrollFromStoredHash = () => {
@@ -135,12 +212,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!hash || !url) return;
 
+            /* A bare hash is always this page, whatever the URL parsing says. */
+            const sameDocument = href.trim().charAt(0) === "#";
+
             const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
             const targetPath = url.pathname.replace(/\/+$/, "") || "/";
 
             setActiveByHash(hash);
 
-            if (currentPath === targetPath) {
+            if (sameDocument || currentPath === targetPath) {
                 e.preventDefault();
                 history.pushState(null, "", hash);
 

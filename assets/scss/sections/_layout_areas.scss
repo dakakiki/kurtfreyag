@@ -1,0 +1,680 @@
+@use '../abstracts' as *;
+
+/*
+* Block - Service areas (layout_areas)
+*
+* XD reference (Leistungen and Leistungen - more text, 1440):
+*   grid     content 882 at x140, nav 180 at x1120 - a 98 gap
+*   head     white, 3px #00519E border, 60px radius, text at x238 so 98 in
+*   title    Lato Bold 53 #00529E, lead Lato Regular 16
+*   bars     882 x 81 closed, ice fill, 3px #00529E border; consecutive bars
+*            sit 3 apart so the borders collapse into a single line
+*   open     the bar grows to fit, text starts 51 below its top edge
+*   arrow    27 x 24 on the right
+*   image    882 wide, 60px radius on the bottom corners, no border
+*   nav      pills 180 x 45, ice fill, radius 100, 18 apart; a two line pill
+*            is 64 tall with a 22 radius
+*/
+
+/*
+* Left inset shared by the section title, the card head and the option bars.
+*
+* Everything in the XD starts on x238, which is 98 inside the 882 wide card.
+* Scaled over the primary resize range so the full value is reached at 1160
+* and holds from there - over the secondary range it would still be at its
+* minimum on a 1366 screen, which is what left the three levels misaligned.
+*/
+$areas-inset: 98px;
+
+.layout-areas {
+
+    position: relative;
+
+    width: 100%;
+
+    @include fluid-prop('margin-top', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+    @include fluid-prop('margin-bottom', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    @include respond-max(lg) {
+
+        margin-top: fluid(56, 80, 360, 991);
+        margin-bottom: fluid(56, 80, 360, 991);
+    }
+
+    .areas {
+
+        &__container {
+
+            @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+        }
+
+        /* XD: the section heading starts at x238, in line with the card text */
+        &__title {
+
+            display: block;
+
+            @include fluid-prop('padding-left', 32, 98, $min-resize, $max-resize, $unit: px);
+
+            @include format-text(
+                $max-size: 53,
+                $min-size: 32,
+                $max-height: 62,
+                $min-height: 40,
+                $tx-color: theme-color(title-blue),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            @include fluid-prop('margin-bottom', 48, 95, $min-resize-sec, $max-resize-sec, $unit: px);
+        }
+
+        /*
+        * Select variant
+        *
+        * Only one of the two is ever visible: the sticky pills from 992 up,
+        * this from below. A native select is the right control on a phone and
+        * needs no keyboard work of its own.
+        */
+        &__select {
+
+            display: none;
+
+            position: relative;
+
+            width: 100%;
+
+            @include respond-max(lg) {
+
+                display: block;
+
+                /*
+                * Lined up with the section heading rather than the card edge,
+                * so the label starts on the same x as "Bereiche" above it.
+                */
+                @include fluid-prop('margin-left', 32, 98, $min-resize, $max-resize, $unit: px);
+                @include fluid-prop('margin-right', 32, 98, $min-resize, $max-resize, $unit: px);
+
+                width: auto;
+
+                /*
+                * The first card's symbol hangs about half its height above
+                * the card, so the gap has to clear that as well as the card
+                * itself - otherwise the select sits right on the icon.
+                */
+                margin-bottom: fluid(64, 88, 360, 991);
+            }
+
+            /* The chevron, drawn here because the native arrow is hidden */
+            &::after {
+
+                content: "";
+
+                position: absolute;
+                top: 50%;
+                right: rem(24);
+
+                width: rem(14);
+                height: rem(9);
+
+                transform: translateY(-50%);
+
+                background-color: theme-color(text-blue);
+
+                mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='M1 1l7 7 7-7' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+                mask-repeat: no-repeat;
+                mask-size: contain;
+                -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='M1 1l7 7 7-7' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+                -webkit-mask-repeat: no-repeat;
+                -webkit-mask-size: contain;
+
+                pointer-events: none;
+            }
+
+            select {
+
+                display: block;
+
+                width: 100%;
+                height: rem(45);
+
+                box-sizing: border-box;
+
+                padding: 0 rem(52) 0 rem(24);
+
+                /* Reset the native control so the pill styling shows through */
+                appearance: none;
+                -webkit-appearance: none;
+
+                font-family: inherit;
+
+                cursor: pointer;
+
+                @include format-text(
+                    $max-size: 16,
+                    $min-size: 15,
+                    $max-height: 24,
+                    $min-height: 22,
+                    $tx-color: theme-color(text-blue),
+                    $tx-weight: 400,
+                    $max-rsp: $max-resize-sec,
+                    $min-rsp: $min-resize-sec,
+                );
+
+                background-color: theme-color(bg-ice);
+                border: 1px solid theme-color(brd-ice);
+
+                @include brd-radius-all($brd-radius: 100px);
+
+                @include trans;
+                @include focus-ring(theme-color(brd-blue));
+
+                &:hover {
+
+                    border-color: theme-color(brd-blue);
+                }
+            }
+        }
+
+        &__select-label {
+
+            /*
+            * Visible to assistive tech only - the placeholder option already
+            * says the same thing on screen.
+            */
+            position: absolute;
+            width: 1px;
+            height: 1px;
+
+            margin: -1px;
+            padding: 0;
+
+            overflow: hidden;
+            clip-path: inset(50%);
+            white-space: nowrap;
+        }
+
+        &__grid {
+
+            display: grid;
+
+            /* XD: 882 and 180 out of 1160, 98 between them */
+            grid-template-columns: minmax(0, 882fr) minmax(0, 180fr);
+
+            @include fluid-prop('column-gap', 40, 98, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            align-items: start;
+
+            @include respond-max(lg) {
+
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        /* -------------------------------------------------------- areas */
+
+        &__list {
+
+            display: flex;
+            flex-direction: column;
+
+            @include fluid-prop('row-gap', 72, 146, $min-resize-sec, $max-resize-sec, $unit: px);
+        }
+
+        &__item {
+
+            /*
+            * Fallback for a native jump - custom.js measures the bar and
+            * scrolls itself, but a pasted URL with a hash lands here before
+            * the script runs.
+            */
+            scroll-margin-top: calc(#{$header-height} + #{rem(24)});
+
+            @include respond-max(xl) {
+
+                scroll-margin-top: calc(#{$header-height-rsp} + #{rem(24)});
+            }
+        }
+
+        /*
+        * Head, bars and image stack into one continuous card, so the head is
+        * open at the bottom and only the image closes it.
+        */
+        &__head {
+
+            position: relative;
+
+            background-color: theme-color(bg-white);
+
+            border: 3px solid theme-color(brd-blue);
+            border-bottom: none;
+
+            @include brd-radius-top($brd-radius: rem(60));
+
+            @include fluid-prop-multi('padding', 40 32, 64 98, $min-resize, $max-resize, $unit: px, $base: 16);
+
+            @include respond-max(lg) {
+
+                @include brd-radius-top($brd-radius: rem(30));
+
+                padding: fluid(32, 40, 360, 991) fluid(20, 32, 360, 991);
+            }
+        }
+
+        /*
+        * XD: the symbol is ~180 wide and sits centred on the card's top
+        * border, 114 in from the card's right edge - measured across all six
+        * areas, where only the artwork's height varies.
+        */
+        &__symbol {
+
+            position: absolute;
+            z-index: 2;
+            top: 0;
+
+            @include fluid-prop('right', 40, 114, $min-resize, $max-resize, $unit: px);
+
+            transform: translateY(-50%);
+
+            line-height: 0;
+
+            img {
+
+                display: block;
+
+                height: auto;
+
+                @include fluid-prop('width', 110, 180, $min-resize, $max-resize, $unit: px);
+            }
+
+            @include respond-max(lg) {
+
+                right: fluid(20, 40, 360, 991);
+
+                img {
+
+                    width: fluid(84, 110, 360, 991);
+                }
+            }
+        }
+
+        &__item-title {
+
+            display: block;
+
+            @include format-text(
+                $max-size: 53,
+                $min-size: 32,
+                $max-height: 62,
+                $min-height: 40,
+                $tx-color: theme-color(title-blue),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            @include break-word;
+        }
+
+        &__text {
+
+            @include fluid-prop('margin-top', 20, 30, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 26,
+                $min-height: 24,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            p,
+            ul,
+            ol {
+
+                margin: 0 0 rem(16);
+
+                color: inherit;
+                font: inherit;
+            }
+
+            > :last-child {
+
+                margin-bottom: 0;
+            }
+        }
+
+        /* ------------------------------------------------------ options */
+
+        &__option {
+
+            background-color: theme-color(bg-ice);
+
+            border: 3px solid theme-color(brd-blue);
+
+            /* Neighbouring bars share one border line, as in the XD */
+            & + .areas__option {
+
+                margin-top: -3px;
+            }
+        }
+
+        &__option-head {
+
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: rem(24);
+
+            box-sizing: border-box;
+
+            /* XD: 81 tall when closed */
+            @include fluid-prop('min-height', 64, 75, $min-resize, $max-resize, $unit: px);
+
+            @include fluid-prop-multi('padding', 16 20 16 32, 16 55 16 98, $min-resize, $max-resize, $unit: px, $base: 16);
+
+            cursor: pointer;
+
+            /* The default disclosure triangle is replaced by the XD arrow */
+            list-style: none;
+
+            &::-webkit-details-marker {
+
+                display: none;
+            }
+
+            @include focus-ring(theme-color(brd-blue));
+
+            @include respond-max(lg) {
+
+                padding: rem(16) fluid(20, 32, 360, 991);
+            }
+        }
+
+        &__option-title {
+
+            display: block;
+
+            @include format-text(
+                $max-size: 25,
+                $min-size: 19,
+                $max-height: 32,
+                $min-height: 26,
+                $tx-color: theme-color(title-blue),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+        }
+
+        &__option-arrow {
+
+            display: block;
+
+            flex: 0 0 auto;
+
+            width: rem(27);
+            height: rem(24);
+
+            @include trans;
+        }
+
+        &__option[open] .areas__option-arrow {
+
+            transform: rotate(180deg);
+        }
+
+        /*
+        * Set by the script while the panel is collapsing, when [open] is
+        * still on the element - see the note in layout_areas.js.
+        */
+        &__option[open].is-closing .areas__option-arrow {
+
+            transform: rotate(0deg);
+        }
+
+        /*
+        * The animated box. It carries no padding of its own, so a height of
+        * zero really is zero - see layout_areas.js.
+        */
+        &__option-body {
+
+            overflow: hidden;
+        }
+
+        &__option-inner {
+
+            @include fluid-prop-multi('padding', 0 20 24 32, 0 55 30 98, $min-resize, $max-resize, $unit: px, $base: 16);
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 26,
+                $min-height: 24,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            p,
+            ul,
+            ol {
+
+                margin: 0 0 rem(16);
+
+                color: inherit;
+                font: inherit;
+            }
+
+            > :last-child {
+
+                margin-bottom: 0;
+            }
+
+            ul,
+            ol {
+
+                padding-left: rem(20);
+            }
+
+            @include respond-max(lg) {
+
+                padding: 0 fluid(20, 32, 360, 991) rem(24);
+            }
+        }
+
+        /*
+        * While the script is animating it writes an explicit height, and this
+        * carries the movement.
+        */
+        &__option-body.is-animating {
+
+            transition: height 0.3s ease-out;
+        }
+
+        /*
+        * The fade is separate from the height on purpose: it is a plain CSS
+        * animation on the panel becoming visible, so the content still eases
+        * in even if layout_areas.js never loads and <details> snaps open.
+        */
+        &__option[open] .areas__option-inner {
+
+            animation: areas-fade-in 0.3s ease-out both;
+        }
+
+        /* Set by the script the moment a close starts */
+        &__option.is-closing .areas__option-inner {
+
+            animation: none;
+
+            opacity: 0;
+            transform: translateY(#{rem(-6)});
+
+            transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            &__option-body.is-animating,
+            &__option.is-closing .areas__option-inner {
+
+                transition: none;
+            }
+
+            &__option[open] .areas__option-inner {
+
+                animation: none;
+            }
+        }
+
+        /* -------------------------------------------------------- image */
+
+        &__media {
+
+            line-height: 0;
+
+            overflow: hidden;
+
+            /* Closes the card: rounded at the bottom, square where it meets the bars */
+            @include brd-radius-bottom($brd-radius: rem(60));
+
+            img {
+
+                display: block;
+
+                width: 100%;
+                height: auto;
+            }
+
+            @include respond-max(lg) {
+
+                @include brd-radius-bottom($brd-radius: rem(30));
+            }
+        }
+
+        /* ---------------------------------------------------------- nav */
+
+        &__nav {
+
+            position: sticky;
+
+            /* Clears the fixed bar while the list scrolls past */
+            top: calc(#{$header-height} + #{rem(24)});
+
+            /*
+            * A stretched grid item fills the row and has nothing left to
+            * travel, so sticky quietly does nothing. Both of these keep the
+            * nav at its natural height so it can move with the scroll.
+            */
+            align-self: start;
+
+            height: fit-content;
+
+            /* The select takes over below the breakpoint */
+            @include respond-max(lg) {
+
+                display: none;
+            }
+        }
+
+        &__nav-list {
+
+            display: flex;
+            flex-direction: column;
+
+            /* XD: pills 45 tall on a 63 pitch */
+            gap: rem(18);
+
+            list-style: none;
+
+            margin: 0;
+            padding: 0;
+
+        }
+
+        &__nav-link {
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            box-sizing: border-box;
+
+            width: 100%;
+
+            /* XD: 180 x 45, and 64 tall with a 22 radius when the label wraps */
+            min-height: rem(45);
+
+            padding: rem(10) rem(16);
+
+            text-align: center;
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 22,
+                $min-height: 20,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            text-decoration: none;
+
+            background-color: theme-color(bg-ice);
+            border: 1px solid theme-color(brd-ice);
+
+            @include brd-radius-all($brd-radius: rem(22));
+
+            @include trans;
+            @include focus-ring(theme-color(brd-blue));
+
+            &:hover,
+            &:focus-visible {
+
+                text-decoration: none;
+
+                border-color: theme-color(brd-blue);
+            }
+
+        }
+    }
+}
+
+/*
+* Smooth jumps for the area navigation, switched off when the visitor asks
+* for less motion.
+*/
+@media (prefers-reduced-motion: no-preference) {
+
+    html:has(.layout-areas) {
+
+        scroll-behavior: smooth;
+    }
+}
+
+/*
+* Content easing in as an option opens.
+*/
+@keyframes areas-fade-in {
+
+    from {
+
+        opacity: 0;
+        transform: translateY(#{rem(-6)});
+    }
+
+    to {
+
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

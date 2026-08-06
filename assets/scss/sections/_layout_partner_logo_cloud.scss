@@ -1,0 +1,180 @@
+@use '../abstracts' as *;
+
+/*
+* Block - Partner logo cloud (layout_partner_logo_cloud)
+*
+* XD reference (Homepage "Vernetzt und verbunden", 1440 artboard):
+*   frame   1160 at x140, white fill, 3px #00519E border, 60px radius
+*   title   Lato Bold 25 #00529E, centred, baseline 70 below the frame top
+*   logos   six across, ~155 x 103, 14 apart
+*           first at x222, last ending on x1218 - 82 of side padding, the
+*           same as the news slider frame
+*
+* The XD rectangle is 450 tall and its lower 159 run behind the footer, so
+* the frame has no visible bottom edge: the block sits flush against whatever
+* follows it, with the bottom border and the bottom corners dropped. Height is
+* left to the content rather than pinned to that number.
+*/
+
+.layout-partner-logo-cloud {
+
+    position: relative;
+
+    width: 100%;
+
+    @include fluid-prop('margin-top', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    /* Flush against the footer, as in the XD - no gap below the frame. */
+    margin-bottom: 0;
+
+    @include respond-max(lg) {
+
+        margin-top: fluid(56, 80, 360, 991);
+    }
+
+    .logo-cloud {
+
+        &__container {
+
+            @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+        }
+
+        &__frame {
+
+            background-color: theme-color(bg-white);
+
+            /*
+            * Open at the bottom: the frame runs into the next block instead
+            * of closing, so there is no bottom edge and no bottom corners.
+            */
+            border: 3px solid theme-color(brd-blue);
+            border-bottom: none;
+
+            @include brd-radius-top($brd-radius: rem(60));
+
+            @include fluid-prop('padding-top', 32, 45, $min-resize-sec, $max-resize-sec, $unit: px);
+            @include fluid-prop('padding-bottom', 40, 64, $min-resize-sec, $max-resize-sec, $unit: px);
+            @include fluid-prop('padding-left', 32, 82, $min-resize-sec, $max-resize-sec, $unit: px);
+            @include fluid-prop('padding-right', 32, 82, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            @include respond-max(lg) {
+
+                @include brd-radius-top($brd-radius: rem(30));
+
+                padding: fluid(32, 40, 360, 991) fluid(20, 32, 360, 991);
+            }
+        }
+
+        &__title {
+
+            display: block;
+
+            text-align: center;
+
+            @include format-text(
+                $max-size: 25,
+                $min-size: 20,
+                $max-height: 32,
+                $min-height: 28,
+                $tx-color: theme-color(title-blue),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+        }
+
+        &__text {
+
+            @include fluid-prop('margin-top', 12, 16, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            text-align: center;
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 26,
+                $min-height: 24,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            p {
+
+                margin: 0 0 rem(12);
+
+                color: inherit;
+                font: inherit;
+            }
+
+            > :last-child {
+
+                margin-bottom: 0;
+            }
+        }
+
+        /*
+        * Six columns rather than a wrapping flex row: the XD spaces the logos
+        * evenly across the frame, and a grid keeps that spacing whether there
+        * are four logos or six.
+        */
+        &__list {
+
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+
+            align-items: center;
+
+            list-style: none;
+
+            margin: 0;
+            padding: 0;
+
+            @include fluid-prop('margin-top', 30, 46, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            @include fluid-prop('column-gap', 12, 14, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            row-gap: rem(24);
+
+            @include respond-max(lg) {
+
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+
+                column-gap: rem(20);
+                row-gap: rem(28);
+            }
+
+            @include respond-max(sm) {
+
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        &__item {
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            img {
+
+                display: block;
+
+                width: auto;
+
+                /*
+                * Logos come in different proportions, so the box is fixed and
+                * each one is fitted inside it - scaling by width alone would
+                * make a wide logo tower over a square one.
+                */
+                max-width: 100%;
+
+                @include fluid-prop('max-height', 72, 103, $min-resize-sec, $max-resize-sec, $unit: px);
+
+                object-fit: contain;
+            }
+        }
+    }
+}

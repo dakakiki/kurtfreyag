@@ -291,35 +291,23 @@ $hero-cut-bottom: 52.43% + $hero-cut-shift;
         }
     }
 
-    /* Layout height style */
-    &.h-full {
+    /*
+    * Height
+    *
+    * Always full viewport height: the h-full / h-page choice is gone from
+    * ACF, so there is nothing left to branch on. svh keeps the hero from
+    * running under a mobile browser's collapsing toolbar.
+    */
+    .page-hero {
 
-        .page-hero {
+        min-height: 100vh;
+        min-height: 100svh;
 
-            min-height: 100vh;
-            min-height: 100svh;
+        @include respond-max(lg) {
 
-            @include respond-max(lg) {
+            min-height: auto;
 
-                min-height: auto;
-
-                padding-bottom: fluid(40, 72, 360, 991);
-            }
-        }
-    }
-
-    &.h-page {
-
-        .page-hero {
-
-            min-height: 70vh;
-
-            @include respond-max(lg) {
-
-                min-height: auto;
-
-                padding-bottom: fluid(32, 56, 360, 991);
-            }
+            padding-bottom: fluid(40, 72, 360, 991);
         }
     }
 }

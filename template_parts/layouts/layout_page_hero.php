@@ -9,23 +9,21 @@
  *   content  sits on the blue, title at x140
  *
  * The image sits under the overlay, so both are painted before the content.
+ *
+ * The hero is always full height - there is no height field in ACF.
  */
 
 $hero_row     = get_row_index();
-$hero_styles  = get_sub_field( 'styles' );
 $hero_content = get_sub_field( 'content' );
 $hero_image   = get_sub_field( 'image' );
 
 $hero_anchor = sanitize_title( (string) get_sub_field( 'anchor' ) );
 
-$hero_height = ( ! empty( $hero_styles['style_layout_height'] ) && $hero_styles['style_layout_height'] === 'h-full' )
-	? 'h-full'
-	: 'h-page';
 ?>
 
 <section
 	<?php if ( $hero_anchor ) : ?>id="<?= esc_attr( $hero_anchor ); ?>"<?php endif; ?>
-	class="layout-page-hero <?= esc_attr( $hero_height ); ?>"
+	class="layout-page-hero"
 	data-animate-now
 >
 

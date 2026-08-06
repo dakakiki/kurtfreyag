@@ -45,9 +45,9 @@
             "default_value": "",
             "allow_in_bindings": 0,
             "tabs": "all",
-            "toolbar": "full",
-            "media_upload": 1,
-            "delay": 0
+            "toolbar": "basic",
+            "media_upload": 0,
+            "delay": 1
         },
         {
             "key": "field_6a7088f9fc2e3",
@@ -123,7 +123,7 @@
             {
                 "param": "post_type",
                 "operator": "==",
-                "value": "post"
+                "value": "bereich"
             }
         ]
     ],
@@ -139,5 +139,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785760187
+    "modified": 1785925938
 }

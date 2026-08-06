@@ -210,6 +210,12 @@ function my_acf_enqueue_layout_assets() {
             'deps'        => [ 'jquery' ],
             'needs_slick' => false,
         ],
+        'layout_areas' => [
+            'min'         => 'js/layout_areas.min.js',
+            'file'        => 'js/layout_areas.js',
+            'deps'        => [ 'jquery' ],
+            'needs_slick' => false,
+        ],
     ];
 
     /*

@@ -11,28 +11,17 @@
 *   image     1161 x 663, 60px radius on every corner, y1350
 *   related   blue bar 1160 x 45, radius 3, white 16 centred, then the cards
 *
-* The hero comes from the archive page's own layout row. Only its height is
-* overridden here, because that row is authored for the archive page and may
-* be set to h-page. Cards are styled in layouts/_news_card.scss.
+* The hero comes from the archive page's own layout row. Cards are styled in
+* layouts/_news_card.scss.
 */
 
+/*
+* The hero is full height on its own now that the ACF height choice is gone,
+* so this wrapper only exists to scope the borrowed row - no override needed.
+*/
 .single-news__hero {
 
     display: block;
-
-    .layout-page-hero .page-hero {
-
-        min-height: 100vh;
-        min-height: 100svh;
-    }
-
-    @include respond-max(lg) {
-
-        .layout-page-hero .page-hero {
-
-            min-height: auto;
-        }
-    }
 }
 
 /* 33 between cards, split across the two slide halves - as in the slider */

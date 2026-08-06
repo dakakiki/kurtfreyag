@@ -1818,25 +1818,22 @@ Tags: KurtFreyAG
   }
 }
 .layout-page-hero {
-  /* Layout height style */
+  /*
+  * Height
+  *
+  * Always full viewport height: the h-full / h-page choice is gone from
+  * ACF, so there is nothing left to branch on. svh keeps the hero from
+  * running under a mobile browser's collapsing toolbar.
+  */
 }
-.layout-page-hero.h-full .page-hero {
+.layout-page-hero .page-hero {
   min-height: 100vh;
   min-height: 100svh;
 }
 @media (max-width: 991px) {
-  .layout-page-hero.h-full .page-hero {
+  .layout-page-hero .page-hero {
     min-height: auto;
     padding-bottom: clamp(40px, 21.7432646593px + 5.0713153724vw, 72px);
-  }
-}
-.layout-page-hero.h-page .page-hero {
-  min-height: 70vh;
-}
-@media (max-width: 991px) {
-  .layout-page-hero.h-page .page-hero {
-    min-height: auto;
-    padding-bottom: clamp(32px, 18.3074484945px + 3.8034865293vw, 56px);
   }
 }
 
@@ -2694,6 +2691,705 @@ Version: 1.0.2
 Tags: KurtFreyAG
 */
 /*
+* Block - Partner logo cloud (layout_partner_logo_cloud)
+*
+* XD reference (Homepage "Vernetzt und verbunden", 1440 artboard):
+*   frame   1160 at x140, white fill, 3px #00519E border, 60px radius
+*   title   Lato Bold 25 #00529E, centred, baseline 70 below the frame top
+*   logos   six across, ~155 x 103, 14 apart
+*           first at x222, last ending on x1218 - 82 of side padding, the
+*           same as the news slider frame
+*
+* The XD rectangle is 450 tall and its lower 159 run behind the footer, so
+* the frame has no visible bottom edge: the block sits flush against whatever
+* follows it, with the bottom border and the bottom corners dropped. Height is
+* left to the content rather than pinned to that number.
+*/
+.layout-partner-logo-cloud {
+  position: relative;
+  width: 100%;
+  margin-top: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+  /* Flush against the footer, as in the XD - no gap below the frame. */
+  margin-bottom: 0;
+}
+@media (max-width: 991px) {
+  .layout-partner-logo-cloud {
+    margin-top: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+  }
+}
+.layout-partner-logo-cloud .logo-cloud__container {
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+.layout-partner-logo-cloud .logo-cloud__frame {
+  background-color: #ffffff;
+  /*
+  * Open at the bottom: the frame runs into the next block instead
+  * of closing, so there is no bottom edge and no bottom corners.
+  */
+  border: 3px solid #00529E;
+  border-bottom: none;
+  -webkit-border-top-left-radius: 3.75rem;
+  -webkit-border-top-right-radius: 3.75rem;
+  -moz-border-radius-topleft: 3.75rem;
+  -moz-border-radius-topright: 3.75rem;
+  border-top-left-radius: 3.75rem;
+  border-top-right-radius: 3.75rem;
+  padding-top: clamp(32px, -64.5108695652px + 7.0652173913vw, 45px);
+  padding-bottom: clamp(40px, -138.1739130435px + 13.0434782609vw, 64px);
+  padding-left: clamp(32px, -339.1956521739px + 27.1739130435vw, 82px);
+  padding-right: clamp(32px, -339.1956521739px + 27.1739130435vw, 82px);
+}
+@media (max-width: 991px) {
+  .layout-partner-logo-cloud .logo-cloud__frame {
+    -webkit-border-top-left-radius: 1.875rem;
+    -webkit-border-top-right-radius: 1.875rem;
+    -moz-border-radius-topleft: 1.875rem;
+    -moz-border-radius-topright: 1.875rem;
+    border-top-left-radius: 1.875rem;
+    border-top-right-radius: 1.875rem;
+    padding: clamp(32px, 27.4358161648px + 1.2678288431vw, 40px) clamp(20px, 13.1537242472px + 1.9017432647vw, 32px);
+  }
+}
+.layout-partner-logo-cloud .logo-cloud__title {
+  display: block;
+  text-align: center;
+  font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
+  line-height: clamp(28px, -1.6956521739px + 2.1739130435vw, 32px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-partner-logo-cloud .logo-cloud__text {
+  margin-top: clamp(12px, -17.6956521739px + 2.1739130435vw, 16px);
+  text-align: center;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-partner-logo-cloud .logo-cloud__text p {
+  margin: 0 0 0.75rem;
+  color: inherit;
+  font: inherit;
+}
+.layout-partner-logo-cloud .logo-cloud__text > :last-child {
+  margin-bottom: 0;
+}
+.layout-partner-logo-cloud .logo-cloud {
+  /*
+  * Six columns rather than a wrapping flex row: the XD spaces the logos
+  * evenly across the frame, and a grid keeps that spacing whether there
+  * are four logos or six.
+  */
+}
+.layout-partner-logo-cloud .logo-cloud__list {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-top: clamp(30px, -88.7826086957px + 8.6956521739vw, 46px);
+  column-gap: clamp(12px, -2.847826087px + 1.0869565217vw, 14px);
+  row-gap: 1.5rem;
+}
+@media (max-width: 991px) {
+  .layout-partner-logo-cloud .logo-cloud__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 1.25rem;
+    row-gap: 1.75rem;
+  }
+}
+@media (max-width: 640px) {
+  .layout-partner-logo-cloud .logo-cloud__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.layout-partner-logo-cloud .logo-cloud__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.layout-partner-logo-cloud .logo-cloud__item img {
+  display: block;
+  width: auto;
+  /*
+  * Logos come in different proportions, so the box is fixed and
+  * each one is fitted inside it - scaling by width alone would
+  * make a wide logo tower over a square one.
+  */
+  max-width: 100%;
+  max-height: clamp(72px, -158.1413043478px + 16.847826087vw, 103px);
+  object-fit: contain;
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
+* Block - Service areas (layout_areas)
+*
+* XD reference (Leistungen and Leistungen - more text, 1440):
+*   grid     content 882 at x140, nav 180 at x1120 - a 98 gap
+*   head     white, 3px #00519E border, 60px radius, text at x238 so 98 in
+*   title    Lato Bold 53 #00529E, lead Lato Regular 16
+*   bars     882 x 81 closed, ice fill, 3px #00529E border; consecutive bars
+*            sit 3 apart so the borders collapse into a single line
+*   open     the bar grows to fit, text starts 51 below its top edge
+*   arrow    27 x 24 on the right
+*   image    882 wide, 60px radius on the bottom corners, no border
+*   nav      pills 180 x 45, ice fill, radius 100, 18 apart; a two line pill
+*            is 64 tall with a 22 radius
+*/
+/*
+* Left inset shared by the section title, the card head and the option bars.
+*
+* Everything in the XD starts on x238, which is 98 inside the 882 wide card.
+* Scaled over the primary resize range so the full value is reached at 1160
+* and holds from there - over the secondary range it would still be at its
+* minimum on a 1366 screen, which is what left the three levels misaligned.
+*/
+.layout-areas {
+  position: relative;
+  width: 100%;
+  margin-top: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+  margin-bottom: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+}
+@media (max-width: 991px) {
+  .layout-areas {
+    margin-top: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+    margin-bottom: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+  }
+}
+.layout-areas .areas__container {
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+.layout-areas .areas {
+  /* XD: the section heading starts at x238, in line with the card text */
+}
+.layout-areas .areas__title {
+  display: block;
+  padding-left: clamp(32px, -355.0177514793px + 39.0532544379vw, 98px);
+  font-size: clamp(32px, -123.902173913px + 11.4130434783vw, 53px);
+  line-height: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  margin-bottom: clamp(48px, -300.9239130435px + 25.5434782609vw, 95px);
+}
+.layout-areas .areas {
+  /*
+  * Select variant
+  *
+  * Only one of the two is ever visible: the sticky pills from 992 up,
+  * this from below. A native select is the right control on a phone and
+  * needs no keyboard work of its own.
+  */
+}
+.layout-areas .areas__select {
+  display: none;
+  position: relative;
+  width: 100%;
+}
+@media (max-width: 991px) {
+  .layout-areas .areas__select {
+    display: block;
+    /*
+    * Lined up with the section heading rather than the card edge,
+    * so the label starts on the same x as "Bereiche" above it.
+    */
+    margin-left: clamp(32px, -355.0177514793px + 39.0532544379vw, 98px);
+    margin-right: clamp(32px, -355.0177514793px + 39.0532544379vw, 98px);
+    width: auto;
+    /*
+    * The first card's symbol hangs about half its height above
+    * the card, so the gap has to clear that as well as the card
+    * itself - otherwise the select sits right on the icon.
+    */
+    margin-bottom: clamp(64px, 50.3074484945px + 3.8034865293vw, 88px);
+  }
+}
+.layout-areas .areas__select {
+  /* The chevron, drawn here because the native arrow is hidden */
+}
+.layout-areas .areas__select::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  width: 0.875rem;
+  height: 0.5625rem;
+  transform: translateY(-50%);
+  background-color: #00529E;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='M1 1l7 7 7-7' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='M1 1l7 7 7-7' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  pointer-events: none;
+}
+.layout-areas .areas__select select {
+  display: block;
+  width: 100%;
+  height: 2.8125rem;
+  box-sizing: border-box;
+  padding: 0 3.25rem 0 1.5rem;
+  /* Reset the native control so the pill styling shows through */
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: inherit;
+  cursor: pointer;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  background-color: #EDF6FC;
+  border: 1px solid #EDF6FC;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.layout-areas .areas__select select:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+.layout-areas .areas__select select:hover {
+  border-color: #00529E;
+}
+.layout-areas .areas__select-label {
+  /*
+  * Visible to assistive tech only - the placeholder option already
+  * says the same thing on screen.
+  */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.layout-areas .areas__grid {
+  display: grid;
+  /* XD: 882 and 180 out of 1160, 98 between them */
+  grid-template-columns: minmax(0, 882fr) minmax(0, 180fr);
+  column-gap: clamp(40px, -390.5869565217px + 31.5217391304vw, 98px);
+  align-items: start;
+}
+@media (max-width: 991px) {
+  .layout-areas .areas__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.layout-areas .areas {
+  /* -------------------------------------------------------- areas */
+}
+.layout-areas .areas__list {
+  display: flex;
+  flex-direction: column;
+  row-gap: clamp(72px, -477.3695652174px + 40.2173913043vw, 146px);
+}
+.layout-areas .areas__item {
+  /*
+  * Fallback for a native jump - custom.js measures the bar and
+  * scrolls itself, but a pasted URL with a hash lands here before
+  * the script runs.
+  */
+  scroll-margin-top: calc(100px + 1.5rem);
+}
+@media (max-width: 1024px) {
+  .layout-areas .areas__item {
+    scroll-margin-top: calc(64px + 1.5rem);
+  }
+}
+.layout-areas .areas {
+  /*
+  * Head, bars and image stack into one continuous card, so the head is
+  * open at the bottom and only the image closes it.
+  */
+}
+.layout-areas .areas__head {
+  position: relative;
+  background-color: #ffffff;
+  border: 3px solid #00529E;
+  border-bottom: none;
+  -webkit-border-top-left-radius: 3.75rem;
+  -webkit-border-top-right-radius: 3.75rem;
+  -moz-border-radius-topleft: 3.75rem;
+  -moz-border-radius-topright: 3.75rem;
+  border-top-left-radius: 3.75rem;
+  border-top-right-radius: 3.75rem;
+  padding: clamp(40px, -100.7337278107px + 14.201183432vw, 64px) clamp(32px, -355.0177514793px + 39.0532544379vw, 98px);
+}
+@media (max-width: 991px) {
+  .layout-areas .areas__head {
+    -webkit-border-top-left-radius: 1.875rem;
+    -webkit-border-top-right-radius: 1.875rem;
+    -moz-border-radius-topleft: 1.875rem;
+    -moz-border-radius-topright: 1.875rem;
+    border-top-left-radius: 1.875rem;
+    border-top-right-radius: 1.875rem;
+    padding: clamp(32px, 27.4358161648px + 1.2678288431vw, 40px) clamp(20px, 13.1537242472px + 1.9017432647vw, 32px);
+  }
+}
+.layout-areas .areas {
+  /*
+  * XD: the symbol is ~180 wide and sits centred on the card's top
+  * border, 114 in from the card's right edge - measured across all six
+  * areas, where only the artwork's height varies.
+  */
+}
+.layout-areas .areas__symbol {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: clamp(40px, -393.9289940828px + 43.7869822485vw, 114px);
+  transform: translateY(-50%);
+  line-height: 0;
+}
+.layout-areas .areas__symbol img {
+  display: block;
+  height: auto;
+  width: clamp(110px, -300.4733727811px + 41.4201183432vw, 180px);
+}
+@media (max-width: 991px) {
+  .layout-areas .areas__symbol {
+    right: clamp(20px, 8.589540412px + 3.1695721078vw, 40px);
+  }
+  .layout-areas .areas__symbol img {
+    width: clamp(84px, 69.1664025357px + 4.1204437401vw, 110px);
+  }
+}
+.layout-areas .areas__item-title {
+  display: block;
+  font-size: clamp(32px, -123.902173913px + 11.4130434783vw, 53px);
+  line-height: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+.layout-areas .areas__text {
+  margin-top: clamp(20px, -54.2391304348px + 5.4347826087vw, 30px);
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-areas .areas__text p,
+.layout-areas .areas__text ul,
+.layout-areas .areas__text ol {
+  margin: 0 0 1rem;
+  color: inherit;
+  font: inherit;
+}
+.layout-areas .areas__text > :last-child {
+  margin-bottom: 0;
+}
+.layout-areas .areas {
+  /* ------------------------------------------------------ options */
+}
+.layout-areas .areas__option {
+  background-color: #EDF6FC;
+  border: 3px solid #00529E;
+  /* Neighbouring bars share one border line, as in the XD */
+}
+.layout-areas .areas__option + .areas__option {
+  margin-top: -3px;
+}
+.layout-areas .areas__option-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  /* XD: 81 tall when closed */
+  min-height: clamp(64px, -0.5029585799px + 6.5088757396vw, 75px);
+  padding: clamp(16px, 16px + 0vw, 16px) clamp(20px, -185.2366863905px + 20.7100591716vw, 55px) clamp(16px, 16px + 0vw, 16px) clamp(32px, -355.0177514793px + 39.0532544379vw, 98px);
+  cursor: pointer;
+  /* The default disclosure triangle is replaced by the XD arrow */
+  list-style: none;
+}
+.layout-areas .areas__option-head::-webkit-details-marker {
+  display: none;
+}
+.layout-areas .areas__option-head:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+@media (max-width: 991px) {
+  .layout-areas .areas__option-head {
+    padding: 1rem clamp(20px, 13.1537242472px + 1.9017432647vw, 32px);
+  }
+}
+.layout-areas .areas__option-title {
+  display: block;
+  font-size: clamp(19px, -25.5434782609px + 3.2608695652vw, 25px);
+  line-height: clamp(26px, -18.5434782609px + 3.2608695652vw, 32px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-areas .areas__option-arrow {
+  display: block;
+  flex: 0 0 auto;
+  width: 1.6875rem;
+  height: 1.5rem;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.layout-areas .areas__option[open] .areas__option-arrow {
+  transform: rotate(180deg);
+}
+.layout-areas .areas {
+  /*
+  * Set by the script while the panel is collapsing, when [open] is
+  * still on the element - see the note in layout_areas.js.
+  */
+}
+.layout-areas .areas__option[open].is-closing .areas__option-arrow {
+  transform: rotate(0deg);
+}
+.layout-areas .areas {
+  /*
+  * The animated box. It carries no padding of its own, so a height of
+  * zero really is zero - see layout_areas.js.
+  */
+}
+.layout-areas .areas__option-body {
+  overflow: hidden;
+}
+.layout-areas .areas__option-inner {
+  padding: clamp(0px, 0px + 0vw, 0px) clamp(20px, -185.2366863905px + 20.7100591716vw, 55px) clamp(24px, -11.1834319527px + 3.550295858vw, 30px) clamp(32px, -355.0177514793px + 39.0532544379vw, 98px);
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-areas .areas__option-inner p,
+.layout-areas .areas__option-inner ul,
+.layout-areas .areas__option-inner ol {
+  margin: 0 0 1rem;
+  color: inherit;
+  font: inherit;
+}
+.layout-areas .areas__option-inner > :last-child {
+  margin-bottom: 0;
+}
+.layout-areas .areas__option-inner ul,
+.layout-areas .areas__option-inner ol {
+  padding-left: 1.25rem;
+}
+@media (max-width: 991px) {
+  .layout-areas .areas__option-inner {
+    padding: 0 clamp(20px, 13.1537242472px + 1.9017432647vw, 32px) 1.5rem;
+  }
+}
+.layout-areas .areas {
+  /*
+  * While the script is animating it writes an explicit height, and this
+  * carries the movement.
+  */
+}
+.layout-areas .areas__option-body.is-animating {
+  transition: height 0.3s ease-out;
+}
+.layout-areas .areas {
+  /*
+  * The fade is separate from the height on purpose: it is a plain CSS
+  * animation on the panel becoming visible, so the content still eases
+  * in even if layout_areas.js never loads and <details> snaps open.
+  */
+}
+.layout-areas .areas__option[open] .areas__option-inner {
+  animation: areas-fade-in 0.3s ease-out both;
+}
+.layout-areas .areas {
+  /* Set by the script the moment a close starts */
+}
+.layout-areas .areas__option.is-closing .areas__option-inner {
+  animation: none;
+  opacity: 0;
+  transform: translateY(-0.375rem);
+  transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+}
+@media (prefers-reduced-motion: reduce) {
+  .layout-areas .areas__option-body.is-animating, .layout-areas .areas__option.is-closing .areas__option-inner {
+    transition: none;
+  }
+  .layout-areas .areas__option[open] .areas__option-inner {
+    animation: none;
+  }
+}
+.layout-areas .areas {
+  /* -------------------------------------------------------- image */
+}
+.layout-areas .areas__media {
+  line-height: 0;
+  overflow: hidden;
+  /* Closes the card: rounded at the bottom, square where it meets the bars */
+  -webkit-border-bottom-right-radius: 3.75rem;
+  -webkit-border-bottom-left-radius: 3.75rem;
+  -moz-border-radius-bottomright: 3.75rem;
+  -moz-border-radius-bottomleft: 3.75rem;
+  border-bottom-right-radius: 3.75rem;
+  border-bottom-left-radius: 3.75rem;
+}
+.layout-areas .areas__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+@media (max-width: 991px) {
+  .layout-areas .areas__media {
+    -webkit-border-bottom-right-radius: 1.875rem;
+    -webkit-border-bottom-left-radius: 1.875rem;
+    -moz-border-radius-bottomright: 1.875rem;
+    -moz-border-radius-bottomleft: 1.875rem;
+    border-bottom-right-radius: 1.875rem;
+    border-bottom-left-radius: 1.875rem;
+  }
+}
+.layout-areas .areas {
+  /* ---------------------------------------------------------- nav */
+}
+.layout-areas .areas__nav {
+  position: sticky;
+  /* Clears the fixed bar while the list scrolls past */
+  top: calc(100px + 1.5rem);
+  /*
+  * A stretched grid item fills the row and has nothing left to
+  * travel, so sticky quietly does nothing. Both of these keep the
+  * nav at its natural height so it can move with the scroll.
+  */
+  align-self: start;
+  height: fit-content;
+  /* The select takes over below the breakpoint */
+}
+@media (max-width: 991px) {
+  .layout-areas .areas__nav {
+    display: none;
+  }
+}
+.layout-areas .areas__nav-list {
+  display: flex;
+  flex-direction: column;
+  /* XD: pills 45 tall on a 63 pitch */
+  gap: 1.125rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.layout-areas .areas__nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  /* XD: 180 x 45, and 64 tall with a 22 radius when the label wraps */
+  min-height: 2.8125rem;
+  padding: 0.625rem 1rem;
+  text-align: center;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(20px, 5.152173913px + 1.0869565217vw, 22px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  text-decoration: none;
+  background-color: #EDF6FC;
+  border: 1px solid #EDF6FC;
+  -webkit-border-radius: 1.375rem;
+  -moz-border-radius: 1.375rem;
+  border-radius: 1.375rem;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.layout-areas .areas__nav-link:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+.layout-areas .areas__nav-link:hover, .layout-areas .areas__nav-link:focus-visible {
+  text-decoration: none;
+  border-color: #00529E;
+}
+
+/*
+* Smooth jumps for the area navigation, switched off when the visitor asks
+* for less motion.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.layout-areas) {
+    scroll-behavior: smooth;
+  }
+}
+/*
+* Content easing in as an option opens.
+*/
+@keyframes areas-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.375rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
 * Single, Page
 */
 .spacer {
@@ -2908,21 +3604,15 @@ Tags: KurtFreyAG
 *   image     1161 x 663, 60px radius on every corner, y1350
 *   related   blue bar 1160 x 45, radius 3, white 16 centred, then the cards
 *
-* The hero comes from the archive page's own layout row. Only its height is
-* overridden here, because that row is authored for the archive page and may
-* be set to h-page. Cards are styled in layouts/_news_card.scss.
+* The hero comes from the archive page's own layout row. Cards are styled in
+* layouts/_news_card.scss.
+*/
+/*
+* The hero is full height on its own now that the ACF height choice is gone,
+* so this wrapper only exists to scope the borrowed row - no override needed.
 */
 .single-news__hero {
   display: block;
-}
-.single-news__hero .layout-page-hero .page-hero {
-  min-height: 100vh;
-  min-height: 100svh;
-}
-@media (max-width: 991px) {
-  .single-news__hero .layout-page-hero .page-hero {
-    min-height: auto;
-  }
 }
 
 /* 33 between cards, split across the two slide halves - as in the slider */
@@ -3280,7 +3970,15 @@ body {
   font-family: "Lato", sans-serif;
   color: #00529E;
   background-color: #ffffff;
-  overflow-x: hidden;
+  /*
+  * clip, not hidden.
+  *
+  * overflow-x: hidden computes overflow-y to auto, which turns html and
+  * body into scroll containers - and a position: sticky element then sticks
+  * to that container instead of the viewport, so it never moves. clip cuts
+  * the same horizontal overflow without creating a scrollport.
+  */
+  overflow-x: clip;
 }
 
 html {
@@ -3289,7 +3987,8 @@ html {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow-x: hidden;
+  /* See the note on body - clip keeps position: sticky working. */
+  overflow-x: clip;
 }
 
 p {

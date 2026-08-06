@@ -6,6 +6,7 @@ const files = [
     "assets/js/slick.min.js",
     "assets/js/layout_news_slider.js",
     "assets/js/layout_news_archive.js",
+    "assets/js/layout_areas.js",
 
     "assets/js/gsap.js",
 ];
