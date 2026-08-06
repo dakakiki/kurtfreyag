@@ -1,0 +1,468 @@
+@use '../abstracts' as *;
+
+/*
+* Block - Teams (layout_teams)
+*
+* XD reference (Über Uns "Team", 1440):
+*   band     x0 -> 1440 #00529E, from y8513 to y9017 - so it runs 134 past
+*            the top of the first row of cards
+*   title    Lato Bold 53 white at x238, intro Lato Bold 16 #A7D8F4
+*   group    Lato Bold 25, white while it sits on the band, blue after it
+*   card     278 x 464, #EDF6FC, 3px radius, 16 apart - four fill the 1160
+*   photo    278 x 277 #E6E6E6, rounded on the top corners, portrait 213
+*            square inside it
+*   name     Lato Bold 20 blue, 16 in from the card edge
+*   role     Lato Italic 17 blue, mail the same
+*   hint     98 wide sky strip at 90% over the right edge of the row
+*/
+
+/* XD: four cards of 278 with 16 between them fill the 1160 container */
+$teams-gutter: 8px;
+
+/*
+* The hint panel is 98 in the XD; capped at 90 and scaled down to 40 on a
+* phone, where it would otherwise cover most of a card.
+*/
+$teams-hint-max: 90px;
+$teams-hint-min: 40px;
+
+.layout-teams {
+
+    position: relative;
+
+    width: 100%;
+
+    @include fluid-prop('margin-top', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+    @include fluid-prop('margin-bottom', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    @include respond-max(lg) {
+
+        margin-top: fluid(56, 80, 360, 991);
+        margin-bottom: fluid(56, 80, 360, 991);
+    }
+
+    .teams {
+
+        &__container {
+
+            @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+        }
+
+        /*
+        * The band.
+        *
+        * It is full bleed and reaches past the heading into the first row of
+        * cards, so it is drawn by the head plus a block below it rather than
+        * by a background on a wrapper - a wrapper would have to know how tall
+        * the first row is.
+        */
+        &__head {
+
+            position: relative;
+
+            background-color: theme-color(bg-blue);
+
+            @include fluid-prop('padding-top', 48, 80, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            &::after {
+
+                content: "";
+
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                z-index: -1;
+
+                /* XD: the band ends 134 into the cards */
+                @include fluid-prop('height', 200, 314, $min-resize-sec, $max-resize-sec, $unit: px);
+
+                background-color: theme-color(bg-blue);
+            }
+        }
+
+        /*
+        * XD: the heading column starts on x238, 98 inside the container, while
+        * the cards keep the container's own edge on x140.
+        */
+        &__title,
+        &__intro,
+        &__group-title {
+
+            @include fluid-prop('padding-left', 0, 98, $min-resize, $max-resize, $unit: px);
+            @include fluid-prop('padding-right', 0, 98, $min-resize, $max-resize, $unit: px);
+        }
+
+        &__title {
+
+            display: block;
+
+            @include format-text(
+                $max-size: 53,
+                $min-size: 32,
+                $max-height: 62,
+                $min-height: 40,
+                $tx-color: theme-color(title-white),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            @include break-word;
+        }
+
+        &__intro {
+
+            @include fluid-prop('margin-top', 8, 12, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 26,
+                $min-height: 24,
+                $tx-color: theme-color(text-white),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            p {
+
+                margin: 0 0 rem(8);
+
+                color: inherit;
+                font: inherit;
+            }
+
+            > :last-child {
+
+                margin-bottom: 0;
+            }
+
+            a {
+
+                color: theme-color(text-white);
+                text-decoration: underline;
+                text-underline-offset: rem(3);
+            }
+        }
+
+        /* ------------------------------------------------------- groups */
+
+        &__group {
+
+            position: relative;
+
+            /* Also on the first group, which follows the intro rather than a group */
+            @include fluid-prop('margin-top', 48, 70, $min-resize-sec, $max-resize-sec, $unit: px);
+        }
+
+        &__group-title {
+
+            display: block;
+
+            @include format-text(
+                $max-size: 25,
+                $min-size: 20,
+                $max-height: 32,
+                $min-height: 26,
+                $tx-color: theme-color(title-blue),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            @include fluid-prop('margin-bottom', 32, 50, $min-resize-sec, $max-resize-sec, $unit: px);
+        }
+
+        /*
+        * The first group still sits on the band, so its heading is white.
+        *
+        * Written with the full class rather than a second &: inside a nested
+        * block both ampersands expand to the whole parent chain, which
+        * produced .layout-teams .teams__group:first-child .layout-teams
+        * .teams__group-title - a selector that matches nothing.
+        */
+        &__group:first-child .teams__group-title {
+
+            color: theme-color(title-white);
+        }
+
+        /* ---------------------------------------------------- the slider */
+
+        &__row {
+
+            position: relative;
+        }
+
+        &__slides {
+
+            /*
+            * Before Slick runs this is a plain four column grid, so the block
+            * is readable if the script never arrives and there is no jump
+            * when it takes over.
+            */
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+
+            gap: rem(16);
+
+            &.slick-initialized {
+
+                display: block;
+            }
+
+            .slick-track {
+
+                display: flex !important;
+
+                align-items: stretch;
+            }
+
+            .slick-list {
+
+                margin-left: -$teams-gutter;
+                margin-right: -$teams-gutter;
+            }
+
+            .slick-slide {
+
+                height: auto !important;
+
+                display: flex;
+
+                box-sizing: border-box;
+
+                > div {
+
+                    display: flex;
+
+                    width: 100%;
+                }
+            }
+
+            /*
+            * The gap sits on the card rather than on the slide.
+            *
+            * Slick writes its own width on every slide and its stylesheet
+            * also touches their padding, so a gutter declared there is not
+            * reliably its own - on the card it cannot be overwritten.
+            *
+            * Only once Slick has taken over: before that the grid's own gap
+            * is already doing the job.
+            */
+            &.slick-initialized .teams__card {
+
+                margin-left: $teams-gutter;
+                margin-right: $teams-gutter;
+            }
+
+            @include respond-max(lg) {
+
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            @include respond-max(sm) {
+
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        /* ---------------------------------------------------------- card */
+
+        &__card {
+
+            display: flex;
+            flex-direction: column;
+
+            flex: 1 1 auto;
+
+            width: 100%;
+
+            background-color: theme-color(bg-ice);
+
+            @include brd-radius-all($brd-radius: rem(3));
+
+            overflow: hidden;
+        }
+
+        &__photo {
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            flex: 0 0 auto;
+
+            /* XD: 278 x 277 - square in practice */
+            aspect-ratio: 278 / 277;
+
+            background-color: #E6E6E6;
+
+            img {
+
+                display: block;
+
+                /* XD: the portrait is 213 inside the 278 wide panel */
+                width: 76.6%;
+                height: auto;
+
+                aspect-ratio: 1;
+
+                object-fit: cover;
+            }
+        }
+
+        &__info {
+
+            display: flex;
+            flex-direction: column;
+
+            flex: 1 1 auto;
+
+            @include fluid-prop-multi('padding', 24 16 20, 33 16 27, $min-resize-sec, $max-resize-sec, $unit: px, $base: 16);
+        }
+
+        &__name {
+
+            display: block;
+
+            @include format-text(
+                $max-size: 20,
+                $min-size: 18,
+                $max-height: 26,
+                $min-height: 24,
+                $tx-color: theme-color(title-blue),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            /* XD sets the given name and the surname on their own lines */
+            .teams__first,
+            .teams__last {
+
+                display: block;
+            }
+        }
+
+        &__role {
+
+            margin: 0;
+
+            @include fluid-prop('margin-top', 8, 12, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            @include format-text(
+                $max-size: 17,
+                $min-size: 15,
+                $max-height: 24,
+                $min-height: 22,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            font-style: italic;
+        }
+
+        &__mail {
+
+            display: block;
+
+            /* Pushed to the base of the card, as in the XD */
+            margin-top: auto;
+
+            @include fluid-prop('padding-top', 16, 22, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            @include format-text(
+                $max-size: 17,
+                $min-size: 15,
+                $max-height: 24,
+                $min-height: 22,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            font-style: italic;
+
+            text-decoration: none;
+
+            word-break: break-word;
+
+            @include focus-ring(theme-color(brd-blue));
+
+            &:hover {
+
+                text-decoration: underline;
+                text-underline-offset: rem(3);
+            }
+        }
+
+        /* ---------------------------------------------------------- hint */
+
+        &__next {
+
+            position: absolute;
+            z-index: 2;
+            top: 0;
+            bottom: 0;
+
+            /*
+            * The Slick track is pulled out by the gutter on each side, so a
+            * panel at right: 0 left a sliver of the next card showing beside
+            * it. This lines it up with the outer edge of the track.
+            */
+            right: -$teams-gutter;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            @include fluid-prop('width', 40, 90, $min-resize, $max-resize, $unit: px);
+
+            /* Reset the default button chrome - this is a translucent panel */
+            padding: 0;
+            border: none;
+            appearance: none;
+            -webkit-appearance: none;
+
+            background-color: color-alpha(bg-sky, 0.9);
+
+            cursor: pointer;
+
+            @include trans;
+            @include focus-ring(theme-color(brd-blue));
+
+            &:hover {
+
+                background-color: theme-color(bg-sky);
+            }
+
+            /* Nothing left to scroll to, so the panel would only mislead */
+            &[hidden] {
+
+                display: none;
+            }
+
+        }
+
+        /*
+        * The supplied asset - 33 x 71, pointing the way the cards travel.
+        *
+        * Sized as a share of the panel rather than in pixels, so the arrow
+        * shrinks with it instead of filling a narrow control end to end.
+        */
+        &__next-icon {
+
+            display: block;
+
+            width: 37%;
+            height: auto;
+        }
+    }
+}

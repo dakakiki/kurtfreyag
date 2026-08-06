@@ -4375,6 +4375,362 @@ Version: 1.0.2
 Tags: KurtFreyAG
 */
 /*
+* Block - Teams (layout_teams)
+*
+* XD reference (Über Uns "Team", 1440):
+*   band     x0 -> 1440 #00529E, from y8513 to y9017 - so it runs 134 past
+*            the top of the first row of cards
+*   title    Lato Bold 53 white at x238, intro Lato Bold 16 #A7D8F4
+*   group    Lato Bold 25, white while it sits on the band, blue after it
+*   card     278 x 464, #EDF6FC, 3px radius, 16 apart - four fill the 1160
+*   photo    278 x 277 #E6E6E6, rounded on the top corners, portrait 213
+*            square inside it
+*   name     Lato Bold 20 blue, 16 in from the card edge
+*   role     Lato Italic 17 blue, mail the same
+*   hint     98 wide sky strip at 90% over the right edge of the row
+*/
+/* XD: four cards of 278 with 16 between them fill the 1160 container */
+/*
+* The hint panel is 98 in the XD; capped at 90 and scaled down to 40 on a
+* phone, where it would otherwise cover most of a card.
+*/
+.layout-teams {
+  position: relative;
+  width: 100%;
+  margin-top: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+  margin-bottom: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+}
+@media (max-width: 991px) {
+  .layout-teams {
+    margin-top: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+    margin-bottom: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+  }
+}
+.layout-teams .teams__container {
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+.layout-teams .teams {
+  /*
+  * The band.
+  *
+  * It is full bleed and reaches past the heading into the first row of
+  * cards, so it is drawn by the head plus a block below it rather than
+  * by a background on a wrapper - a wrapper would have to know how tall
+  * the first row is.
+  */
+}
+.layout-teams .teams__head {
+  position: relative;
+  background-color: #00529E;
+  padding-top: clamp(48px, -189.5652173913px + 17.3913043478vw, 80px);
+}
+.layout-teams .teams__head::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  /* XD: the band ends 134 into the cards */
+  height: clamp(200px, -646.3260869565px + 61.9565217391vw, 314px);
+  background-color: #00529E;
+}
+.layout-teams .teams {
+  /*
+  * XD: the heading column starts on x238, 98 inside the container, while
+  * the cards keep the container's own edge on x140.
+  */
+}
+.layout-teams .teams__title, .layout-teams .teams__intro, .layout-teams .teams__group-title {
+  padding-left: clamp(0px, -574.6627218935px + 57.9881656805vw, 98px);
+  padding-right: clamp(0px, -574.6627218935px + 57.9881656805vw, 98px);
+}
+.layout-teams .teams__title {
+  display: block;
+  font-size: clamp(32px, -123.902173913px + 11.4130434783vw, 53px);
+  line-height: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+.layout-teams .teams__intro {
+  margin-top: clamp(8px, -21.6956521739px + 2.1739130435vw, 12px);
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-teams .teams__intro p {
+  margin: 0 0 0.5rem;
+  color: inherit;
+  font: inherit;
+}
+.layout-teams .teams__intro > :last-child {
+  margin-bottom: 0;
+}
+.layout-teams .teams__intro a {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 0.1875rem;
+}
+.layout-teams .teams {
+  /* ------------------------------------------------------- groups */
+}
+.layout-teams .teams__group {
+  position: relative;
+  /* Also on the first group, which follows the intro rather than a group */
+  margin-top: clamp(48px, -115.3260869565px + 11.9565217391vw, 70px);
+}
+.layout-teams .teams__group-title {
+  display: block;
+  font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
+  line-height: clamp(26px, -18.5434782609px + 3.2608695652vw, 32px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  margin-bottom: clamp(32px, -101.6304347826px + 9.7826086957vw, 50px);
+}
+.layout-teams .teams {
+  /*
+  * The first group still sits on the band, so its heading is white.
+  *
+  * Written with the full class rather than a second &: inside a nested
+  * block both ampersands expand to the whole parent chain, which
+  * produced .layout-teams .teams__group:first-child .layout-teams
+  * .teams__group-title - a selector that matches nothing.
+  */
+}
+.layout-teams .teams__group:first-child .teams__group-title {
+  color: #ffffff;
+}
+.layout-teams .teams {
+  /* ---------------------------------------------------- the slider */
+}
+.layout-teams .teams__row {
+  position: relative;
+}
+.layout-teams .teams__slides {
+  /*
+  * Before Slick runs this is a plain four column grid, so the block
+  * is readable if the script never arrives and there is no jump
+  * when it takes over.
+  */
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+.layout-teams .teams__slides.slick-initialized {
+  display: block;
+}
+.layout-teams .teams__slides .slick-track {
+  display: flex !important;
+  align-items: stretch;
+}
+.layout-teams .teams__slides .slick-list {
+  margin-left: -8px;
+  margin-right: -8px;
+}
+.layout-teams .teams__slides .slick-slide {
+  height: auto !important;
+  display: flex;
+  box-sizing: border-box;
+}
+.layout-teams .teams__slides .slick-slide > div {
+  display: flex;
+  width: 100%;
+}
+.layout-teams .teams__slides {
+  /*
+  * The gap sits on the card rather than on the slide.
+  *
+  * Slick writes its own width on every slide and its stylesheet
+  * also touches their padding, so a gutter declared there is not
+  * reliably its own - on the card it cannot be overwritten.
+  *
+  * Only once Slick has taken over: before that the grid's own gap
+  * is already doing the job.
+  */
+}
+.layout-teams .teams__slides.slick-initialized .teams__card {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+@media (max-width: 991px) {
+  .layout-teams .teams__slides {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .layout-teams .teams__slides {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.layout-teams .teams {
+  /* ---------------------------------------------------------- card */
+}
+.layout-teams .teams__card {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  background-color: #EDF6FC;
+  -webkit-border-radius: 0.1875rem;
+  -moz-border-radius: 0.1875rem;
+  border-radius: 0.1875rem;
+  overflow: hidden;
+}
+.layout-teams .teams__photo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  /* XD: 278 x 277 - square in practice */
+  aspect-ratio: 278/277;
+  background-color: #E6E6E6;
+}
+.layout-teams .teams__photo img {
+  display: block;
+  /* XD: the portrait is 213 inside the 278 wide panel */
+  width: 76.6%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.layout-teams .teams__info {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: clamp(24px, -42.8152173913px + 4.8913043478vw, 33px) clamp(16px, 16px + 0vw, 16px) clamp(20px, -31.9673913043px + 3.8043478261vw, 27px);
+}
+.layout-teams .teams__name {
+  display: block;
+  font-size: clamp(18px, 3.152173913px + 1.0869565217vw, 20px);
+  line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  /* XD sets the given name and the surname on their own lines */
+}
+.layout-teams .teams__name .teams__first,
+.layout-teams .teams__name .teams__last {
+  display: block;
+}
+.layout-teams .teams__role {
+  margin: 0;
+  margin-top: clamp(8px, -21.6956521739px + 2.1739130435vw, 12px);
+  font-size: clamp(15px, 0.152173913px + 1.0869565217vw, 17px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  font-style: italic;
+}
+.layout-teams .teams__mail {
+  display: block;
+  /* Pushed to the base of the card, as in the XD */
+  margin-top: auto;
+  padding-top: clamp(16px, -28.5434782609px + 3.2608695652vw, 22px);
+  font-size: clamp(15px, 0.152173913px + 1.0869565217vw, 17px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  font-style: italic;
+  text-decoration: none;
+  word-break: break-word;
+}
+.layout-teams .teams__mail:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+.layout-teams .teams__mail:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.1875rem;
+}
+.layout-teams .teams {
+  /* ---------------------------------------------------------- hint */
+}
+.layout-teams .teams__next {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  /*
+  * The Slick track is pulled out by the gutter on each side, so a
+  * panel at right: 0 left a sliver of the next card showing beside
+  * it. This lines it up with the outer edge of the track.
+  */
+  right: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(40px, -253.1952662722px + 29.5857988166vw, 90px);
+  /* Reset the default button chrome - this is a translucent panel */
+  padding: 0;
+  border: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: rgba(167, 216, 244, 0.9);
+  cursor: pointer;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.layout-teams .teams__next:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+.layout-teams .teams__next:hover {
+  background-color: #A7D8F4;
+}
+.layout-teams .teams__next {
+  /* Nothing left to scroll to, so the panel would only mislead */
+}
+.layout-teams .teams__next[hidden] {
+  display: none;
+}
+.layout-teams .teams {
+  /*
+  * The supplied asset - 33 x 71, pointing the way the cards travel.
+  *
+  * Sized as a share of the panel rather than in pixels, so the arrow
+  * shrinks with it instead of filling a narrow control end to end.
+  */
+}
+.layout-teams .teams__next-icon {
+  display: block;
+  width: 37%;
+  height: auto;
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
 * Single, Page
 */
 .spacer {

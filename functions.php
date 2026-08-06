@@ -222,6 +222,12 @@ function my_acf_enqueue_layout_assets() {
             'deps'        => [ 'jquery' ],
             'needs_slick' => false,
         ],
+        'layout_teams' => [
+            'min'         => 'js/layout_teams.min.js',
+            'file'        => 'js/layout_teams.js',
+            'deps'        => [ 'jquery' ],
+            'needs_slick' => true,
+        ],
     ];
 
     /*
