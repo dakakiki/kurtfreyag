@@ -150,6 +150,13 @@
 
         &__item.is-card {
 
+            /*
+            * Each card keeps its own height. Stretching would make the whole
+            * row as tall as whichever item is open, leaving the others with
+            * their title stranded at the bottom of an empty card.
+            */
+            align-self: start;
+
             /* XD: the icon starts 39 below the top, the text ends 63 above the base */
             @include fluid-prop-multi('padding', 32 20 40, 39 36 63, $min-resize-sec, $max-resize-sec, $unit: px, $base: 16);
 
@@ -168,20 +175,41 @@
                 background-color: theme-color(bg-ice);
             }
 
+            /*
+            * The icon block has a height of its own rather than pushing the
+            * title down with an auto margin.
+            *
+            * With the auto margin, the free space collapsed the moment a card
+            * opened and the title and arrow jumped upwards - most visibly on
+            * a narrow screen, where the icon is smaller and there was more
+            * space to lose. A fixed block keeps the title on the same line
+            * whether the card is open or closed.
+            *
+            * XD: icon 256 square with 45 under it, so the block is ~301 tall.
+            */
             .iwiaat__icon {
 
-                /* XD: 256 square, centred, with the title pushed to the base */
-                margin-bottom: auto;
+                display: flex;
 
-                text-align: center;
+                align-items: center;
+                justify-content: center;
+
+                flex: 0 0 auto;
+
+                @include fluid-prop('height', 200, 301, $min-resize, $max-resize, $unit: px);
+
+                margin-bottom: rem(16);
 
                 img {
 
-                    display: inline-block;
+                    display: block;
 
-                    height: auto;
+                    width: auto;
 
-                    @include fluid-prop('width', 160, 256, $min-resize-sec, $max-resize-sec, $unit: px);
+                    max-width: 100%;
+                    max-height: 100%;
+
+                    object-fit: contain;
                 }
             }
 

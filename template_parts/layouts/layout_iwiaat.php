@@ -25,6 +25,18 @@ if ( empty( $iw_items ) ) {
 	return;
 }
 
+/*
+ * The title is a textarea now, so an editor can break it where they want with
+ * a <br>. The tag is printed as authored - only line breaks and light
+ * emphasis get through, since anything else would let arbitrary markup into
+ * a heading.
+ */
+$iw_title_tags = array(
+	'br'     => array(),
+	'strong' => array(),
+	'em'     => array(),
+);
+
 $iw_backgrounds = array( 'i-bg-sky', 'i-bg-cream', 'i-bg-ice' );
 $iw_titles      = array( 'i-title-blue', 'i-title-golden' );
 
@@ -86,7 +98,7 @@ $iw_arrow = THEME_URI . '/dist/images/ico_area_arrow.svg';
 
 								<summary class="iwiaat__summary">
 
-									<span class="iwiaat__title <?= esc_attr( $title_color ); ?>"><?= esc_html( $title ); ?></span>
+									<span class="iwiaat__title <?= esc_attr( $title_color ); ?>"><?= wp_kses( $title, $iw_title_tags ); ?></span>
 
 									<img
 										class="iwiaat__arrow"
@@ -116,7 +128,7 @@ $iw_arrow = THEME_URI . '/dist/images/ico_area_arrow.svg';
 							<?php endif; ?>
 
 							<?php if ( $title ) : ?>
-								<h3 class="iwiaat__title <?= esc_attr( $title_color ); ?>"><?= esc_html( $title ); ?></h3>
+								<h3 class="iwiaat__title <?= esc_attr( $title_color ); ?>"><?= wp_kses( $title, $iw_title_tags ); ?></h3>
 							<?php endif; ?>
 
 							<?php if ( $text ) : ?>

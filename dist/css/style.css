@@ -3805,6 +3805,12 @@ Tags: KurtFreyAG
   /* -------------------------------------------------- card variant */
 }
 .layout-iwiaat .iwiaat__item.is-card {
+  /*
+  * Each card keeps its own height. Stretching would make the whole
+  * row as tall as whichever item is open, leaving the others with
+  * their title stranded at the bottom of an empty card.
+  */
+  align-self: start;
   /* XD: the icon starts 39 below the top, the text ends 63 above the base */
   padding: clamp(32px, -19.9673913043px + 3.8043478261vw, 39px) clamp(20px, -98.7826086957px + 8.6956521739vw, 36px) clamp(40px, -130.75px + 12.5vw, 63px);
 }
@@ -3817,15 +3823,34 @@ Tags: KurtFreyAG
 .layout-iwiaat .iwiaat__item.is-card.i-bg-ice {
   background-color: #EDF6FC;
 }
+.layout-iwiaat .iwiaat__item.is-card {
+  /*
+  * The icon block has a height of its own rather than pushing the
+  * title down with an auto margin.
+  *
+  * With the auto margin, the free space collapsed the moment a card
+  * opened and the title and arrow jumped upwards - most visibly on
+  * a narrow screen, where the icon is smaller and there was more
+  * space to lose. A fixed block keeps the title on the same line
+  * whether the card is open or closed.
+  *
+  * XD: icon 256 square with 45 under it, so the block is ~301 tall.
+  */
+}
 .layout-iwiaat .iwiaat__item.is-card .iwiaat__icon {
-  /* XD: 256 square, centred, with the title pushed to the base */
-  margin-bottom: auto;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  height: clamp(200px, -392.2544378698px + 59.7633136095vw, 301px);
+  margin-bottom: 1rem;
 }
 .layout-iwiaat .iwiaat__item.is-card .iwiaat__icon img {
-  display: inline-block;
-  height: auto;
-  width: clamp(160px, -552.6956521739px + 52.1739130435vw, 256px);
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 .layout-iwiaat .iwiaat__item.is-card .iwiaat__title {
   font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
