@@ -5352,6 +5352,332 @@ Version: 1.0.2
 Tags: KurtFreyAG
 */
 /*
+* Block - Contact (layout_contact)
+*
+* XD reference (Kontakt artboard, 1440):
+*   columns  contact x140 -> 418, billing x475 -> 753, card x810 -> 1300
+*            so 278, 278 and 490 with 57 between them - 1160 exactly
+*   title    Lato Bold 53 #00529E, its baseline 953
+*   labels   Lato Bold 16 #00529E, values in ice pills ending on x418
+*   address  Lato Regular 16 #00529E, its label in the same weight
+*   card     490 x 289, #00529E, 60px radius, text 43 in from its edge
+*   hours    heading Lato Bold 16 white, days at x853, times at x1033
+*   note     Lato Italic 16 #A7D8F4
+*
+* The pills are the footer's own, so they come from btn-pill-light - except
+* here they sit on white rather than on blue.
+*/
+/*
+* XD: text starts 43 inside the card.
+*
+* Unitless, because fluid-prop-multi adds the unit itself - passing 43px gave
+* clamp(..., 43pxpx), which made the whole padding declaration invalid and
+* left the card with none at all.
+*/
+.layout-contact {
+  position: relative;
+  width: 100%;
+  margin-top: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+  margin-bottom: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+}
+@media (max-width: 991px) {
+  .layout-contact {
+    margin-top: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+    margin-bottom: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+  }
+}
+.layout-contact .contact__container {
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+.layout-contact .contact__title {
+  display: block;
+  font-size: clamp(32px, -123.902173913px + 11.4130434783vw, 53px);
+  line-height: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  /* XD: title baseline 953, first label baseline 1055 */
+  margin-bottom: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+.layout-contact .contact {
+  /*
+  * The three tracks add up to the container on their own: 278 + 57 +
+  * 278 + 57 + 490 is 1160, so the fr values carry the XD's proportions
+  * at any width.
+  */
+}
+.layout-contact .contact__grid {
+  display: grid;
+  grid-template-columns: 278fr 278fr 490fr;
+  align-items: start;
+  column-gap: clamp(32px, -153.597826087px + 13.5869565217vw, 57px);
+  row-gap: 2.5rem;
+}
+@media (max-width: 991px) {
+  .layout-contact .contact__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.layout-contact .contact {
+  /*
+  * Below the breakpoint the grid collapses to one column, so the
+  * contact rows would stretch the full width and the pills would sit
+  * far from their labels. The column keeps the XD's 278 measure, as it
+  * does in the footer, and only lets go on a phone where the pills move
+  * out to the right edge instead.
+  */
+}
+@media (max-width: 991px) {
+  .layout-contact .contact .contact__col--details {
+    max-width: 17.375rem;
+  }
+}
+@media (max-width: 640px) {
+  .layout-contact .contact .contact__col--details {
+    max-width: none;
+  }
+}
+.layout-contact .contact {
+  /* ------------------------------------------------- contact column */
+}
+.layout-contact .contact__line {
+  display: flex;
+  align-items: center;
+  /* XD: both pills end on x418, the right edge of the column */
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0 0 0.875rem;
+}
+.layout-contact .contact__label {
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  /* Same weight as the labels beside the pills, on its own line */
+}
+.layout-contact .contact__label--plain {
+  display: block;
+  margin-bottom: 0.125rem;
+}
+.layout-contact .contact__pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: clamp(31px, 31px + 0vw, 31px);
+  padding-left: clamp(16px, -7.4556213018px + 2.3668639053vw, 20px);
+  padding-right: clamp(16px, -7.4556213018px + 2.3668639053vw, 20px);
+  box-sizing: border-box;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.layout-contact .contact__pill:hover, .layout-contact .contact__pill:focus-visible {
+  text-decoration: none;
+}
+.layout-contact .contact__pill {
+  font-size: clamp(14px, 14px + 0vw, 14px);
+  line-height: clamp(20px, 20px + 0vw, 20px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  background-color: #EDF6FC;
+  border-color: #EDF6FC;
+}
+.layout-contact .contact__pill:hover, .layout-contact .contact__pill:focus-visible {
+  background-color: #ffffff;
+  border-color: #FFB500;
+}
+@media (max-width: 991px) {
+  .layout-contact .contact__pill {
+    height: 2.5625rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+.layout-contact .contact__pill:focus-visible {
+  outline: 2px solid #FFB500;
+  outline-offset: 3px;
+}
+.layout-contact .contact__pill {
+  /* On white here, so the border does the work the blue did */
+  border-color: #EDF6FC;
+}
+.layout-contact .contact__pill:hover, .layout-contact .contact__pill:focus-visible {
+  background-color: #ffffff;
+  border-color: #00529E;
+}
+.layout-contact .contact__address {
+  margin-top: clamp(24px, -139.3260869565px + 11.9565217391vw, 46px);
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-contact .contact__address p {
+  margin: 0;
+  color: inherit;
+  font: inherit;
+}
+.layout-contact .contact__address a {
+  color: #00529E;
+  text-decoration: underline;
+  text-underline-offset: 0.1875rem;
+}
+.layout-contact .contact__address a:hover {
+  color: #FFB500;
+}
+.layout-contact .contact {
+  /* ------------------------------------------------- billing column */
+}
+.layout-contact .contact__billing {
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-contact .contact__billing p {
+  margin: 0 0 1rem;
+  color: inherit;
+  font: inherit;
+}
+.layout-contact .contact__billing p:last-child {
+  margin-bottom: 0;
+}
+.layout-contact .contact {
+  /* ----------------------------------------------------- hours card */
+}
+.layout-contact .contact__card {
+  background-color: #00529E;
+  -webkit-border-radius: 3.75rem;
+  -moz-border-radius: 3.75rem;
+  border-radius: 3.75rem;
+  padding: clamp(32px, -73.550295858px + 10.650887574vw, 50px) clamp(24px, -87.4142011834px + 11.2426035503vw, 43px);
+}
+@media (max-width: 991px) {
+  .layout-contact .contact__card {
+    -webkit-border-radius: 1.875rem;
+    -moz-border-radius: 1.875rem;
+    border-radius: 1.875rem;
+  }
+}
+.layout-contact .contact__card-title {
+  display: block;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  margin-bottom: clamp(20px, -24.5434782609px + 3.2608695652vw, 26px);
+}
+.layout-contact .contact__hours {
+  display: grid;
+  /*
+  * XD puts the days on x853 and the times on x1033, a 180 wide
+  * first column. Here the day column takes only what its longest
+  * label needs, which leaves the rest for the times.
+  */
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 0.125rem 1rem;
+  margin: 0;
+}
+.layout-contact .contact__hours dt,
+.layout-contact .contact__hours dd {
+  margin: 0;
+  /*
+  * One line per day down to 1160.
+  *
+  * The card is a share of the container, so it narrows with the
+  * viewport while "7.00 - 12.00 und 13.15 - 17.00" does not.
+  * Holding the line and stepping the type down instead keeps
+  * the two columns readable as a table; below the breakpoint
+  * the card is full width again and wrapping is fine.
+  */
+  white-space: nowrap;
+  font-size: clamp(14px, 5.7142857143px + 0.7142857143vw, 16px);
+  line-height: clamp(21px, 8.5714285714px + 1.0714285714vw, 24px);
+  color: #ffffff;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+@media (max-width: 991px) {
+  .layout-contact .contact__hours dt,
+  .layout-contact .contact__hours dd {
+    white-space: normal;
+  }
+}
+.layout-contact .contact__hours {
+  /*
+  * Two columns of times stop fitting here, so each interval sits
+  * above its hours and the pairs are separated instead of the
+  * columns - the same as the footer.
+  */
+}
+@media (max-width: 640px) {
+  .layout-contact .contact__hours {
+    display: block;
+  }
+  .layout-contact .contact__hours dd {
+    margin: 0 0 0.5rem;
+  }
+  .layout-contact .contact__hours dd:last-child {
+    margin-bottom: 0;
+  }
+}
+.layout-contact .contact__note {
+  margin-top: clamp(24px, -50.2391304348px + 5.4347826087vw, 34px);
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #A7D8F4;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  font-style: italic;
+}
+.layout-contact .contact__note p {
+  margin: 0;
+  color: inherit;
+  font: inherit;
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
 * Single, Page
 */
 .spacer {

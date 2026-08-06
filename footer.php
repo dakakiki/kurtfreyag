@@ -9,8 +9,8 @@
  *              already renders the contact data (Kontakt artboard).
  *
  * The variant is chosen automatically: if the page renders
- * layout_contact_details, the footer drops its own contact block so the same
- * data is not printed twice. Override with the kfa_footer_show_contact filter.
+ * layout_contact, the footer drops its own contact block so the same data is
+ * not printed twice. Override with the kfa_footer_show_contact filter.
  *
  * @package KurtFreyAG
  */
@@ -31,7 +31,12 @@ $has_contact_data = ( $phone || $email || $address || ! empty( $hours['intervals
 
 $show_contact = apply_filters(
 	'kfa_footer_show_contact',
-	$has_contact_data && ! in_array( 'layout_contact_details', kfa_current_layouts(), true )
+	/*
+	 * The slug is layout_contact. This read layout_contact_details, the name
+	 * the block carried while it was still being planned, so the footer never
+	 * recognised it and printed the same addresses twice.
+	 */
+	$has_contact_data && ! in_array( 'layout_contact', kfa_current_layouts(), true )
 );
 ?>
 

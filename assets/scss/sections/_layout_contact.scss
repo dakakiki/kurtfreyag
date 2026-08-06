@@ -1,0 +1,368 @@
+@use '../abstracts' as *;
+
+/*
+* Block - Contact (layout_contact)
+*
+* XD reference (Kontakt artboard, 1440):
+*   columns  contact x140 -> 418, billing x475 -> 753, card x810 -> 1300
+*            so 278, 278 and 490 with 57 between them - 1160 exactly
+*   title    Lato Bold 53 #00529E, its baseline 953
+*   labels   Lato Bold 16 #00529E, values in ice pills ending on x418
+*   address  Lato Regular 16 #00529E, its label in the same weight
+*   card     490 x 289, #00529E, 60px radius, text 43 in from its edge
+*   hours    heading Lato Bold 16 white, days at x853, times at x1033
+*   note     Lato Italic 16 #A7D8F4
+*
+* The pills are the footer's own, so they come from btn-pill-light - except
+* here they sit on white rather than on blue.
+*/
+
+/*
+* XD: text starts 43 inside the card.
+*
+* Unitless, because fluid-prop-multi adds the unit itself - passing 43px gave
+* clamp(..., 43pxpx), which made the whole padding declaration invalid and
+* left the card with none at all.
+*/
+$contact-card-inset: 43;
+
+.layout-contact {
+
+    position: relative;
+
+    width: 100%;
+
+    @include fluid-prop('margin-top', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+    @include fluid-prop('margin-bottom', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    @include respond-max(lg) {
+
+        margin-top: fluid(56, 80, 360, 991);
+        margin-bottom: fluid(56, 80, 360, 991);
+    }
+
+    .contact {
+
+        &__container {
+
+            @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+        }
+
+        &__title {
+
+            display: block;
+
+            @include format-text(
+                $max-size: 53,
+                $min-size: 32,
+                $max-height: 62,
+                $min-height: 40,
+                $tx-color: theme-color(title-blue),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            /* XD: title baseline 953, first label baseline 1055 */
+            @include fluid-prop('margin-bottom', 40, 62, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            @include break-word;
+        }
+
+        /*
+        * The three tracks add up to the container on their own: 278 + 57 +
+        * 278 + 57 + 490 is 1160, so the fr values carry the XD's proportions
+        * at any width.
+        */
+        &__grid {
+
+            display: grid;
+            grid-template-columns: 278fr 278fr 490fr;
+
+            align-items: start;
+
+            @include fluid-prop('column-gap', 32, 57, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            row-gap: rem(40);
+
+            @include respond-max(lg) {
+
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        /*
+        * Below the breakpoint the grid collapses to one column, so the
+        * contact rows would stretch the full width and the pills would sit
+        * far from their labels. The column keeps the XD's 278 measure, as it
+        * does in the footer, and only lets go on a phone where the pills move
+        * out to the right edge instead.
+        */
+        @include respond-max(lg) {
+
+            .contact__col--details {
+
+                max-width: rem(278);
+            }
+        }
+
+        @include respond-max(sm) {
+
+            .contact__col--details {
+
+                max-width: none;
+            }
+        }
+
+        /* ------------------------------------------------- contact column */
+
+        &__line {
+
+            display: flex;
+            align-items: center;
+
+            /* XD: both pills end on x418, the right edge of the column */
+            justify-content: space-between;
+
+            gap: rem(12);
+
+            margin: 0 0 rem(14);
+        }
+
+        &__label {
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 24,
+                $min-height: 22,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            /* Same weight as the labels beside the pills, on its own line */
+            &--plain {
+
+                display: block;
+
+                margin-bottom: rem(2);
+            }
+        }
+
+        &__pill {
+
+            @include btn-pill-light;
+            @include focus-ring;
+
+            /* On white here, so the border does the work the blue did */
+            border-color: theme-color(brd-ice);
+
+            &:hover,
+            &:focus-visible {
+
+                background-color: theme-color(bg-white);
+                border-color: theme-color(brd-blue);
+            }
+        }
+
+        &__address {
+
+            @include fluid-prop('margin-top', 24, 46, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 24,
+                $min-height: 22,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            p {
+
+                margin: 0;
+
+                color: inherit;
+                font: inherit;
+            }
+
+            a {
+
+                color: theme-color(text-blue);
+                text-decoration: underline;
+                text-underline-offset: rem(3);
+
+                &:hover {
+
+                    color: theme-color(text-golden);
+                }
+            }
+        }
+
+        /* ------------------------------------------------- billing column */
+
+        &__billing {
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 24,
+                $min-height: 22,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            p {
+
+                margin: 0 0 rem(16);
+
+                color: inherit;
+                font: inherit;
+
+                &:last-child {
+
+                    margin-bottom: 0;
+                }
+            }
+        }
+
+        /* ----------------------------------------------------- hours card */
+
+        &__card {
+
+            background-color: theme-color(bg-blue);
+
+            @include brd-radius-all($brd-radius: rem(60));
+
+            @include fluid-prop-multi('padding', 32 24, 50 $contact-card-inset, $min-resize, $max-resize, $unit: px, $base: 16);
+
+            @include respond-max(lg) {
+
+                @include brd-radius-all($brd-radius: rem(30));
+            }
+        }
+
+        &__card-title {
+
+            display: block;
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 24,
+                $min-height: 22,
+                $tx-color: theme-color(title-white),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            @include fluid-prop('margin-bottom', 20, 26, $min-resize-sec, $max-resize-sec, $unit: px);
+        }
+
+        &__hours {
+
+            display: grid;
+
+            /*
+            * XD puts the days on x853 and the times on x1033, a 180 wide
+            * first column. Here the day column takes only what its longest
+            * label needs, which leaves the rest for the times.
+            */
+            grid-template-columns: max-content minmax(0, 1fr);
+
+            gap: rem(2) rem(16);
+
+            margin: 0;
+
+            dt,
+            dd {
+
+                margin: 0;
+
+                /*
+                * One line per day down to 1160.
+                *
+                * The card is a share of the container, so it narrows with the
+                * viewport while "7.00 - 12.00 und 13.15 - 17.00" does not.
+                * Holding the line and stepping the type down instead keeps
+                * the two columns readable as a table; below the breakpoint
+                * the card is full width again and wrapping is fine.
+                */
+                white-space: nowrap;
+
+                @include format-text(
+                    $max-size: 16,
+                    $min-size: 14,
+                    $max-height: 24,
+                    $min-height: 21,
+                    $tx-color: theme-color(text-white),
+                    $tx-weight: 400,
+                    $max-rsp: 1440,
+                    $min-rsp: $max-resize,
+                );
+            }
+
+            @include respond-max(lg) {
+
+                dt,
+                dd {
+
+                    white-space: normal;
+                }
+            }
+
+            /*
+            * Two columns of times stop fitting here, so each interval sits
+            * above its hours and the pairs are separated instead of the
+            * columns - the same as the footer.
+            */
+            @include respond-max(sm) {
+
+                display: block;
+
+                dd {
+
+                    margin: 0 0 rem(8);
+                }
+
+                dd:last-child {
+
+                    margin-bottom: 0;
+                }
+            }
+        }
+
+        &__note {
+
+            @include fluid-prop('margin-top', 24, 34, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 24,
+                $min-height: 22,
+                $tx-color: theme-color(text-sky),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            font-style: italic;
+
+            p {
+
+                margin: 0;
+
+                color: inherit;
+                font: inherit;
+            }
+        }
+    }
+}
