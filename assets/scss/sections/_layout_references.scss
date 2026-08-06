@@ -1,0 +1,707 @@
+@use '../abstracts' as *;
+
+/*
+* Block - References / Projects (layout_references)
+*
+* XD reference (Referenzen/Projekte and its "if" state, 1440):
+*   filter  pills 180 x 45, #EDF6FC, 100 radius, 16 apart, above the title
+*   title   Lato Bold 53 #00529E at x140
+*   grid    three columns of 376 x 339, 16 apart
+*   card    picture with the project name in Lato Bold 25 white over it,
+*           49 in from the card edge
+*   hover   the whole card becomes #00529E and the Referenzen fields take
+*           over, Lato Regular 16 white
+*/
+
+/* XD: text sits 49 in from the card's edge, in both states */
+$ref-card-inset: 49px;
+
+.layout-references {
+
+    position: relative;
+
+    width: 100%;
+
+    /*
+    * XD: the hero ends on y800 and the pills start on y863, so the block sits
+    * 60 below whatever precedes it - closer than a standalone section, since
+    * the filter belongs to the page it opens.
+    */
+    @include fluid-prop('margin-top', 40, 60, $min-resize-sec, $max-resize-sec, $unit: px);
+    @include fluid-prop('margin-bottom', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    @include respond-max(lg) {
+
+        margin-top: fluid(32, 40, 360, 991);
+        margin-bottom: fluid(56, 80, 360, 991);
+    }
+
+    .references {
+
+        &__container {
+
+            @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+        }
+
+        /* ------------------------------------------------------- filter */
+
+        &__filter {
+
+            display: flex;
+
+            /*
+            * One row, always. The pills share what is left after the gaps
+            * rather than holding a 180 minimum that pushed the last one onto
+            * a second line as soon as a sixth group appeared.
+            */
+            flex-wrap: nowrap;
+
+            align-items: center;
+
+            gap: rem(16);
+
+            /* XD: pills end on y908, the title's cap starts on y959 */
+            @include fluid-prop('margin-bottom', 32, 50, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            /* The select takes over below the breakpoint */
+            @include respond-max(lg) {
+
+                display: none;
+            }
+        }
+
+        &__pill {
+
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            box-sizing: border-box;
+
+            /*
+            * XD: 180 x 45. The pills grow from their own label rather than
+            * from an equal share, so a long one like "Service und Unterhalt"
+            * takes the room it needs instead of breaking onto two lines.
+            */
+            flex: 1 1 auto;
+
+            white-space: nowrap;
+
+            @include fluid-prop('height', 40, 45, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            padding-left: rem(24);
+            padding-right: rem(24);
+
+            /* Reset the default button chrome - these read as pills */
+            appearance: none;
+            -webkit-appearance: none;
+
+            font-family: inherit;
+
+            cursor: pointer;
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 24,
+                $min-height: 22,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            background-color: theme-color(bg-ice);
+            border: 1px solid theme-color(brd-ice);
+
+            @include brd-radius-all($brd-radius: 100px);
+
+            @include trans;
+            @include focus-ring(theme-color(brd-blue));
+
+            &:hover {
+
+                border-color: theme-color(brd-blue);
+            }
+
+            &:disabled {
+
+                cursor: default;
+            }
+
+            /*
+            * The XD draws every pill the same, with no selected state. A
+            * filter that does not show what is selected is unusable, so the
+            * active one inverts.
+            */
+            &.is-active {
+
+                background-color: theme-color(bg-blue);
+                border-color: theme-color(brd-blue);
+
+                color: theme-color(text-white);
+
+                font-weight: 700;
+            }
+        }
+
+        /* Select variant, as on the news archive */
+        &__select {
+
+            display: none;
+
+            position: relative;
+
+            width: 100%;
+
+            @include respond-max(lg) {
+
+                display: block;
+
+                margin-bottom: fluid(40, 56, 360, 991);
+            }
+
+            &::after {
+
+                content: "";
+
+                position: absolute;
+                top: 50%;
+                right: rem(24);
+
+                width: rem(14);
+                height: rem(9);
+
+                transform: translateY(-50%);
+
+                background-color: theme-color(text-blue);
+
+                mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='M1 1l7 7 7-7' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+                mask-repeat: no-repeat;
+                mask-size: contain;
+                -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='M1 1l7 7 7-7' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+                -webkit-mask-repeat: no-repeat;
+                -webkit-mask-size: contain;
+
+                pointer-events: none;
+            }
+
+            select {
+
+                display: block;
+
+                width: 100%;
+                height: rem(45);
+
+                box-sizing: border-box;
+
+                padding: 0 rem(52) 0 rem(24);
+
+                appearance: none;
+                -webkit-appearance: none;
+
+                font-family: inherit;
+
+                cursor: pointer;
+
+                @include format-text(
+                    $max-size: 16,
+                    $min-size: 15,
+                    $max-height: 24,
+                    $min-height: 22,
+                    $tx-color: theme-color(text-blue),
+                    $tx-weight: 400,
+                    $max-rsp: $max-resize-sec,
+                    $min-rsp: $min-resize-sec,
+                );
+
+                background-color: theme-color(bg-ice);
+                border: 1px solid theme-color(brd-ice);
+
+                @include brd-radius-all($brd-radius: 100px);
+
+                @include trans;
+                @include focus-ring(theme-color(brd-blue));
+            }
+        }
+
+        &__select-label {
+
+            /* Visible to assistive tech only - the first option says the same */
+            position: absolute;
+            width: 1px;
+            height: 1px;
+
+            margin: -1px;
+            padding: 0;
+
+            overflow: hidden;
+            clip-path: inset(50%);
+            white-space: nowrap;
+        }
+
+        /* -------------------------------------------------------- title */
+
+        &__title {
+
+            display: block;
+
+            @include format-text(
+                $max-size: 53,
+                $min-size: 32,
+                $max-height: 62,
+                $min-height: 40,
+                $tx-color: theme-color(title-blue),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            @include fluid-prop('margin-bottom', 40, 60, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            @include break-word;
+        }
+
+        /* --------------------------------------------------------- grid */
+
+        &__grid {
+
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+
+            gap: rem(16);
+
+            /*
+            * Held back until initCardReveal() picks the grid up, so the rise
+            * starts from nothing rather than from the finished state. The
+            * .js class is dropped if the bundle never runs, which uncovers
+            * the cards again.
+            */
+            .js &:not(.cards-initialized) > * {
+
+                visibility: hidden;
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+
+                .js &:not(.cards-initialized) > * {
+
+                    visibility: visible;
+                }
+            }
+
+            @include respond-max(lg) {
+
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            @include respond-max(sm) {
+
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        /* ---------------------------------------------------- load more */
+
+        &__more {
+
+            display: flex;
+
+            justify-content: center;
+
+            @include fluid-prop('margin-top', 40, 60, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            &[hidden] {
+
+                display: none;
+            }
+        }
+
+        &__more-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            box-sizing: border-box;
+
+            @include fluid-prop('height', 44, 48, $min-resize-sec, $max-resize-sec, $unit: px);
+            @include fluid-prop('padding-left', 28, 40, $min-resize-sec, $max-resize-sec, $unit: px);
+            @include fluid-prop('padding-right', 28, 40, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            appearance: none;
+            -webkit-appearance: none;
+
+            font-family: inherit;
+
+            cursor: pointer;
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 24,
+                $min-height: 22,
+                $tx-color: theme-color(text-white),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            white-space: nowrap;
+
+            background-color: theme-color(bg-blue);
+            border: 1px solid theme-color(brd-blue);
+
+            @include brd-radius-all($brd-radius: 100px);
+
+            @include trans;
+            @include focus-ring(theme-color(brd-blue));
+
+            /* Same golden hover as the hero */
+            &:hover,
+            &:focus-visible {
+
+                background-color: theme-color(bg-golden);
+                border-color: theme-color(brd-golden);
+
+                color: theme-color(text-blue);
+            }
+
+            &.is-loading {
+
+                cursor: progress;
+
+                opacity: 0.7;
+            }
+        }
+
+        &__status {
+
+            margin: rem(12) 0 0;
+
+            text-align: center;
+
+            @include format-text(
+                $max-size: 15,
+                $min-size: 14,
+                $max-height: 22,
+                $min-height: 20,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            &:empty {
+
+                display: none;
+            }
+        }
+
+        &__empty {
+
+            margin: 0;
+
+            @include format-text(
+                $max-size: 18,
+                $min-size: 16,
+                $max-height: 28,
+                $min-height: 24,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            &[hidden] {
+
+                display: none;
+            }
+        }
+    }
+}
+
+
+/*
+* What an opened card looks like - shared by the hover, focus and tap states.
+*/
+@mixin reference-card-open {
+
+    .reference-card__details {
+
+        opacity: 1;
+        visibility: visible;
+
+        clip-path: inset(0 0 0 0);
+
+        transition:
+            opacity 0.25s ease-out,
+            clip-path 0.35s ease-out,
+            visibility 0s;
+    }
+
+    /* The rows follow the wipe, one after another */
+    .reference-card__row {
+
+        opacity: 1;
+        transform: translateY(0);
+
+        @for $i from 1 through 6 {
+
+            &:nth-child(#{$i}) {
+
+                transition-delay: #{0.12 + ($i - 1) * 0.05}s;
+            }
+        }
+    }
+
+    .reference-card__title {
+
+        opacity: 0;
+    }
+
+    .reference-card__media {
+
+        opacity: 0;
+    }
+}
+
+/*
+* The card
+*
+* Written outside the block so an archive or a teaser can reuse it.
+*/
+.reference-card {
+
+    position: relative;
+
+    display: block;
+
+    /* XD: 376 x 339 */
+    aspect-ratio: 376 / 339;
+
+    background-color: theme-color(bg-blue);
+
+    @include brd-radius-all($brd-radius: rem(3));
+
+    overflow: hidden;
+
+    &__media {
+
+        position: absolute;
+        inset: 0;
+
+        line-height: 0;
+
+        @include trans;
+
+        img {
+
+            @include image-cover;
+        }
+    }
+
+    &__title {
+
+        position: absolute;
+        z-index: 2;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        margin: 0;
+
+        padding: $ref-card-inset;
+
+        @include format-text(
+            $max-size: 25,
+            $min-size: 20,
+            $max-height: 32,
+            $min-height: 26,
+            $tx-color: theme-color(title-white),
+            $tx-weight: 700,
+            $max-rsp: $max-resize-sec,
+            $min-rsp: $min-resize-sec,
+        );
+
+        /*
+        * The XD sets white type straight onto the photograph. A soft gradient
+        * behind it keeps that readable whatever picture is uploaded.
+        */
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
+
+        @include trans;
+    }
+
+    /*
+    * The control covers the card, so a pointer anywhere on it opens the
+    * details and a keyboard reaches them in one stop.
+    */
+    &__toggle {
+
+        position: absolute;
+        z-index: 4;
+        inset: 0;
+
+        display: block;
+
+        width: 100%;
+
+        padding: 0;
+        border: none;
+        background: none;
+        appearance: none;
+        -webkit-appearance: none;
+
+        cursor: pointer;
+
+        @include focus-ring(theme-color(brd-blue));
+    }
+
+    &__details {
+
+        position: absolute;
+        z-index: 3;
+        inset: 0;
+
+        display: flex;
+        flex-direction: column;
+
+        /* XD: the details sit on the base of the card, as the title did */
+        justify-content: flex-end;
+
+        box-sizing: border-box;
+
+        /*
+        * Less room under the text than over it: the block is bottom aligned,
+        * so an equal inset all round reads as bottom heavy.
+        */
+        padding: $ref-card-inset $ref-card-inset rem(32);
+
+        background-color: theme-color(bg-blue);
+
+        /*
+        * Never scrolls. A panel that needs scrolling inside a hover state is
+        * unusable with a pointer, so the type steps down instead - see the
+        * row sizing below.
+        */
+        overflow: hidden;
+
+        opacity: 0;
+        visibility: hidden;
+
+        /*
+        * The panel wipes up from the base of the card rather than fading flat
+        * on top of it, which reads as the picture giving way to the details.
+        */
+        clip-path: inset(100% 0 0 0);
+
+        transition:
+            opacity 0.25s ease-out,
+            clip-path 0.35s ease-out,
+            visibility 0s linear 0.35s;
+
+        @media (prefers-reduced-motion: reduce) {
+
+            transition: none;
+        }
+    }
+
+    &__list {
+
+        margin: 0;
+    }
+
+    &__row {
+
+        margin: 0 0 rem(8);
+
+        opacity: 0;
+        transform: translateY(#{rem(8)});
+
+        transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+
+        @media (prefers-reduced-motion: reduce) {
+
+            opacity: 1;
+            transform: none;
+
+            transition: none;
+        }
+
+        &:last-child {
+
+            margin-bottom: 0;
+        }
+
+        dt,
+        dd {
+
+            margin: 0;
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 13,
+                $max-height: 24,
+                $min-height: 19,
+                $tx-color: theme-color(text-white),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+        }
+
+        /* The label carries the accent so the two read apart at a glance */
+        dt {
+
+            color: theme-color(text-sky);
+
+            font-weight: 700;
+        }
+
+        /* XD keeps the completion date on the same line as its label */
+        &.is-inline {
+
+            display: flex;
+            flex-wrap: wrap;
+
+            gap: rem(6);
+        }
+    }
+
+    /*
+    * Open state.
+    *
+    * Split into two rules on purpose.
+    *
+    * A touch screen has no hover, but browsers fake one on the first tap and
+    * then leave it applied. With :hover in the same rule as .is-open, a tap
+    * opened the card twice over and the second tap could not close it - the
+    * stuck hover kept it open. Behind (hover: hover) the hover state only
+    * exists on devices that really have a pointer, so on a phone the class
+    * the script toggles is the only thing in charge.
+    */
+    @media (hover: hover) {
+
+        &:hover {
+
+            @include reference-card-open;
+        }
+    }
+
+    /*
+     * Keyboard focus, not any focus.
+     *
+     * :focus-within kept the card open after a tap: the toggle still holds
+     * focus once the class has been removed, so the second tap appeared to do
+     * nothing. :focus-visible is only set when the browser decides focus came
+     * from the keyboard, which leaves the tap entirely to the class.
+     */
+    &:has(.reference-card__toggle:focus-visible),
+    &.is-open {
+
+        @include reference-card-open;
+    }
+}

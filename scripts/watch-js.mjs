@@ -9,6 +9,7 @@ const files = [
     "assets/js/layout_areas.js",
     "assets/js/layout_iwiaat.js",
     "assets/js/layout_teams.js",
+    "assets/js/layout_references.js",
 
     "assets/js/gsap.js",
 ];

@@ -18,6 +18,7 @@ const entries = [
   { in: "assets/js/layout_areas.js", out: "dist/js/layout_areas.min.js", bundle: false },
   { in: "assets/js/layout_iwiaat.js", out: "dist/js/layout_iwiaat.min.js", bundle: false },
   { in: "assets/js/layout_teams.js", out: "dist/js/layout_teams.min.js", bundle: false },
+  { in: "assets/js/layout_references.js", out: "dist/js/layout_references.min.js", bundle: false },
 
   { in: "assets/js/gsap.js", out: "dist/js/gsap.min.js", bundle: true },
 ];

@@ -228,6 +228,12 @@ function my_acf_enqueue_layout_assets() {
             'deps'        => [ 'jquery' ],
             'needs_slick' => true,
         ],
+        'layout_references' => [
+            'min'         => 'js/layout_references.min.js',
+            'file'        => 'js/layout_references.js',
+            'deps'        => [ 'jquery' ],
+            'needs_slick' => false,
+        ],
     ];
 
     /*
@@ -392,3 +398,4 @@ require_once THEME_PATH . '/inc/helpers/debug.php';
 require_once THEME_PATH . '/inc/options-page.php';
 require_once THEME_PATH . '/inc/nav-submenu-toggle.php';
 require_once THEME_PATH . '/inc/news.php';
+require_once THEME_PATH . '/inc/reference.php';

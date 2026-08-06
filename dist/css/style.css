@@ -4758,6 +4758,600 @@ Version: 1.0.2
 Tags: KurtFreyAG
 */
 /*
+* Block - References / Projects (layout_references)
+*
+* XD reference (Referenzen/Projekte and its "if" state, 1440):
+*   filter  pills 180 x 45, #EDF6FC, 100 radius, 16 apart, above the title
+*   title   Lato Bold 53 #00529E at x140
+*   grid    three columns of 376 x 339, 16 apart
+*   card    picture with the project name in Lato Bold 25 white over it,
+*           49 in from the card edge
+*   hover   the whole card becomes #00529E and the Referenzen fields take
+*           over, Lato Regular 16 white
+*/
+/* XD: text sits 49 in from the card's edge, in both states */
+.layout-references {
+  position: relative;
+  width: 100%;
+  /*
+  * XD: the hero ends on y800 and the pills start on y863, so the block sits
+  * 60 below whatever precedes it - closer than a standalone section, since
+  * the filter belongs to the page it opens.
+  */
+  margin-top: clamp(40px, -108.4782608696px + 10.8695652174vw, 60px);
+  margin-bottom: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+}
+@media (max-width: 991px) {
+  .layout-references {
+    margin-top: clamp(32px, 27.4358161648px + 1.2678288431vw, 40px);
+    margin-bottom: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+  }
+}
+.layout-references .references__container {
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+.layout-references .references {
+  /* ------------------------------------------------------- filter */
+}
+.layout-references .references__filter {
+  display: flex;
+  /*
+  * One row, always. The pills share what is left after the gaps
+  * rather than holding a 180 minimum that pushed the last one onto
+  * a second line as soon as a sixth group appeared.
+  */
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 1rem;
+  /* XD: pills end on y908, the title's cap starts on y959 */
+  margin-bottom: clamp(32px, -101.6304347826px + 9.7826086957vw, 50px);
+  /* The select takes over below the breakpoint */
+}
+@media (max-width: 991px) {
+  .layout-references .references__filter {
+    display: none;
+  }
+}
+.layout-references .references__pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  /*
+  * XD: 180 x 45. The pills grow from their own label rather than
+  * from an equal share, so a long one like "Service und Unterhalt"
+  * takes the room it needs instead of breaking onto two lines.
+  */
+  flex: 1 1 auto;
+  white-space: nowrap;
+  height: clamp(40px, 2.8804347826px + 2.7173913043vw, 45px);
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  /* Reset the default button chrome - these read as pills */
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: inherit;
+  cursor: pointer;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  background-color: #EDF6FC;
+  border: 1px solid #EDF6FC;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.layout-references .references__pill:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+.layout-references .references__pill:hover {
+  border-color: #00529E;
+}
+.layout-references .references__pill:disabled {
+  cursor: default;
+}
+.layout-references .references__pill {
+  /*
+  * The XD draws every pill the same, with no selected state. A
+  * filter that does not show what is selected is unusable, so the
+  * active one inverts.
+  */
+}
+.layout-references .references__pill.is-active {
+  background-color: #00529E;
+  border-color: #00529E;
+  color: #ffffff;
+  font-weight: 700;
+}
+.layout-references .references {
+  /* Select variant, as on the news archive */
+}
+.layout-references .references__select {
+  display: none;
+  position: relative;
+  width: 100%;
+}
+@media (max-width: 991px) {
+  .layout-references .references__select {
+    display: block;
+    margin-bottom: clamp(40px, 30.8716323296px + 2.5356576862vw, 56px);
+  }
+}
+.layout-references .references__select::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  width: 0.875rem;
+  height: 0.5625rem;
+  transform: translateY(-50%);
+  background-color: #00529E;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='M1 1l7 7 7-7' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='M1 1l7 7 7-7' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  pointer-events: none;
+}
+.layout-references .references__select select {
+  display: block;
+  width: 100%;
+  height: 2.8125rem;
+  box-sizing: border-box;
+  padding: 0 3.25rem 0 1.5rem;
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: inherit;
+  cursor: pointer;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  background-color: #EDF6FC;
+  border: 1px solid #EDF6FC;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.layout-references .references__select select:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+.layout-references .references__select-label {
+  /* Visible to assistive tech only - the first option says the same */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.layout-references .references {
+  /* -------------------------------------------------------- title */
+}
+.layout-references .references__title {
+  display: block;
+  font-size: clamp(32px, -123.902173913px + 11.4130434783vw, 53px);
+  line-height: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  margin-bottom: clamp(40px, -108.4782608696px + 10.8695652174vw, 60px);
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+.layout-references .references {
+  /* --------------------------------------------------------- grid */
+}
+.layout-references .references__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  /*
+  * Held back until initCardReveal() picks the grid up, so the rise
+  * starts from nothing rather than from the finished state. The
+  * .js class is dropped if the bundle never runs, which uncovers
+  * the cards again.
+  */
+}
+.js .layout-references .references__grid:not(.cards-initialized) > * {
+  visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .layout-references .references__grid:not(.cards-initialized) > * {
+    visibility: visible;
+  }
+}
+@media (max-width: 991px) {
+  .layout-references .references__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .layout-references .references__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.layout-references .references {
+  /* ---------------------------------------------------- load more */
+}
+.layout-references .references__more {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(40px, -108.4782608696px + 10.8695652174vw, 60px);
+}
+.layout-references .references__more[hidden] {
+  display: none;
+}
+.layout-references .references__more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: clamp(44px, 14.3043478261px + 2.1739130435vw, 48px);
+  padding-left: clamp(28px, -61.0869565217px + 6.5217391304vw, 40px);
+  padding-right: clamp(28px, -61.0869565217px + 6.5217391304vw, 40px);
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: inherit;
+  cursor: pointer;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  white-space: nowrap;
+  background-color: #00529E;
+  border: 1px solid #00529E;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.layout-references .references__more-btn:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+.layout-references .references__more-btn {
+  /* Same golden hover as the hero */
+}
+.layout-references .references__more-btn:hover, .layout-references .references__more-btn:focus-visible {
+  background-color: #FFB500;
+  border-color: #FFB500;
+  color: #00529E;
+}
+.layout-references .references__more-btn.is-loading {
+  cursor: progress;
+  opacity: 0.7;
+}
+.layout-references .references__status {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  font-size: clamp(14px, 6.5760869565px + 0.5434782609vw, 15px);
+  line-height: clamp(20px, 5.152173913px + 1.0869565217vw, 22px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-references .references__status:empty {
+  display: none;
+}
+.layout-references .references__empty {
+  margin: 0;
+  font-size: clamp(16px, 1.152173913px + 1.0869565217vw, 18px);
+  line-height: clamp(24px, -5.6956521739px + 2.1739130435vw, 28px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-references .references__empty[hidden] {
+  display: none;
+}
+
+/*
+* What an opened card looks like - shared by the hover, focus and tap states.
+*/
+/*
+* The card
+*
+* Written outside the block so an archive or a teaser can reuse it.
+*/
+.reference-card {
+  position: relative;
+  display: block;
+  /* XD: 376 x 339 */
+  aspect-ratio: 376/339;
+  background-color: #00529E;
+  -webkit-border-radius: 0.1875rem;
+  -moz-border-radius: 0.1875rem;
+  border-radius: 0.1875rem;
+  overflow: hidden;
+}
+.reference-card__media {
+  position: absolute;
+  inset: 0;
+  line-height: 0;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.reference-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+.reference-card__title {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 49px;
+  font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
+  line-height: clamp(26px, -18.5434782609px + 3.2608695652vw, 32px);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  /*
+  * The XD sets white type straight onto the photograph. A soft gradient
+  * behind it keeps that readable whatever picture is uploaded.
+  */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.reference-card {
+  /*
+  * The control covers the card, so a pointer anywhere on it opens the
+  * details and a keyboard reaches them in one stop.
+  */
+}
+.reference-card__toggle {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+.reference-card__toggle:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+.reference-card__details {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  /* XD: the details sit on the base of the card, as the title did */
+  justify-content: flex-end;
+  box-sizing: border-box;
+  /*
+  * Less room under the text than over it: the block is bottom aligned,
+  * so an equal inset all round reads as bottom heavy.
+  */
+  padding: 49px 49px 2rem;
+  background-color: #00529E;
+  /*
+  * Never scrolls. A panel that needs scrolling inside a hover state is
+  * unusable with a pointer, so the type steps down instead - see the
+  * row sizing below.
+  */
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  /*
+  * The panel wipes up from the base of the card rather than fading flat
+  * on top of it, which reads as the picture giving way to the details.
+  */
+  clip-path: inset(100% 0 0 0);
+  transition: opacity 0.25s ease-out, clip-path 0.35s ease-out, visibility 0s linear 0.35s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reference-card__details {
+    transition: none;
+  }
+}
+.reference-card__list {
+  margin: 0;
+}
+.reference-card__row {
+  margin: 0 0 0.5rem;
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reference-card__row {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+.reference-card__row:last-child {
+  margin-bottom: 0;
+}
+.reference-card__row dt,
+.reference-card__row dd {
+  margin: 0;
+  font-size: clamp(13px, -9.2717391304px + 1.6304347826vw, 16px);
+  line-height: clamp(19px, -18.1195652174px + 2.7173913043vw, 24px);
+  color: #ffffff;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.reference-card__row {
+  /* The label carries the accent so the two read apart at a glance */
+}
+.reference-card__row dt {
+  color: #A7D8F4;
+  font-weight: 700;
+}
+.reference-card__row {
+  /* XD keeps the completion date on the same line as its label */
+}
+.reference-card__row.is-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+.reference-card {
+  /*
+  * Open state.
+  *
+  * Split into two rules on purpose.
+  *
+  * A touch screen has no hover, but browsers fake one on the first tap and
+  * then leave it applied. With :hover in the same rule as .is-open, a tap
+  * opened the card twice over and the second tap could not close it - the
+  * stuck hover kept it open. Behind (hover: hover) the hover state only
+  * exists on devices that really have a pointer, so on a phone the class
+  * the script toggles is the only thing in charge.
+  */
+}
+@media (hover: hover) {
+  .reference-card:hover .reference-card__details {
+    opacity: 1;
+    visibility: visible;
+    clip-path: inset(0 0 0 0);
+    transition: opacity 0.25s ease-out, clip-path 0.35s ease-out, visibility 0s;
+  }
+  .reference-card:hover {
+    /* The rows follow the wipe, one after another */
+  }
+  .reference-card:hover .reference-card__row {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reference-card:hover .reference-card__row:nth-child(1) {
+    transition-delay: 0.12s;
+  }
+  .reference-card:hover .reference-card__row:nth-child(2) {
+    transition-delay: 0.17s;
+  }
+  .reference-card:hover .reference-card__row:nth-child(3) {
+    transition-delay: 0.22s;
+  }
+  .reference-card:hover .reference-card__row:nth-child(4) {
+    transition-delay: 0.27s;
+  }
+  .reference-card:hover .reference-card__row:nth-child(5) {
+    transition-delay: 0.32s;
+  }
+  .reference-card:hover .reference-card__row:nth-child(6) {
+    transition-delay: 0.37s;
+  }
+  .reference-card:hover .reference-card__title {
+    opacity: 0;
+  }
+  .reference-card:hover .reference-card__media {
+    opacity: 0;
+  }
+}
+.reference-card {
+  /*
+   * Keyboard focus, not any focus.
+   *
+   * :focus-within kept the card open after a tap: the toggle still holds
+   * focus once the class has been removed, so the second tap appeared to do
+   * nothing. :focus-visible is only set when the browser decides focus came
+   * from the keyboard, which leaves the tap entirely to the class.
+   */
+}
+.reference-card:has(.reference-card__toggle:focus-visible) .reference-card__details, .reference-card.is-open .reference-card__details {
+  opacity: 1;
+  visibility: visible;
+  clip-path: inset(0 0 0 0);
+  transition: opacity 0.25s ease-out, clip-path 0.35s ease-out, visibility 0s;
+}
+.reference-card:has(.reference-card__toggle:focus-visible), .reference-card.is-open {
+  /* The rows follow the wipe, one after another */
+}
+.reference-card:has(.reference-card__toggle:focus-visible) .reference-card__row, .reference-card.is-open .reference-card__row {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reference-card:has(.reference-card__toggle:focus-visible) .reference-card__row:nth-child(1), .reference-card.is-open .reference-card__row:nth-child(1) {
+  transition-delay: 0.12s;
+}
+.reference-card:has(.reference-card__toggle:focus-visible) .reference-card__row:nth-child(2), .reference-card.is-open .reference-card__row:nth-child(2) {
+  transition-delay: 0.17s;
+}
+.reference-card:has(.reference-card__toggle:focus-visible) .reference-card__row:nth-child(3), .reference-card.is-open .reference-card__row:nth-child(3) {
+  transition-delay: 0.22s;
+}
+.reference-card:has(.reference-card__toggle:focus-visible) .reference-card__row:nth-child(4), .reference-card.is-open .reference-card__row:nth-child(4) {
+  transition-delay: 0.27s;
+}
+.reference-card:has(.reference-card__toggle:focus-visible) .reference-card__row:nth-child(5), .reference-card.is-open .reference-card__row:nth-child(5) {
+  transition-delay: 0.32s;
+}
+.reference-card:has(.reference-card__toggle:focus-visible) .reference-card__row:nth-child(6), .reference-card.is-open .reference-card__row:nth-child(6) {
+  transition-delay: 0.37s;
+}
+.reference-card:has(.reference-card__toggle:focus-visible) .reference-card__title, .reference-card.is-open .reference-card__title {
+  opacity: 0;
+}
+.reference-card:has(.reference-card__toggle:focus-visible) .reference-card__media, .reference-card.is-open .reference-card__media {
+  opacity: 0;
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
 * Single, Page
 */
 .spacer {

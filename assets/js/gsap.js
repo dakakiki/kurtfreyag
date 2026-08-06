@@ -214,6 +214,76 @@ window.initPathAnimations = function (scope = document) {
  * Items are tagged with the -initialized class as they are picked up, so the
  * document wide pass that follows skips them and nothing animates twice.
  */
+/**
+ * Card grids.
+ *
+ * A whole grid revealed as one group: the cards rise together with a short
+ * stagger rather than each waiting for its own trigger, which is what makes a
+ * row read as one block instead of a queue.
+ *
+ * Also called on cards that arrive from AJAX - pass the new nodes as the
+ * scope and animateNow as true, since by then the grid is already on screen.
+ *
+ * @param {ParentNode} scope
+ * @param {boolean} animateNow Skip the scroll trigger and play at once.
+ */
+function initCardReveal(scope, animateNow) {
+
+    scope = scope || document;
+
+    const grids = Array.from(scope.querySelectorAll("[data-gsap-cards]"));
+
+    /* The scope can be a grid itself, or a single card handed over by AJAX. */
+    if (scope.matches && scope.matches("[data-gsap-cards]")) {
+        grids.unshift(scope);
+    }
+
+    if (!grids.length) {
+        return;
+    }
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    grids.forEach(function (grid) {
+
+        const cards = Array.from(grid.children).filter(function (card) {
+            return !card.classList.contains("cards-initialized");
+        });
+
+        if (!cards.length) {
+            return;
+        }
+
+        cards.forEach(function (card) {
+            card.classList.add("cards-initialized");
+        });
+
+        grid.classList.add("cards-initialized");
+
+        if (reduced) {
+            gsap.set(cards, { clearProps: "all" });
+            return;
+        }
+
+        gsap.from(cards, {
+            autoAlpha: 0,
+            y: 40,
+            duration: 0.6,
+            ease: "power2.out",
+            stagger: 0.08,
+            clearProps: "transform,opacity,visibility",
+            scrollTrigger: animateNow ? null : {
+                trigger: grid,
+                start: "top bottom-=80",
+                toggleActions: "play none none none"
+            }
+        });
+    });
+}
+
+window.initCardReveal = initCardReveal;
+
+
 function initializeAboveFoldAnimations() {
     const immediate = document.querySelectorAll("[data-animate-now]");
 
@@ -227,6 +297,7 @@ function initializeScrollAnimations() {
 
     window.initFadeUpAnimations(document);
     window.initPathAnimations(document);
+    window.initCardReveal(document);
 
     ScrollTrigger.refresh();
 }
