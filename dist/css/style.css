@@ -5678,6 +5678,300 @@ Version: 1.0.2
 Tags: KurtFreyAG
 */
 /*
+* Block - Jobs (layout_jobs)
+*
+* XD reference (Jobs artboard, 1440):
+*   columns  vacancies 670 at x140, side text 376 at x924 - 114 between them,
+*            which is the container exactly
+*   heading  blue pill 670 x 94, radius 49 so it is fully rounded, Lato Bold
+*            25 white, centred
+*   vacancy  ice pill 670 wide, 60px radius, 100 tall on one line and 134 on
+*            two, 21 apart, the first 47 below the heading
+*   position Lato Bold 25 #00529E, centred
+*   link     "Stellenbeschrieb", Lato Bold 16 #00529E, centred underneath
+*   side     Lato Bold 25 headings over Lato Regular 16 copy
+*/
+.layout-jobs {
+  position: relative;
+  width: 100%;
+  margin-top: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+  margin-bottom: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+}
+@media (max-width: 991px) {
+  .layout-jobs {
+    margin-top: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+    margin-bottom: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+  }
+}
+.layout-jobs .jobs__container {
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+.layout-jobs .jobs {
+  /*
+  * 670 + 114 + 376 is 1160, so the fr values carry the XD's proportions
+  * at any width.
+  */
+}
+.layout-jobs .jobs__grid {
+  display: grid;
+  grid-template-columns: 670fr 376fr;
+  /*
+  * Row one holds the heading, row two the vacancies and the side
+  * text - so the side column starts level with the first pill.
+  */
+  grid-template-areas: "heading ." "list    side";
+  align-items: start;
+  column-gap: clamp(48px, -441.9782608696px + 35.8695652174vw, 114px);
+  /*
+  * XD: 45 between the heading and the row below it.
+  *
+  * This is the only thing separating them - the heading carries no
+  * bottom margin of its own, because a margin there would be added
+  * to the gap and push the vacancies and the side text down by
+  * twice the intended distance.
+  */
+  row-gap: clamp(28px, -98.2065217391px + 9.2391304348vw, 45px);
+}
+@media (max-width: 991px) {
+  .layout-jobs .jobs__grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "heading" "list" "side";
+    /*
+    * Tighter once the columns stack: the XD's 45 is the gap
+    * beside another column, and on one column it reads as a
+    * break between sections rather than a heading over its list.
+    */
+    row-gap: clamp(20px, 13.1537242472px + 1.9017432647vw, 32px);
+  }
+}
+.layout-jobs .jobs {
+  /* ------------------------------------------------------ heading */
+}
+.layout-jobs .jobs__title {
+  grid-area: heading;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  /* XD: 94 tall, fully rounded */
+  min-height: clamp(72px, -91.3260869565px + 11.9565217391vw, 94px);
+  padding: 1rem 2rem;
+  background-color: #00529E;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+  font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
+  line-height: clamp(26px, -18.5434782609px + 3.2608695652vw, 32px);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  text-align: center;
+  /* The distance to the row below is the grid's row-gap */
+  margin-bottom: 0;
+}
+.layout-jobs .jobs {
+  /* ----------------------------------------------------- vacancies */
+}
+.layout-jobs .jobs__col--list {
+  grid-area: list;
+}
+.layout-jobs .jobs__col--side {
+  grid-area: side;
+}
+.layout-jobs .jobs__list {
+  display: flex;
+  flex-direction: column;
+  /* XD: 21 between the pills */
+  gap: 1.3125rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.layout-jobs .jobs__pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  /* XD: 100 tall with a single line position */
+  min-height: clamp(84px, -34.7826086957px + 8.6956521739vw, 100px);
+  padding: clamp(20px, -24.5434782609px + 3.2608695652vw, 26px) clamp(24px, -94.7826086957px + 8.6956521739vw, 40px) clamp(16px, -13.6956521739px + 2.1739130435vw, 20px) clamp(24px, -94.7826086957px + 8.6956521739vw, 40px);
+  background-color: #EDF6FC;
+  /* XD: a 3px #00519E stroke inside the pill */
+  border: 3px solid #00529E;
+  -webkit-border-radius: 3.75rem;
+  -moz-border-radius: 3.75rem;
+  border-radius: 3.75rem;
+  text-align: center;
+  text-decoration: none;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.layout-jobs .jobs__pill:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+.layout-jobs .jobs__pill:hover, .layout-jobs .jobs__pill:focus-visible {
+  text-decoration: none;
+  background-color: #A7D8F4;
+}
+.layout-jobs .jobs__pill {
+  /* Nothing to open, so nothing to react to either */
+}
+.layout-jobs .jobs__pill--static {
+  cursor: default;
+}
+.layout-jobs .jobs__pill--static:hover {
+  background-color: #EDF6FC;
+}
+.layout-jobs .jobs__position {
+  display: block;
+  font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
+  line-height: clamp(26px, -18.5434782609px + 3.2608695652vw, 32px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+.layout-jobs .jobs__link {
+  display: block;
+  margin-top: clamp(6px, -16.2717391304px + 1.6304347826vw, 9px);
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: rgba(0, 82, 158, 0.5);
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-jobs .jobs__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: clamp(84px, -34.7826086957px + 8.6956521739vw, 100px);
+  padding: clamp(20px, -24.5434782609px + 3.2608695652vw, 26px) clamp(24px, -94.7826086957px + 8.6956521739vw, 40px) clamp(20px, -24.5434782609px + 3.2608695652vw, 26px) clamp(24px, -94.7826086957px + 8.6956521739vw, 40px);
+  /*
+  * Shaped like a vacancy but outlined rather than filled, so it
+  * reads as the place where a vacancy would be instead of one that
+  * cannot be opened.
+  */
+  background-color: transparent;
+  border: 3px solid #EDF6FC;
+  -webkit-border-radius: 3.75rem;
+  -moz-border-radius: 3.75rem;
+  border-radius: 3.75rem;
+  text-align: center;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: rgba(0, 82, 158, 0.7);
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  margin: 0;
+}
+.layout-jobs .jobs {
+  /* ---------------------------------------------------- side text */
+}
+.layout-jobs .jobs__side {
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-jobs .jobs__side p,
+.layout-jobs .jobs__side ul,
+.layout-jobs .jobs__side ol {
+  margin: 0 0 1.25rem;
+  color: inherit;
+  font: inherit;
+}
+.layout-jobs .jobs__side > :last-child {
+  margin-bottom: 0;
+}
+.layout-jobs .jobs__side {
+  /*
+  * XD sets the bullets with their own character rather than a list
+  * marker, so the indent is removed and the marker left in place.
+  */
+}
+.layout-jobs .jobs__side ul,
+.layout-jobs .jobs__side ol {
+  padding-left: 1.25rem;
+}
+.layout-jobs .jobs__side li {
+  margin-bottom: 0.25rem;
+}
+.layout-jobs .jobs__side {
+  /* "Interesse geweckt?" and its siblings */
+  /*
+  * XD: Lato Bold 25 on a 27 line, 54 above a heading and 18 below.
+  *
+  * Every level is listed rather than the two or three a designer is
+  * expected to use: the field is an editor, and whichever tag was
+  * picked for "Interesse geweckt?" has to come out the same.
+  */
+}
+.layout-jobs .jobs__side h2,
+.layout-jobs .jobs__side h3,
+.layout-jobs .jobs__side h4,
+.layout-jobs .jobs__side h5,
+.layout-jobs .jobs__side h6 {
+  margin-top: clamp(40px, -63.9347826087px + 7.6086956522vw, 54px);
+  margin-bottom: 1.125rem;
+  font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
+  line-height: clamp(24px, 1.7282608696px + 1.6304347826vw, 27px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-jobs .jobs__side {
+  /* Nothing to separate from at the top of the field */
+}
+.layout-jobs .jobs__side > :first-child {
+  margin-top: 0;
+}
+.layout-jobs .jobs__side strong {
+  font-weight: 700;
+}
+.layout-jobs .jobs__side {
+  /* XD sets these plain - the underline is only offered on hover */
+}
+.layout-jobs .jobs__side a {
+  color: #00529E;
+  text-decoration: none;
+}
+.layout-jobs .jobs__side a:hover {
+  color: #FFB500;
+  text-decoration: underline;
+  text-underline-offset: 0.1875rem;
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
 * Single, Page
 */
 .spacer {
