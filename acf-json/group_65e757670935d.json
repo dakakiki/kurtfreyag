@@ -1676,7 +1676,7 @@
                             },
                             "layout": "block",
                             "min": 0,
-                            "max": 2,
+                            "max": 0,
                             "collapsed": "",
                             "button_label": "Add Story",
                             "rows_per_page": 20,
@@ -2633,5 +2633,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1786003141
+    "modified": 1786007597
 }
