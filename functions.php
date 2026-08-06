@@ -216,6 +216,12 @@ function my_acf_enqueue_layout_assets() {
             'deps'        => [ 'jquery' ],
             'needs_slick' => false,
         ],
+        'layout_iwiaat' => [
+            'min'         => 'js/layout_iwiaat.min.js',
+            'file'        => 'js/layout_iwiaat.js',
+            'deps'        => [ 'jquery' ],
+            'needs_slick' => false,
+        ],
     ];
 
     /*

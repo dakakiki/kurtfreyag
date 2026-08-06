@@ -1,0 +1,419 @@
+@use '../abstracts' as *;
+
+/*
+* Block - Items with icon and additional text (layout_iwiaat)
+*
+* Two shapes, picked per item by whether a background colour was chosen.
+*
+* Plain - XD Über Uns "Leitbild" / "Vision 2040":
+*   box    573 x 521, 3px #00519E border, 60px radius, 16 apart
+*   title  Lato Bold 53, blue or golden
+*   text   always visible
+*
+* Tinted - XD Über Uns "Energie mit Verantwortung" row:
+*   card   376 x 460, 60px radius, filled sky / cream / ice
+*   icon   256 square, centred, 39 below the top
+*   title  Lato Bold 25 blue, 36 in from the left
+*   arrow  27 x 24, 36 in from the right
+*   text   revealed on click
+*/
+
+.layout-iwiaat {
+
+    position: relative;
+
+    width: 100%;
+
+    @include fluid-prop('margin-top', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+    @include fluid-prop('margin-bottom', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    @include respond-max(lg) {
+
+        margin-top: fluid(56, 80, 360, 991);
+        margin-bottom: fluid(56, 80, 360, 991);
+    }
+
+    .iwiaat {
+
+        &__container {
+
+            @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+        }
+
+        /*
+        * Two items fill the row at 573 each, three at 376 - both with 16
+        * between - so the column count follows the number of items rather
+        * than being fixed.
+        */
+        &__grid {
+
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+
+            align-items: stretch;
+
+            gap: rem(16);
+
+            &[data-count="3"] {
+
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            &[data-count="1"] {
+
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            @include respond-max(lg) {
+
+                grid-template-columns: minmax(0, 1fr);
+
+                &[data-count="3"] {
+
+                    grid-template-columns: minmax(0, 1fr);
+                }
+            }
+        }
+
+        &__item {
+
+            display: flex;
+            flex-direction: column;
+
+            box-sizing: border-box;
+
+            @include brd-radius-all($brd-radius: rem(60));
+
+            @include respond-max(lg) {
+
+                @include brd-radius-all($brd-radius: rem(30));
+            }
+        }
+
+        /* ------------------------------------------------------- titles */
+
+        &__title {
+
+            display: block;
+        }
+
+        /* -------------------------------------------------- plain variant */
+
+        &__item.is-plain {
+
+            border: 3px solid theme-color(brd-blue);
+
+            @include fluid-prop-multi('padding', 40 32, 54 98, $min-resize-sec, $max-resize-sec, $unit: px, $base: 16);
+
+            @include respond-max(lg) {
+
+                padding: fluid(32, 40, 360, 991) fluid(20, 32, 360, 991);
+            }
+
+            .iwiaat__title {
+
+                @include format-text(
+                    $max-size: 53,
+                    $min-size: 32,
+                    $max-height: 62,
+                    $min-height: 40,
+                    $tx-color: theme-color(title-blue),
+                    $tx-weight: 700,
+                    $max-rsp: $max-resize-sec,
+                    $min-rsp: $min-resize-sec,
+                );
+
+                @include break-word;
+            }
+
+            .iwiaat__icon {
+
+                margin-bottom: rem(24);
+
+                img {
+
+                    display: block;
+
+                    height: auto;
+
+                    @include fluid-prop('width', 80, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+                }
+            }
+
+            .iwiaat__text {
+
+                @include fluid-prop('margin-top', 24, 36, $min-resize-sec, $max-resize-sec, $unit: px);
+            }
+        }
+
+        /* -------------------------------------------------- card variant */
+
+        &__item.is-card {
+
+            /* XD: the icon starts 39 below the top, the text ends 63 above the base */
+            @include fluid-prop-multi('padding', 32 20 40, 39 36 63, $min-resize-sec, $max-resize-sec, $unit: px, $base: 16);
+
+            &.i-bg-sky {
+
+                background-color: theme-color(bg-sky);
+            }
+
+            &.i-bg-cream {
+
+                background-color: theme-color(bg-cream);
+            }
+
+            &.i-bg-ice {
+
+                background-color: theme-color(bg-ice);
+            }
+
+            .iwiaat__icon {
+
+                /* XD: 256 square, centred, with the title pushed to the base */
+                margin-bottom: auto;
+
+                text-align: center;
+
+                img {
+
+                    display: inline-block;
+
+                    height: auto;
+
+                    @include fluid-prop('width', 160, 256, $min-resize-sec, $max-resize-sec, $unit: px);
+                }
+            }
+
+            .iwiaat__title {
+
+                @include format-text(
+                    $max-size: 25,
+                    $min-size: 20,
+                    $max-height: 32,
+                    $min-height: 26,
+                    $tx-color: theme-color(title-blue),
+                    $tx-weight: 700,
+                    $max-rsp: $max-resize-sec,
+                    $min-rsp: $min-resize-sec,
+                );
+
+                @include break-word;
+            }
+        }
+
+        /* ------------------------------------------------------ details */
+
+        &__details {
+
+            @include fluid-prop('margin-top', 32, 45, $min-resize-sec, $max-resize-sec, $unit: px);
+        }
+
+        &__summary {
+
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: rem(20);
+
+            cursor: pointer;
+
+            /* The default disclosure triangle is replaced by the XD arrow */
+            list-style: none;
+
+            &::-webkit-details-marker {
+
+                display: none;
+            }
+
+            @include focus-ring(theme-color(brd-blue));
+        }
+
+        &__arrow {
+
+            display: block;
+
+            flex: 0 0 auto;
+
+            width: rem(27);
+            height: rem(24);
+
+            @include trans;
+        }
+
+        &__details[open] .iwiaat__arrow {
+
+            transform: rotate(180deg);
+        }
+
+        /* Set by the script the moment a close starts */
+        &__details.is-closing .iwiaat__arrow {
+
+            transform: rotate(0deg);
+        }
+
+        /*
+        * The animated box carries no padding of its own, so a height of zero
+        * really is zero - see layout_iwiaat.js.
+        */
+        &__body {
+
+            overflow: hidden;
+        }
+
+        &__body-inner {
+
+            padding-top: rem(20);
+        }
+
+        &__body.is-animating {
+
+            transition: height 0.3s ease-out;
+        }
+
+        /*
+        * The fade is separate from the height on purpose: a plain CSS
+        * animation on the panel becoming visible, so the content still eases
+        * in even if the script never loads and <details> snaps open.
+        */
+        &__details[open] .iwiaat__body-inner {
+
+            animation: iwiaat-fade-in 0.3s ease-out both;
+        }
+
+        &__details.is-closing .iwiaat__body-inner {
+
+            animation: none;
+
+            opacity: 0;
+            transform: translateY(#{rem(-6)});
+
+            transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            &__body.is-animating,
+            &__details.is-closing .iwiaat__body-inner {
+
+                transition: none;
+            }
+
+            &__details[open] .iwiaat__body-inner {
+
+                animation: none;
+            }
+        }
+
+        /*
+        * Title colour
+        *
+        * Declared after the two variants on purpose. Each variant sets its
+        * type through format-text, which writes a colour of its own at the
+        * same specificity, so a modifier declared earlier would simply lose -
+        * which is why the golden title stayed blue.
+        */
+        &__item .iwiaat__title.i-title-blue {
+
+            color: theme-color(title-blue);
+        }
+
+        &__item .iwiaat__title.i-title-golden {
+
+            color: theme-color(title-golden);
+        }
+
+        /* --------------------------------------------------------- text */
+
+        &__text,
+        &__body-inner {
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 26,
+                $min-height: 24,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            p,
+            ul,
+            ol {
+
+                margin: 0 0 rem(20);
+
+                color: inherit;
+                font: inherit;
+            }
+
+            > :last-child {
+
+                margin-bottom: 0;
+            }
+
+            ul,
+            ol {
+
+                padding-left: rem(24);
+            }
+
+            /* XD: the sub heading inside the plain box is Lato Bold 25 */
+            h3,
+            h4 {
+
+                margin: 0 0 rem(16);
+
+                @include format-text(
+                    $max-size: 25,
+                    $min-size: 20,
+                    $max-height: 32,
+                    $min-height: 26,
+                    $tx-color: theme-color(title-blue),
+                    $tx-weight: 700,
+                    $max-rsp: $max-resize-sec,
+                    $min-rsp: $min-resize-sec,
+                );
+            }
+
+            strong {
+
+                font-weight: 700;
+            }
+
+            a {
+
+                color: theme-color(text-blue);
+                text-decoration: underline;
+                text-underline-offset: rem(3);
+
+                &:hover {
+
+                    color: theme-color(text-golden);
+                }
+            }
+        }
+    }
+}
+
+/*
+* Content easing in as an item opens.
+*/
+@keyframes iwiaat-fade-in {
+
+    from {
+
+        opacity: 0;
+        transform: translateY(#{rem(-6)});
+    }
+
+    to {
+
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

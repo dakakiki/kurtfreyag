@@ -1466,7 +1466,7 @@
                                     "label": "Title",
                                     "name": "title",
                                     "aria-label": "",
-                                    "type": "text",
+                                    "type": "textarea",
                                     "instructions": "",
                                     "required": 0,
                                     "conditional_logic": 0,
@@ -1478,9 +1478,9 @@
                                     "default_value": "",
                                     "maxlength": "",
                                     "allow_in_bindings": 0,
+                                    "rows": 2,
                                     "placeholder": "",
-                                    "prepend": "",
-                                    "append": "",
+                                    "new_lines": "br",
                                     "parent_repeater": "field_6a719274120f5"
                                 },
                                 {
@@ -2633,5 +2633,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1786001662
+    "modified": 1786003141
 }

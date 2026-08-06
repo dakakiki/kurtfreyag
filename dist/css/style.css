@@ -3679,6 +3679,336 @@ Version: 1.0.2
 Tags: KurtFreyAG
 */
 /*
+* Block - Items with icon and additional text (layout_iwiaat)
+*
+* Two shapes, picked per item by whether a background colour was chosen.
+*
+* Plain - XD Über Uns "Leitbild" / "Vision 2040":
+*   box    573 x 521, 3px #00519E border, 60px radius, 16 apart
+*   title  Lato Bold 53, blue or golden
+*   text   always visible
+*
+* Tinted - XD Über Uns "Energie mit Verantwortung" row:
+*   card   376 x 460, 60px radius, filled sky / cream / ice
+*   icon   256 square, centred, 39 below the top
+*   title  Lato Bold 25 blue, 36 in from the left
+*   arrow  27 x 24, 36 in from the right
+*   text   revealed on click
+*/
+.layout-iwiaat {
+  position: relative;
+  width: 100%;
+  margin-top: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+  margin-bottom: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+}
+@media (max-width: 991px) {
+  .layout-iwiaat {
+    margin-top: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+    margin-bottom: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+  }
+}
+.layout-iwiaat .iwiaat__container {
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+.layout-iwiaat .iwiaat {
+  /*
+  * Two items fill the row at 573 each, three at 376 - both with 16
+  * between - so the column count follows the number of items rather
+  * than being fixed.
+  */
+}
+.layout-iwiaat .iwiaat__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 1rem;
+}
+.layout-iwiaat .iwiaat__grid[data-count="3"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.layout-iwiaat .iwiaat__grid[data-count="1"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (max-width: 991px) {
+  .layout-iwiaat .iwiaat__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .layout-iwiaat .iwiaat__grid[data-count="3"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.layout-iwiaat .iwiaat__item {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  -webkit-border-radius: 3.75rem;
+  -moz-border-radius: 3.75rem;
+  border-radius: 3.75rem;
+}
+@media (max-width: 991px) {
+  .layout-iwiaat .iwiaat__item {
+    -webkit-border-radius: 1.875rem;
+    -moz-border-radius: 1.875rem;
+    border-radius: 1.875rem;
+  }
+}
+.layout-iwiaat .iwiaat {
+  /* ------------------------------------------------------- titles */
+}
+.layout-iwiaat .iwiaat__title {
+  display: block;
+}
+.layout-iwiaat .iwiaat {
+  /* -------------------------------------------------- plain variant */
+}
+.layout-iwiaat .iwiaat__item.is-plain {
+  border: 3px solid #00529E;
+  padding: clamp(40px, -63.9347826087px + 7.6086956522vw, 54px) clamp(32px, -457.9782608696px + 35.8695652174vw, 98px);
+}
+@media (max-width: 991px) {
+  .layout-iwiaat .iwiaat__item.is-plain {
+    padding: clamp(32px, 27.4358161648px + 1.2678288431vw, 40px) clamp(20px, 13.1537242472px + 1.9017432647vw, 32px);
+  }
+}
+.layout-iwiaat .iwiaat__item.is-plain .iwiaat__title {
+  font-size: clamp(32px, -123.902173913px + 11.4130434783vw, 53px);
+  line-height: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+.layout-iwiaat .iwiaat__item.is-plain .iwiaat__icon {
+  margin-bottom: 1.5rem;
+}
+.layout-iwiaat .iwiaat__item.is-plain .iwiaat__icon img {
+  display: block;
+  height: auto;
+  width: clamp(80px, -216.9565217391px + 21.7391304348vw, 120px);
+}
+.layout-iwiaat .iwiaat__item.is-plain .iwiaat__text {
+  margin-top: clamp(24px, -65.0869565217px + 6.5217391304vw, 36px);
+}
+.layout-iwiaat .iwiaat {
+  /* -------------------------------------------------- card variant */
+}
+.layout-iwiaat .iwiaat__item.is-card {
+  /* XD: the icon starts 39 below the top, the text ends 63 above the base */
+  padding: clamp(32px, -19.9673913043px + 3.8043478261vw, 39px) clamp(20px, -98.7826086957px + 8.6956521739vw, 36px) clamp(40px, -130.75px + 12.5vw, 63px);
+}
+.layout-iwiaat .iwiaat__item.is-card.i-bg-sky {
+  background-color: #A7D8F4;
+}
+.layout-iwiaat .iwiaat__item.is-card.i-bg-cream {
+  background-color: #FBE8C9;
+}
+.layout-iwiaat .iwiaat__item.is-card.i-bg-ice {
+  background-color: #EDF6FC;
+}
+.layout-iwiaat .iwiaat__item.is-card .iwiaat__icon {
+  /* XD: 256 square, centred, with the title pushed to the base */
+  margin-bottom: auto;
+  text-align: center;
+}
+.layout-iwiaat .iwiaat__item.is-card .iwiaat__icon img {
+  display: inline-block;
+  height: auto;
+  width: clamp(160px, -552.6956521739px + 52.1739130435vw, 256px);
+}
+.layout-iwiaat .iwiaat__item.is-card .iwiaat__title {
+  font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
+  line-height: clamp(26px, -18.5434782609px + 3.2608695652vw, 32px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+.layout-iwiaat .iwiaat {
+  /* ------------------------------------------------------ details */
+}
+.layout-iwiaat .iwiaat__details {
+  margin-top: clamp(32px, -64.5108695652px + 7.0652173913vw, 45px);
+}
+.layout-iwiaat .iwiaat__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  cursor: pointer;
+  /* The default disclosure triangle is replaced by the XD arrow */
+  list-style: none;
+}
+.layout-iwiaat .iwiaat__summary::-webkit-details-marker {
+  display: none;
+}
+.layout-iwiaat .iwiaat__summary:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+.layout-iwiaat .iwiaat__arrow {
+  display: block;
+  flex: 0 0 auto;
+  width: 1.6875rem;
+  height: 1.5rem;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.layout-iwiaat .iwiaat__details[open] .iwiaat__arrow {
+  transform: rotate(180deg);
+}
+.layout-iwiaat .iwiaat {
+  /* Set by the script the moment a close starts */
+}
+.layout-iwiaat .iwiaat__details.is-closing .iwiaat__arrow {
+  transform: rotate(0deg);
+}
+.layout-iwiaat .iwiaat {
+  /*
+  * The animated box carries no padding of its own, so a height of zero
+  * really is zero - see layout_iwiaat.js.
+  */
+}
+.layout-iwiaat .iwiaat__body {
+  overflow: hidden;
+}
+.layout-iwiaat .iwiaat__body-inner {
+  padding-top: 1.25rem;
+}
+.layout-iwiaat .iwiaat__body.is-animating {
+  transition: height 0.3s ease-out;
+}
+.layout-iwiaat .iwiaat {
+  /*
+  * The fade is separate from the height on purpose: a plain CSS
+  * animation on the panel becoming visible, so the content still eases
+  * in even if the script never loads and <details> snaps open.
+  */
+}
+.layout-iwiaat .iwiaat__details[open] .iwiaat__body-inner {
+  animation: iwiaat-fade-in 0.3s ease-out both;
+}
+.layout-iwiaat .iwiaat__details.is-closing .iwiaat__body-inner {
+  animation: none;
+  opacity: 0;
+  transform: translateY(-0.375rem);
+  transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+}
+@media (prefers-reduced-motion: reduce) {
+  .layout-iwiaat .iwiaat__body.is-animating, .layout-iwiaat .iwiaat__details.is-closing .iwiaat__body-inner {
+    transition: none;
+  }
+  .layout-iwiaat .iwiaat__details[open] .iwiaat__body-inner {
+    animation: none;
+  }
+}
+.layout-iwiaat .iwiaat {
+  /*
+  * Title colour
+  *
+  * Declared after the two variants on purpose. Each variant sets its
+  * type through format-text, which writes a colour of its own at the
+  * same specificity, so a modifier declared earlier would simply lose -
+  * which is why the golden title stayed blue.
+  */
+}
+.layout-iwiaat .iwiaat__item .iwiaat__title.i-title-blue {
+  color: #00529E;
+}
+.layout-iwiaat .iwiaat__item .iwiaat__title.i-title-golden {
+  color: #FFB500;
+}
+.layout-iwiaat .iwiaat {
+  /* --------------------------------------------------------- text */
+}
+.layout-iwiaat .iwiaat__text, .layout-iwiaat .iwiaat__body-inner {
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-iwiaat .iwiaat__text p,
+.layout-iwiaat .iwiaat__text ul,
+.layout-iwiaat .iwiaat__text ol, .layout-iwiaat .iwiaat__body-inner p,
+.layout-iwiaat .iwiaat__body-inner ul,
+.layout-iwiaat .iwiaat__body-inner ol {
+  margin: 0 0 1.25rem;
+  color: inherit;
+  font: inherit;
+}
+.layout-iwiaat .iwiaat__text > :last-child, .layout-iwiaat .iwiaat__body-inner > :last-child {
+  margin-bottom: 0;
+}
+.layout-iwiaat .iwiaat__text ul,
+.layout-iwiaat .iwiaat__text ol, .layout-iwiaat .iwiaat__body-inner ul,
+.layout-iwiaat .iwiaat__body-inner ol {
+  padding-left: 1.5rem;
+}
+.layout-iwiaat .iwiaat__text, .layout-iwiaat .iwiaat__body-inner {
+  /* XD: the sub heading inside the plain box is Lato Bold 25 */
+}
+.layout-iwiaat .iwiaat__text h3,
+.layout-iwiaat .iwiaat__text h4, .layout-iwiaat .iwiaat__body-inner h3,
+.layout-iwiaat .iwiaat__body-inner h4 {
+  margin: 0 0 1rem;
+  font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
+  line-height: clamp(26px, -18.5434782609px + 3.2608695652vw, 32px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-iwiaat .iwiaat__text strong, .layout-iwiaat .iwiaat__body-inner strong {
+  font-weight: 700;
+}
+.layout-iwiaat .iwiaat__text a, .layout-iwiaat .iwiaat__body-inner a {
+  color: #00529E;
+  text-decoration: underline;
+  text-underline-offset: 0.1875rem;
+}
+.layout-iwiaat .iwiaat__text a:hover, .layout-iwiaat .iwiaat__body-inner a:hover {
+  color: #FFB500;
+}
+
+/*
+* Content easing in as an item opens.
+*/
+@keyframes iwiaat-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.375rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
 * Single, Page
 */
 .spacer {

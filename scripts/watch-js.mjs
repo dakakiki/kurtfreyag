@@ -7,6 +7,7 @@ const files = [
     "assets/js/layout_news_slider.js",
     "assets/js/layout_news_archive.js",
     "assets/js/layout_areas.js",
+    "assets/js/layout_iwiaat.js",
 
     "assets/js/gsap.js",
 ];
