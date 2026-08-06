@@ -29,6 +29,23 @@
         margin-bottom: fluid(56, 80, 360, 991);
     }
 
+    /*
+    * Title on its own.
+    *
+    * With no text under it the block is a heading for the group that follows,
+    * so the gap below shrinks to roughly what a heading keeps from its own
+    * content - a full block gap would read as two unrelated sections.
+    */
+    &.is-heading-only {
+
+        @include fluid-prop('margin-bottom', 32, 46, $min-resize-sec, $max-resize-sec, $unit: px);
+
+        @include respond-max(lg) {
+
+            margin-bottom: fluid(24, 32, 360, 991);
+        }
+    }
+
     .title-text {
 
         &__container {

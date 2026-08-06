@@ -9,7 +9,10 @@
  *   quote  Lato Bold 16 #FFB500, 32 below the title's baseline
  *
  * The gold passage is authored as a blockquote in the editor, which is what
- * the styling hangs off - see pages note in the SCSS.
+ * the styling hangs off - see the note in the SCSS.
+ *
+ * With no text the block is a heading for whatever follows, so it sits closer
+ * to it - is-heading-only.
  */
 
 $tt_row    = get_row_index();
@@ -24,7 +27,7 @@ if ( ! $tt_title && ! $tt_text ) {
 
 <section
 	<?php if ( $tt_anchor ) : ?>id="<?= esc_attr( $tt_anchor ); ?>"<?php endif; ?>
-	class="layout-title-text"
+	class="layout-title-text<?= $tt_text ? '' : ' is-heading-only'; ?>"
 >
 
 	<div class="title-text" id="lyt-<?= (int) $tt_row; ?>">

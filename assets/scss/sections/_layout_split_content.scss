@@ -23,12 +23,19 @@
 /*
 * Columns out of 100, so the numbers read as percentages of the container.
 * Unitless on purpose: they are used to build grid-column spans.
+*
+* l-split-5050 is measured from the Über uns sections: card 573 and image 768
+* out of the 1160 container, overlapping by 179 - so 49 + 66 - 15 = 100.
+*
+* l-split-3070 is the homepage block. Measured there the image is 41 and the
+* card 65 with a 6 overlap; the 34 below is the ratio the ACF label states,
+* which is what the approved build uses.
 */
-$split-media-5050: 50;
+$split-media-5050: 66;
 $split-media-3070: 34;
 
 /* How far the image reaches over the card, in the same 100 column units */
-$split-overlap-5050: 6;
+$split-overlap-5050: 15;
 $split-overlap-3070: 6;
 
 /*
@@ -320,9 +327,98 @@ $split-overlap-3070: 6;
         }
     }
 
+    /*
+    * Über uns variant.
+    *
+    * Different proportions and different typography: an eyebrow sized title
+    * in sky blue and an image rounded 60 on the container edge instead of the
+    * homepage block's flat 3. Everything in the card stays left aligned.
+    */
     &.l-split-5050 {
 
         @include split-columns($split-media-5050, $split-overlap-5050);
+
+        .split-content__body {
+
+            /* XD: text column 376 inside a 573 card, so 98 on each side */
+            @include fluid-prop-multi('padding', 40 32, 78 98, $min-resize-sec, $max-resize-sec, $unit: px, $base: 16);
+        }
+
+        .split-content__title {
+
+            @include format-text(
+                $max-size: 25,
+                $min-size: 20,
+                $max-height: 32,
+                $min-height: 26,
+                $tx-color: theme-color(text-sky),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+        }
+
+        .split-content__text {
+
+            /*
+            * XD: the text block starts 36 below the title's baseline. A line
+            * box already sits about 7 below its own baseline, so the margin
+            * is that much smaller than the measurement.
+            */
+            @include fluid-prop('margin-top', 20, 29, $min-resize-sec, $max-resize-sec, $unit: px);
+        }
+
+        @include respond-min(lg) {
+
+            /*
+            * The card sets the height, always.
+            *
+            * Both columns are stretched to the row, and the image is taken
+            * out of flow so its own proportions contribute nothing to the
+            * row's size - it is a background that covers whatever box the
+            * card ends up creating. Left in flow, a short text let the
+            * picture grow the row instead, which is why rows of the same
+            * style came out in different shapes.
+            */
+            .split-content__grid {
+
+                align-items: stretch;
+            }
+
+            .split-content__media {
+
+                position: relative;
+
+                img {
+
+                    position: absolute;
+                    inset: 0;
+
+                    width: 100%;
+                    height: 100%;
+
+                    object-fit: cover;
+                }
+            }
+
+            /* Rounded towards the container edge, square where the card is */
+            .split-content__media img {
+
+                @include brd-radius-all($brd-radius: rem(60));
+            }
+
+            &.img-left .split-content__media img {
+
+                border-top-right-radius: rem(3);
+                border-bottom-right-radius: rem(3);
+            }
+
+            &.img-right .split-content__media img {
+
+                border-top-left-radius: rem(3);
+                border-bottom-left-radius: rem(3);
+            }
+        }
     }
 
     &.l-split-3070 {
@@ -365,5 +461,60 @@ $split-overlap-3070: 6;
 
             grid-row: 2;
         }
+    }
+}
+
+/*
+* Grouped blocks
+*
+* The Über uns page stacks several split rows under one heading. The XD leaves
+* 45 and 49 between them, not the gap a standalone section gets, and 74 below
+* the heading's baseline.
+*
+* Adjacent margins collapse to the larger of the two, so wherever a gap is
+* reduced both sides have to be reduced - hence the :has() partners. The first
+* row of a group keeps its smaller top margin because of the heading, the last
+* keeps a full bottom margin because the next thing is a new section.
+*/
+
+/* Straight after a heading */
+.layout-title-text + .layout-split-content {
+
+    @include fluid-prop('margin-top', 48, 64, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    @include respond-max(lg) {
+
+        margin-top: fluid(32, 40, 360, 991);
+    }
+}
+
+.layout-title-text:has(+ .layout-split-content) {
+
+    @include fluid-prop('margin-bottom', 48, 64, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    @include respond-max(lg) {
+
+        margin-bottom: fluid(32, 40, 360, 991);
+    }
+}
+
+/* Between two rows of the group - 45 in the XD */
+.layout-split-content + .layout-split-content {
+
+    @include fluid-prop('margin-top', 32, 45, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    @include respond-max(lg) {
+
+        margin-top: fluid(24, 32, 360, 991);
+    }
+}
+
+.layout-split-content:has(+ .layout-split-content) {
+
+    @include fluid-prop('margin-bottom', 32, 45, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    @include respond-max(lg) {
+
+        margin-bottom: fluid(24, 32, 360, 991);
     }
 }

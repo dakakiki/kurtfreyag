@@ -2425,6 +2425,13 @@ Tags: KurtFreyAG
 /*
 * Columns out of 100, so the numbers read as percentages of the container.
 * Unitless on purpose: they are used to build grid-column spans.
+*
+* l-split-5050 is measured from the Über uns sections: card 573 and image 768
+* out of the 1160 container, overlapping by 179 - so 49 + 66 - 15 = 100.
+*
+* l-split-3070 is the homepage block. Measured there the image is 41 and the
+* card 65 with a 6 overlap; the 34 below is the ratio the ACF label states,
+* which is what the approved build uses.
 */
 /* How far the image reaches over the card, in the same 100 column units */
 /*
@@ -2623,18 +2630,90 @@ Tags: KurtFreyAG
     border-bottom-left-radius: 0.1875rem;
   }
 }
+.layout-split-content {
+  /*
+  * Über uns variant.
+  *
+  * Different proportions and different typography: an eyebrow sized title
+  * in sky blue and an image rounded 60 on the container edge instead of the
+  * homepage block's flat 3. Everything in the card stays left aligned.
+  */
+}
 @media (min-width: 991px) {
   .layout-split-content.l-split-5050.img-left .split-content__media {
-    grid-column: 1/51;
+    grid-column: 1/67;
   }
   .layout-split-content.l-split-5050.img-left .split-content__body {
-    grid-column: 45/-1;
+    grid-column: 52/-1;
   }
   .layout-split-content.l-split-5050.img-right .split-content__media {
-    grid-column: 51/-1;
+    grid-column: 35/-1;
   }
   .layout-split-content.l-split-5050.img-right .split-content__body {
-    grid-column: 1/57;
+    grid-column: 1/50;
+  }
+}
+.layout-split-content.l-split-5050 .split-content__body {
+  /* XD: text column 376 inside a 573 card, so 98 on each side */
+  padding: clamp(40px, -242.1086956522px + 20.652173913vw, 78px) clamp(32px, -457.9782608696px + 35.8695652174vw, 98px);
+}
+.layout-split-content.l-split-5050 .split-content__title {
+  font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
+  line-height: clamp(26px, -18.5434782609px + 3.2608695652vw, 32px);
+  color: #A7D8F4;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-split-content.l-split-5050 .split-content__text {
+  /*
+  * XD: the text block starts 36 below the title's baseline. A line
+  * box already sits about 7 below its own baseline, so the margin
+  * is that much smaller than the measurement.
+  */
+  margin-top: clamp(20px, -46.8152173913px + 4.8913043478vw, 29px);
+}
+@media (min-width: 991px) {
+  .layout-split-content.l-split-5050 {
+    /*
+    * The card sets the height, always.
+    *
+    * Both columns are stretched to the row, and the image is taken
+    * out of flow so its own proportions contribute nothing to the
+    * row's size - it is a background that covers whatever box the
+    * card ends up creating. Left in flow, a short text let the
+    * picture grow the row instead, which is why rows of the same
+    * style came out in different shapes.
+    */
+  }
+  .layout-split-content.l-split-5050 .split-content__grid {
+    align-items: stretch;
+  }
+  .layout-split-content.l-split-5050 .split-content__media {
+    position: relative;
+  }
+  .layout-split-content.l-split-5050 .split-content__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .layout-split-content.l-split-5050 {
+    /* Rounded towards the container edge, square where the card is */
+  }
+  .layout-split-content.l-split-5050 .split-content__media img {
+    -webkit-border-radius: 3.75rem;
+    -moz-border-radius: 3.75rem;
+    border-radius: 3.75rem;
+  }
+  .layout-split-content.l-split-5050.img-left .split-content__media img {
+    border-top-right-radius: 0.1875rem;
+    border-bottom-right-radius: 0.1875rem;
+  }
+  .layout-split-content.l-split-5050.img-right .split-content__media img {
+    border-top-left-radius: 0.1875rem;
+    border-bottom-left-radius: 0.1875rem;
   }
 }
 @media (min-width: 991px) {
@@ -2680,6 +2759,56 @@ Tags: KurtFreyAG
   }
   .layout-split-content .split-content__body {
     grid-row: 2;
+  }
+}
+
+/*
+* Grouped blocks
+*
+* The Über uns page stacks several split rows under one heading. The XD leaves
+* 45 and 49 between them, not the gap a standalone section gets, and 74 below
+* the heading's baseline.
+*
+* Adjacent margins collapse to the larger of the two, so wherever a gap is
+* reduced both sides have to be reduced - hence the :has() partners. The first
+* row of a group keeps its smaller top margin because of the heading, the last
+* keeps a full bottom margin because the next thing is a new section.
+*/
+/* Straight after a heading */
+.layout-title-text + .layout-split-content {
+  margin-top: clamp(48px, -70.7826086957px + 8.6956521739vw, 64px);
+}
+@media (max-width: 991px) {
+  .layout-title-text + .layout-split-content {
+    margin-top: clamp(32px, 27.4358161648px + 1.2678288431vw, 40px);
+  }
+}
+
+.layout-title-text:has(+ .layout-split-content) {
+  margin-bottom: clamp(48px, -70.7826086957px + 8.6956521739vw, 64px);
+}
+@media (max-width: 991px) {
+  .layout-title-text:has(+ .layout-split-content) {
+    margin-bottom: clamp(32px, 27.4358161648px + 1.2678288431vw, 40px);
+  }
+}
+
+/* Between two rows of the group - 45 in the XD */
+.layout-split-content + .layout-split-content {
+  margin-top: clamp(32px, -64.5108695652px + 7.0652173913vw, 45px);
+}
+@media (max-width: 991px) {
+  .layout-split-content + .layout-split-content {
+    margin-top: clamp(24px, 19.4358161648px + 1.2678288431vw, 32px);
+  }
+}
+
+.layout-split-content:has(+ .layout-split-content) {
+  margin-bottom: clamp(32px, -64.5108695652px + 7.0652173913vw, 45px);
+}
+@media (max-width: 991px) {
+  .layout-split-content:has(+ .layout-split-content) {
+    margin-bottom: clamp(24px, 19.4358161648px + 1.2678288431vw, 32px);
   }
 }
 
@@ -3412,6 +3541,23 @@ Tags: KurtFreyAG
   .layout-title-text {
     margin-top: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
     margin-bottom: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+  }
+}
+.layout-title-text {
+  /*
+  * Title on its own.
+  *
+  * With no text under it the block is a heading for the group that follows,
+  * so the gap below shrinks to roughly what a heading keeps from its own
+  * content - a full block gap would read as two unrelated sections.
+  */
+}
+.layout-title-text.is-heading-only {
+  margin-bottom: clamp(32px, -71.9347826087px + 7.6086956522vw, 46px);
+}
+@media (max-width: 991px) {
+  .layout-title-text.is-heading-only {
+    margin-bottom: clamp(24px, 19.4358161648px + 1.2678288431vw, 32px);
   }
 }
 .layout-title-text .title-text__container {
