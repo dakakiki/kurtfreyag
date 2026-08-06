@@ -83,7 +83,11 @@
 
         &__text {
 
-            @include fluid-prop('margin-top', 20, 32, $min-resize-sec, $max-resize-sec, $unit: px);
+            /*
+            * XD: the lead line's baseline is 32 below the title's, and a line
+            * box already accounts for most of that.
+            */
+            @include fluid-prop('margin-top', 8, 12, $min-resize-sec, $max-resize-sec, $unit: px);
 
             @include format-text(
                 $max-size: 16,
@@ -122,12 +126,66 @@
                 margin-bottom: rem(8);
             }
 
+            /*
+            * Editor headings
+            *
+            * XD (Über Uns "Unser Weg zur Energiewende"):
+            *   h6  Lato Regular 16 blue - the lead line under the title,
+            *       32 from the title's baseline
+            *   h3  Lato Bold 25 blue
+            *   h4  Lato Bold 25 golden - same size, accent colour
+            *   p   Lato Regular 16 blue
+            *
+            * The gap above a section heading is 70, and 16 below it.
+            */
+            h6 {
+
+                margin: 0 0 rem(16);
+
+                @include format-text(
+                    $max-size: 16,
+                    $min-size: 15,
+                    $max-height: 26,
+                    $min-height: 24,
+                    $tx-color: theme-color(text-blue),
+                    $tx-weight: 400,
+                    $max-rsp: $max-resize-sec,
+                    $min-rsp: $min-resize-sec,
+                );
+            }
+
             h3,
+            h4,
+            h5 {
+
+                @include fluid-prop('margin-top', 48, 70, $min-resize-sec, $max-resize-sec, $unit: px);
+
+                margin-bottom: rem(16);
+
+                @include format-text(
+                    $max-size: 25,
+                    $min-size: 20,
+                    $max-height: 32,
+                    $min-height: 26,
+                    $tx-color: theme-color(title-blue),
+                    $tx-weight: 700,
+                    $max-rsp: $max-resize-sec,
+                    $min-rsp: $min-resize-sec,
+                );
+
+                @include break-word;
+            }
+
+            /* XD: the second level heading is the same size in golden */
             h4 {
 
-                margin: rem(32) 0 rem(12);
+                color: theme-color(title-golden);
+            }
 
-                color: theme-color(title-blue);
+            /* Nothing to separate from at the top of the field */
+            > :first-child {
+
+                margin-top: 0;
             }
 
             strong {

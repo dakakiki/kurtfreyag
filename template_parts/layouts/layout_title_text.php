@@ -20,6 +20,13 @@ $tt_title  = get_sub_field( 'title' );
 $tt_text   = get_sub_field( 'text' );
 $tt_anchor = sanitize_title( (string) get_sub_field( 'anchor' ) );
 
+/*
+ * Editors use an empty paragraph to push headings apart. The spacing is in
+ * the stylesheet now, so those spacers are dropped - otherwise the two add up
+ * and the gap above a heading is never the measured one.
+ */
+$tt_text = preg_replace( '#<p>(\s|&nbsp;|<br\s*/?>)*</p>#i', '', (string) $tt_text );
+
 if ( ! $tt_title && ! $tt_text ) {
 	return;
 }

@@ -3595,7 +3595,11 @@ Tags: KurtFreyAG
   word-wrap: break-word;
 }
 .layout-title-text .title-text__text {
-  margin-top: clamp(20px, -69.0869565217px + 6.5217391304vw, 32px);
+  /*
+  * XD: the lead line's baseline is 32 below the title's, and a line
+  * box already accounts for most of that.
+  */
+  margin-top: clamp(8px, -21.6956521739px + 2.1739130435vw, 12px);
   font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
   line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
   color: #00529E;
@@ -3620,10 +3624,55 @@ Tags: KurtFreyAG
 .layout-title-text .title-text__text li {
   margin-bottom: 0.5rem;
 }
-.layout-title-text .title-text__text h3,
-.layout-title-text .title-text__text h4 {
-  margin: 2rem 0 0.75rem;
+.layout-title-text .title-text__text {
+  /*
+  * Editor headings
+  *
+  * XD (Über Uns "Unser Weg zur Energiewende"):
+  *   h6  Lato Regular 16 blue - the lead line under the title,
+  *       32 from the title's baseline
+  *   h3  Lato Bold 25 blue
+  *   h4  Lato Bold 25 golden - same size, accent colour
+  *   p   Lato Regular 16 blue
+  *
+  * The gap above a section heading is 70, and 16 below it.
+  */
+}
+.layout-title-text .title-text__text h6 {
+  margin: 0 0 1rem;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
   color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-title-text .title-text__text h3,
+.layout-title-text .title-text__text h4,
+.layout-title-text .title-text__text h5 {
+  margin-top: clamp(48px, -115.3260869565px + 11.9565217391vw, 70px);
+  margin-bottom: 1rem;
+  font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
+  line-height: clamp(26px, -18.5434782609px + 3.2608695652vw, 32px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+.layout-title-text .title-text__text {
+  /* XD: the second level heading is the same size in golden */
+}
+.layout-title-text .title-text__text h4 {
+  color: #FFB500;
+}
+.layout-title-text .title-text__text {
+  /* Nothing to separate from at the top of the field */
+}
+.layout-title-text .title-text__text > :first-child {
+  margin-top: 0;
 }
 .layout-title-text .title-text__text strong {
   font-weight: 700;
