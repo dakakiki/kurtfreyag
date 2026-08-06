@@ -3390,6 +3390,149 @@ Version: 1.0.2
 Tags: KurtFreyAG
 */
 /*
+* Block - Title and text (layout_title_text)
+*
+* XD reference (Über Uns artboard, 1440):
+*   inset  text runs x238 -> 1202: 98 in from both sides of the 1160
+*          container, the same inset the service areas use
+*   title  Lato Bold 53 #00529E
+*   quote  Lato Bold 16 #FFB500, its top 32 below the title's baseline
+*
+* The gold passage comes out of the editor as a <blockquote>, so that element
+* carries the accent styling. Everything else in the field is ordinary body
+* copy in blue.
+*/
+.layout-title-text {
+  position: relative;
+  width: 100%;
+  margin-top: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+  margin-bottom: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+}
+@media (max-width: 991px) {
+  .layout-title-text {
+    margin-top: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+    margin-bottom: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+  }
+}
+.layout-title-text .title-text__container {
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+.layout-title-text .title-text {
+  /*
+  * The 98 inset is a desktop measure. Below the breakpoint the column
+  * would be too narrow to give up another 200px, so it runs full width.
+  */
+}
+.layout-title-text .title-text__inner {
+  padding-left: clamp(0px, -574.6627218935px + 57.9881656805vw, 98px);
+  padding-right: clamp(0px, -574.6627218935px + 57.9881656805vw, 98px);
+}
+.layout-title-text .title-text__title {
+  display: block;
+  font-size: clamp(32px, -123.902173913px + 11.4130434783vw, 53px);
+  line-height: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+.layout-title-text .title-text__text {
+  margin-top: clamp(20px, -69.0869565217px + 6.5217391304vw, 32px);
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-title-text .title-text__text p,
+.layout-title-text .title-text__text ul,
+.layout-title-text .title-text__text ol {
+  margin: 0 0 1.25rem;
+  color: inherit;
+  font: inherit;
+}
+.layout-title-text .title-text__text > :last-child {
+  margin-bottom: 0;
+}
+.layout-title-text .title-text__text ul,
+.layout-title-text .title-text__text ol {
+  padding-left: 1.5rem;
+}
+.layout-title-text .title-text__text li {
+  margin-bottom: 0.5rem;
+}
+.layout-title-text .title-text__text h3,
+.layout-title-text .title-text__text h4 {
+  margin: 2rem 0 0.75rem;
+  color: #00529E;
+}
+.layout-title-text .title-text__text strong {
+  font-weight: 700;
+}
+.layout-title-text .title-text__text a {
+  color: #00529E;
+  text-decoration: underline;
+  text-underline-offset: 0.1875rem;
+}
+.layout-title-text .title-text__text a:hover {
+  color: #FFB500;
+}
+.layout-title-text .title-text__text {
+  /*
+  * The gold passage.
+  *
+  * A blockquote in the editor, styled as an accent paragraph rather
+  * than a quotation: no rule, no indent, no quote marks - the XD
+  * sets it apart by weight and colour alone.
+  */
+}
+.layout-title-text .title-text__text blockquote {
+  margin: 0 0 1.25rem;
+  padding: 0;
+  border: none;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
+  color: #FFB500;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-title-text .title-text__text blockquote p {
+  margin: 0 0 0.75rem;
+  color: inherit;
+  font: inherit;
+}
+.layout-title-text .title-text__text blockquote > :last-child {
+  margin-bottom: 0;
+}
+.layout-title-text .title-text__text blockquote {
+  /* Inherit the accent, rather than dropping back to blue */
+}
+.layout-title-text .title-text__text blockquote a {
+  color: #FFB500;
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
 * Single, Page
 */
 .spacer {

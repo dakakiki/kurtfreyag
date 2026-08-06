@@ -1,0 +1,179 @@
+@use '../abstracts' as *;
+
+/*
+* Block - Title and text (layout_title_text)
+*
+* XD reference (Über Uns artboard, 1440):
+*   inset  text runs x238 -> 1202: 98 in from both sides of the 1160
+*          container, the same inset the service areas use
+*   title  Lato Bold 53 #00529E
+*   quote  Lato Bold 16 #FFB500, its top 32 below the title's baseline
+*
+* The gold passage comes out of the editor as a <blockquote>, so that element
+* carries the accent styling. Everything else in the field is ordinary body
+* copy in blue.
+*/
+
+.layout-title-text {
+
+    position: relative;
+
+    width: 100%;
+
+    @include fluid-prop('margin-top', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+    @include fluid-prop('margin-bottom', 72, 120, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    @include respond-max(lg) {
+
+        margin-top: fluid(56, 80, 360, 991);
+        margin-bottom: fluid(56, 80, 360, 991);
+    }
+
+    .title-text {
+
+        &__container {
+
+            @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+        }
+
+        /*
+        * The 98 inset is a desktop measure. Below the breakpoint the column
+        * would be too narrow to give up another 200px, so it runs full width.
+        */
+        &__inner {
+
+            @include fluid-prop('padding-left', 0, 98, $min-resize, $max-resize, $unit: px);
+            @include fluid-prop('padding-right', 0, 98, $min-resize, $max-resize, $unit: px);
+        }
+
+        &__title {
+
+            display: block;
+
+            @include format-text(
+                $max-size: 53,
+                $min-size: 32,
+                $max-height: 62,
+                $min-height: 40,
+                $tx-color: theme-color(title-blue),
+                $tx-weight: 700,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            @include break-word;
+        }
+
+        &__text {
+
+            @include fluid-prop('margin-top', 20, 32, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 26,
+                $min-height: 24,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            p,
+            ul,
+            ol {
+
+                margin: 0 0 rem(20);
+
+                color: inherit;
+                font: inherit;
+            }
+
+            > :last-child {
+
+                margin-bottom: 0;
+            }
+
+            ul,
+            ol {
+
+                padding-left: rem(24);
+            }
+
+            li {
+
+                margin-bottom: rem(8);
+            }
+
+            h3,
+            h4 {
+
+                margin: rem(32) 0 rem(12);
+
+                color: theme-color(title-blue);
+            }
+
+            strong {
+
+                font-weight: 700;
+            }
+
+            a {
+
+                color: theme-color(text-blue);
+                text-decoration: underline;
+                text-underline-offset: rem(3);
+
+                &:hover {
+
+                    color: theme-color(text-golden);
+                }
+            }
+
+            /*
+            * The gold passage.
+            *
+            * A blockquote in the editor, styled as an accent paragraph rather
+            * than a quotation: no rule, no indent, no quote marks - the XD
+            * sets it apart by weight and colour alone.
+            */
+            blockquote {
+
+                margin: 0 0 rem(20);
+                padding: 0;
+
+                border: none;
+
+                @include format-text(
+                    $max-size: 16,
+                    $min-size: 15,
+                    $max-height: 26,
+                    $min-height: 24,
+                    $tx-color: theme-color(text-golden),
+                    $tx-weight: 700,
+                    $max-rsp: $max-resize-sec,
+                    $min-rsp: $min-resize-sec,
+                );
+
+                p {
+
+                    margin: 0 0 rem(12);
+
+                    color: inherit;
+                    font: inherit;
+                }
+
+                > :last-child {
+
+                    margin-bottom: 0;
+                }
+
+                /* Inherit the accent, rather than dropping back to blue */
+                a {
+
+                    color: theme-color(text-golden);
+                }
+            }
+        }
+    }
+}
