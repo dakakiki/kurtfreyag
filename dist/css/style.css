@@ -4083,6 +4083,298 @@ Version: 1.0.2
 Tags: KurtFreyAG
 */
 /*
+* Block - Story (layout_story)
+*
+* XD reference (Über Uns "Geschichte", 1440):
+*   card       1160 wide, #00529E, 60px radius, 98 of side padding
+*   title      Lato Bold 53 white, its baseline 133 below the card top
+*   row        connector 82 | text | image 393, 16 between each - which lands
+*              the image on x809 and ends it on x1202, exactly as drawn
+*   year       Lato Bold 53 #A7D8F4, 20 below the row's top
+*   text       Lato Regular 16 white
+*   image      393 x 298, 3px radius
+*   connector  rounded rectangle, white 3px stroke, 60px radius
+*/
+/* Column widths from the XD, in the order they appear in the row */
+/* Gap between rows */
+/*
+* Where the curve meets the year.
+*
+* XD puts the connector's top edge 32 below the row's top, which is the middle
+* of a 62px year line - so the stub crosses the year at mid height rather than
+* floating above it.
+*
+* It has to be half the line height rather than a fixed 32, because the year
+* scales with the viewport: at a fixed value the line drifted off the middle
+* of the text as soon as the type started shrinking.
+*/
+/* Radius of the curve, and so how far down the vertical line starts */
+/*
+* How far the closing curve is lifted above its row.
+*
+* The tail needs the full radius to draw its arc but has to end level with
+* the other curves, so it starts that much higher than they do.
+*/
+.layout-story {
+  position: relative;
+  width: 100%;
+  margin-top: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+  margin-bottom: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+}
+@media (max-width: 991px) {
+  .layout-story {
+    margin-top: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+    margin-bottom: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+  }
+}
+.layout-story .story__container {
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+.layout-story .story__card {
+  background-color: #00529E;
+  -webkit-border-radius: 3.75rem;
+  -moz-border-radius: 3.75rem;
+  border-radius: 3.75rem;
+  padding: clamp(48px, -139.6449704142px + 18.9349112426vw, 80px) clamp(32px, -355.0177514793px + 39.0532544379vw, 98px);
+}
+@media (max-width: 991px) {
+  .layout-story .story__card {
+    -webkit-border-radius: 1.875rem;
+    -moz-border-radius: 1.875rem;
+    border-radius: 1.875rem;
+    padding: clamp(40px, 30.8716323296px + 2.5356576862vw, 56px) clamp(20px, 13.1537242472px + 1.9017432647vw, 32px);
+  }
+}
+.layout-story .story__title {
+  display: block;
+  font-size: clamp(32px, -123.902173913px + 11.4130434783vw, 53px);
+  line-height: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  margin-bottom: clamp(48px, -159.8695652174px + 15.2173913043vw, 76px);
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+.layout-story .story__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.layout-story .story__item {
+  position: relative;
+  /*
+  * The year's line height, published so the connector can line its
+  * curve up with the middle of the text at any width.
+  */
+  --story-year-lh: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  display: grid;
+  /*
+  * 82 + 16 + text + 16 + 393 fills the 964 of content width, which
+  * puts the image on x809 - the position it holds in the XD.
+  */
+  grid-template-columns: 82px minmax(0, 1fr) 393px;
+  column-gap: 1rem;
+  align-items: start;
+}
+.layout-story .story__item + .story__item {
+  margin-top: 48px;
+}
+.layout-story .story__item {
+  /*
+  * The picture drops under the text, but the connector keeps its
+  * own column so the line and its curve still run alongside the
+  * years exactly as they do on the desktop.
+  */
+}
+@media (max-width: 991px) {
+  .layout-story .story__item {
+    grid-template-columns: clamp(48px, 28.6022187005px + 5.3882725832vw, 82px) minmax(0, 1fr);
+  }
+}
+.layout-story .story {
+  /*
+  * The connector.
+  *
+  * A left and a top border with a rounded top left corner draws the
+  * curve and the line in one element - the XD builds the same shape by
+  * covering half a stroked rectangle with a blue one.
+  *
+  * It reaches past its own row by the row gap so the line runs
+  * unbroken between entries; the last one stops at its own height.
+  */
+}
+.layout-story .story__connector {
+  grid-column: 1;
+  grid-row: 1;
+  display: block;
+  align-self: stretch;
+  min-height: 5rem;
+  border-left: 3px solid #ffffff;
+  border-top: 3px solid #ffffff;
+  border-top-left-radius: 60px;
+  margin-top: calc(var(--story-year-lh) / 2);
+  /*
+  * How far the line reaches into the next row.
+  *
+  * The curve means the vertical border only starts once the radius
+  * has been travelled, so reaching only across the row gap left a
+  * short break above every year. The line has to carry on past the
+  * gap, past the next connector's own offset, and past its radius
+  * to meet where that vertical border begins.
+  */
+  margin-bottom: calc(-1 * (48px + calc(var(--story-year-lh) / 2) + 60px));
+  /*
+  * The picture moves to a second row here, and a connector that
+  * only spanned the first one stopped at the end of the text -
+  * leaving the line broken across every image.
+  *
+  * span 2 rather than 1 / -1: with no grid-template-rows the rows
+  * are implicit, and -1 resolves to the end of the explicit grid,
+  * which is line 1 - so the span collapsed back to a single row.
+  */
+}
+@media (max-width: 991px) {
+  .layout-story .story__connector {
+    grid-row: 1/span 2;
+  }
+}
+.layout-story .story {
+  /*
+  * The closing curve.
+  *
+  * XD draws seven rounded rectangles for eight entries: each one opens
+  * a curve at its own year, and they all end together on the same line,
+  * where the rounded bottom corner turns the vertical line back to the
+  * right. The last entry therefore has no curve of its own - it has the
+  * tail of the whole timeline.
+  */
+}
+.layout-story .story__item:last-child .story__connector {
+  align-self: start;
+  height: 60px;
+  min-height: 0;
+  margin-top: calc(-1 * calc(60px - var(--story-year-lh) / 2));
+  margin-bottom: 0;
+  border-top: none;
+  border-bottom: 3px solid #ffffff;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 60px;
+}
+.layout-story .story {
+  /*
+  * The row before it stops at the tail rather than reaching past it,
+  * which would leave a stub hanging below the curve.
+  */
+}
+.layout-story .story__item:has(+ .story__item:last-child) .story__connector {
+  margin-bottom: calc(-1 * (48px - calc(60px - var(--story-year-lh) / 2)));
+}
+.layout-story .story__body {
+  grid-column: 2;
+  grid-row: 1;
+}
+.layout-story .story__year {
+  display: block;
+  font-size: clamp(32px, -123.902173913px + 11.4130434783vw, 53px);
+  line-height: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  color: #A7D8F4;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-story .story__text {
+  margin-top: clamp(8px, -21.6956521739px + 2.1739130435vw, 12px);
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
+  color: #ffffff;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-story .story__text p,
+.layout-story .story__text ul,
+.layout-story .story__text ol {
+  margin: 0 0 1rem;
+  color: inherit;
+  font: inherit;
+}
+.layout-story .story__text > :last-child {
+  margin-bottom: 0;
+}
+.layout-story .story__text ul,
+.layout-story .story__text ol {
+  padding-left: 1.25rem;
+}
+.layout-story .story__text strong {
+  font-weight: 700;
+}
+.layout-story .story__text a {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 0.1875rem;
+}
+.layout-story .story__text a:hover {
+  color: #FFB500;
+}
+.layout-story .story__media {
+  grid-column: 3;
+  grid-row: 1;
+  /*
+  * The row is as tall as whichever column has more in it - the text
+  * on a long entry, the picture on a short one - and the picture is
+  * centred against that height either way.
+  */
+  align-self: center;
+  line-height: 0;
+}
+.layout-story .story__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  -webkit-border-radius: 0.1875rem;
+  -moz-border-radius: 0.1875rem;
+  border-radius: 0.1875rem;
+}
+@media (max-width: 991px) {
+  .layout-story .story__media {
+    /*
+    * Under the text and in line with it - the second column only,
+    * so the picture starts where the copy does rather than
+    * reaching back under the connector.
+    */
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+    margin-top: 1.25rem;
+    /*
+    * No aspect-ratio here on purpose: forcing the XD's 393 x 298
+    * cropped anything that was not already that shape. The base
+    * rule's width: 100% / height: auto scales each picture down
+    * on its own proportions.
+    */
+  }
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
 * Single, Page
 */
 .spacer {
