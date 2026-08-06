@@ -115,16 +115,21 @@
         }
 
         /*
-        * Six columns rather than a wrapping flex row: the XD spaces the logos
-        * evenly across the frame, and a grid keeps that spacing whether there
-        * are four logos or six.
+        * A centred row rather than six fixed columns.
+        *
+        * The grid spread whatever was there across the full frame, so four
+        * logos sat wide apart with the row no longer centred under the
+        * heading. A wrapping flex row keeps them together in the middle
+        * whatever the count, while the basis holds the XD's column width so
+        * six still line up as drawn.
         */
         &__list {
 
-            display: grid;
-            grid-template-columns: repeat(6, minmax(0, 1fr));
+            display: flex;
+            flex-wrap: wrap;
 
             align-items: center;
+            justify-content: center;
 
             list-style: none;
 
@@ -133,21 +138,21 @@
 
             @include fluid-prop('margin-top', 30, 46, $min-resize-sec, $max-resize-sec, $unit: px);
 
-            @include fluid-prop('column-gap', 12, 14, $min-resize-sec, $max-resize-sec, $unit: px);
+            /*
+            * Published as a variable because the item basis is worked out
+            * from it - six slots plus five gaps have to add up to the row.
+            */
+            @include fluid-prop('--logo-gap', 12, 14, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            column-gap: var(--logo-gap);
 
             row-gap: rem(24);
 
             @include respond-max(lg) {
 
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+                --logo-gap: #{rem(20)};
 
-                column-gap: rem(20);
                 row-gap: rem(28);
-            }
-
-            @include respond-max(sm) {
-
-                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
 
@@ -157,6 +162,32 @@
 
             align-items: center;
             justify-content: center;
+
+            /*
+            * Six to a row, and the seventh wraps.
+            *
+            * A fixed 155 basis was a couple of pixels wider than a sixth of
+            * the frame, so the sixth logo dropped to its own line. Dividing
+            * the row instead means six always fit, whatever the gap resolves
+            * to, and the cap keeps a lone logo from stretching.
+            */
+            flex-basis: calc((100% - 5 * var(--logo-gap)) / 6);
+
+            max-width: rem(155);
+
+            flex-grow: 0;
+            flex-shrink: 1;
+
+            @include respond-max(lg) {
+
+                /* Three to a row here, two on a phone */
+                flex-basis: calc((100% - 2 * var(--logo-gap)) / 3);
+            }
+
+            @include respond-max(sm) {
+
+                flex-basis: calc((100% - var(--logo-gap)) / 2);
+            }
 
             img {
 
