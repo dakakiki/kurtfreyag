@@ -1276,7 +1276,7 @@
                             "default_value": "",
                             "allow_in_bindings": 0,
                             "tabs": "all",
-                            "toolbar": "basic",
+                            "toolbar": "full",
                             "media_upload": 0,
                             "delay": 1
                         },
@@ -1432,8 +1432,8 @@
                                 },
                                 {
                                     "key": "field_6a719325120f6",
-                                    "label": "Title color",
-                                    "name": "title_color",
+                                    "label": "Background color",
+                                    "name": "background_color",
                                     "aria-label": "",
                                     "type": "select",
                                     "instructions": "",
@@ -1452,7 +1452,7 @@
                                     "default_value": false,
                                     "return_format": "value",
                                     "multiple": 0,
-                                    "allow_null": 0,
+                                    "allow_null": 1,
                                     "allow_in_bindings": 0,
                                     "ui": 1,
                                     "ajax": 0,
@@ -1471,7 +1471,7 @@
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
-                                        "width": "",
+                                        "width": "50",
                                         "class": "",
                                         "id": ""
                                     },
@@ -1481,6 +1481,36 @@
                                     "placeholder": "",
                                     "prepend": "",
                                     "append": "",
+                                    "parent_repeater": "field_6a719274120f5"
+                                },
+                                {
+                                    "key": "field_6a7437a1dfa6d",
+                                    "label": "Title color",
+                                    "name": "title_color",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "50",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "i-title-blue": "Deep Blue",
+                                        "i-title-golden": "Golden Yellow"
+                                    },
+                                    "default_value": "i-title-blue",
+                                    "return_format": "value",
+                                    "multiple": 0,
+                                    "allow_null": 1,
+                                    "allow_in_bindings": 0,
+                                    "ui": 1,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "create_options": 0,
+                                    "save_options": 0,
                                     "parent_repeater": "field_6a719274120f5"
                                 },
                                 {
@@ -1500,7 +1530,7 @@
                                     "default_value": "",
                                     "allow_in_bindings": 0,
                                     "tabs": "all",
-                                    "toolbar": "basic",
+                                    "toolbar": "full",
                                     "media_upload": 0,
                                     "delay": 1,
                                     "parent_repeater": "field_6a719274120f5"
@@ -2603,5 +2633,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1786001009
+    "modified": 1786001662
 }
