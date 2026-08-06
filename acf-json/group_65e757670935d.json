@@ -1398,7 +1398,7 @@
                             },
                             "layout": "block",
                             "min": 0,
-                            "max": 2,
+                            "max": 3,
                             "collapsed": "",
                             "button_label": "Add new Item",
                             "rows_per_page": 20,
@@ -2603,5 +2603,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1785914846
+    "modified": 1786001009
 }
