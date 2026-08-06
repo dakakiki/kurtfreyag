@@ -5972,6 +5972,252 @@ Version: 1.0.2
 Tags: KurtFreyAG
 */
 /*
+* Block - Apprenticeship (layout_apprenticeship)
+*
+* XD reference (Jobs artboard, 1440):
+*   card       1160 x 1062, #00529E, 60px radius, text at x238 so 98 in
+*   title      Lato Bold 53 white, its baseline 165 below the card top
+*   text       Lato Bold 25 #A7D8F4 headings over Lato Regular 16 white
+*   row        side text x238 -> 700, vacancies card x728 -> 1202, so 462
+*              and 474 with 28 between - the card ends on the same 98 inset
+*   vacancies  white, 474 x 381, 60px radius, its own text 98 in from x728
+*   heading    Lato Bold 25 #00529E
+*   position   Lato Bold 16 #00529E over its availability in Lato Regular 16
+*
+* The two columns start level with each other: the white card begins higher
+* than the side text, and its own top padding brings the two headings onto
+* the same line.
+*/
+/* Padding shared by the blue card and the white one inside it */
+/* The white card's top padding, which the side column matches */
+.layout-apprenticeship {
+  position: relative;
+  width: 100%;
+  margin-top: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+  margin-bottom: clamp(72px, -284.347826087px + 26.0869565217vw, 120px);
+}
+@media (max-width: 991px) {
+  .layout-apprenticeship {
+    margin-top: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+    margin-bottom: clamp(56px, 42.3074484945px + 3.8034865293vw, 80px);
+  }
+}
+.layout-apprenticeship .apprenticeship__container {
+  --container-bleed: clamp(
+    16px,
+    calc(16px + 32 * ((100vw - 991px) / 169)),
+    48px
+  );
+  width: 100%;
+  max-width: calc(1160px + var(--container-bleed) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-bleed);
+  box-sizing: border-box;
+}
+.layout-apprenticeship .apprenticeship__card {
+  background-color: #00529E;
+  -webkit-border-radius: 3.75rem;
+  -moz-border-radius: 3.75rem;
+  border-radius: 3.75rem;
+  padding: clamp(56px, -272.3786982249px + 33.1360946746vw, 112px) clamp(32px, -355.0177514793px + 39.0532544379vw, 98px) clamp(56px, -389.6568047337px + 44.9704142012vw, 132px) clamp(32px, -355.0177514793px + 39.0532544379vw, 98px);
+}
+@media (max-width: 991px) {
+  .layout-apprenticeship .apprenticeship__card {
+    -webkit-border-radius: 1.875rem;
+    -moz-border-radius: 1.875rem;
+    border-radius: 1.875rem;
+    padding: clamp(40px, 30.8716323296px + 2.5356576862vw, 56px) clamp(20px, 13.1537242472px + 1.9017432647vw, 32px);
+  }
+}
+.layout-apprenticeship .apprenticeship__title {
+  display: block;
+  font-size: clamp(32px, -123.902173913px + 11.4130434783vw, 53px);
+  line-height: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  /* XD: title baseline 1995, the first sub heading 2084 */
+  margin-bottom: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+.layout-apprenticeship .apprenticeship {
+  /*
+  * The editor fields inside the card.
+  *
+  * Shared by the intro and the side column: both are WYSIWYG on blue,
+  * with sky blue headings over white copy.
+  */
+}
+.layout-apprenticeship .apprenticeship__text, .layout-apprenticeship .apprenticeship__side {
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(24px, 9.152173913px + 1.0869565217vw, 26px);
+  color: #ffffff;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-apprenticeship .apprenticeship__text p,
+.layout-apprenticeship .apprenticeship__text ul,
+.layout-apprenticeship .apprenticeship__text ol, .layout-apprenticeship .apprenticeship__side p,
+.layout-apprenticeship .apprenticeship__side ul,
+.layout-apprenticeship .apprenticeship__side ol {
+  margin: 0 0 1.25rem;
+  color: inherit;
+  font: inherit;
+}
+.layout-apprenticeship .apprenticeship__text > :last-child, .layout-apprenticeship .apprenticeship__side > :last-child {
+  margin-bottom: 0;
+}
+.layout-apprenticeship .apprenticeship__text ul,
+.layout-apprenticeship .apprenticeship__text ol, .layout-apprenticeship .apprenticeship__side ul,
+.layout-apprenticeship .apprenticeship__side ol {
+  padding-left: 1.25rem;
+}
+.layout-apprenticeship .apprenticeship__text li, .layout-apprenticeship .apprenticeship__side li {
+  margin-bottom: 0.25rem;
+}
+.layout-apprenticeship .apprenticeship__text, .layout-apprenticeship .apprenticeship__side {
+  /*
+  * "Deine Ausbildung bei uns", "Schnuppertage" and their siblings.
+  * Every level is listed because the field is an editor - whichever
+  * tag was picked has to come out the same.
+  */
+}
+.layout-apprenticeship .apprenticeship__text h2,
+.layout-apprenticeship .apprenticeship__text h3,
+.layout-apprenticeship .apprenticeship__text h4,
+.layout-apprenticeship .apprenticeship__text h5,
+.layout-apprenticeship .apprenticeship__text h6, .layout-apprenticeship .apprenticeship__side h2,
+.layout-apprenticeship .apprenticeship__side h3,
+.layout-apprenticeship .apprenticeship__side h4,
+.layout-apprenticeship .apprenticeship__side h5,
+.layout-apprenticeship .apprenticeship__side h6 {
+  margin-top: clamp(40px, -78.7826086957px + 8.6956521739vw, 56px);
+  margin-bottom: 1.125rem;
+  font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
+  line-height: clamp(24px, 1.7282608696px + 1.6304347826vw, 27px);
+  color: #A7D8F4;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-apprenticeship .apprenticeship__text, .layout-apprenticeship .apprenticeship__side {
+  /* Nothing to separate from at the top of the field */
+}
+.layout-apprenticeship .apprenticeship__text > :first-child, .layout-apprenticeship .apprenticeship__side > :first-child {
+  margin-top: 0;
+}
+.layout-apprenticeship .apprenticeship__text strong, .layout-apprenticeship .apprenticeship__side strong {
+  font-weight: 700;
+}
+.layout-apprenticeship .apprenticeship__text a, .layout-apprenticeship .apprenticeship__side a {
+  color: #ffffff;
+  text-decoration: none;
+}
+.layout-apprenticeship .apprenticeship__text a:hover, .layout-apprenticeship .apprenticeship__side a:hover {
+  color: #FFB500;
+  text-decoration: underline;
+  text-underline-offset: 0.1875rem;
+}
+.layout-apprenticeship .apprenticeship {
+  /* ----------------------------------------------------- two columns */
+}
+.layout-apprenticeship .apprenticeship__row {
+  display: grid;
+  /* XD: 462 and 474 with 28 between them - 964, the content width */
+  grid-template-columns: 462fr 474fr;
+  align-items: start;
+  column-gap: clamp(24px, -5.6956521739px + 2.1739130435vw, 28px);
+  row-gap: 2.5rem;
+  margin-top: clamp(48px, -174.7173913043px + 16.3043478261vw, 78px);
+}
+@media (max-width: 991px) {
+  .layout-apprenticeship .apprenticeship__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.layout-apprenticeship .apprenticeship {
+  /*
+  * The white card starts higher than the side text, and its own top
+  * padding puts the two headings on the same line. Matching that
+  * padding here keeps them level without a magic offset.
+  */
+}
+.layout-apprenticeship .apprenticeship__side {
+  padding-top: 64px;
+}
+@media (max-width: 991px) {
+  .layout-apprenticeship .apprenticeship__side {
+    padding-top: 0;
+  }
+}
+.layout-apprenticeship .apprenticeship {
+  /* ------------------------------------------------------ vacancies */
+}
+.layout-apprenticeship .apprenticeship__vacancies {
+  background-color: #ffffff;
+  -webkit-border-radius: 3.75rem;
+  -moz-border-radius: 3.75rem;
+  border-radius: 3.75rem;
+  padding: clamp(40px, -100.7337278107px + 14.201183432vw, 64px) clamp(32px, -355.0177514793px + 39.0532544379vw, 98px) clamp(40px, -100.7337278107px + 14.201183432vw, 64px) clamp(32px, -355.0177514793px + 39.0532544379vw, 98px);
+}
+@media (max-width: 991px) {
+  .layout-apprenticeship .apprenticeship__vacancies {
+    -webkit-border-radius: 1.875rem;
+    -moz-border-radius: 1.875rem;
+    border-radius: 1.875rem;
+    padding: clamp(32px, 27.4358161648px + 1.2678288431vw, 40px) clamp(24px, 19.4358161648px + 1.2678288431vw, 32px);
+  }
+}
+.layout-apprenticeship .apprenticeship__vacancies-title {
+  display: block;
+  font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
+  line-height: clamp(24px, 1.7282608696px + 1.6304347826vw, 27px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  margin-bottom: clamp(20px, -46.8152173913px + 4.8913043478vw, 29px);
+}
+.layout-apprenticeship .apprenticeship__vacancies-list {
+  display: flex;
+  flex-direction: column;
+  /* XD: the three entries are 51 apart, baseline to baseline */
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.layout-apprenticeship .apprenticeship__position {
+  display: block;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+.layout-apprenticeship .apprenticeship__availability {
+  display: block;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+}
+
+/*
+Theme Name: KurtFreyAG
+Author: Homepage
+Description: KurtFreyAG
+Version: 1.0.2
+Tags: KurtFreyAG
+*/
+/*
 * Single, Page
 */
 .spacer {

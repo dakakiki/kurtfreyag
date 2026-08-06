@@ -2495,7 +2495,7 @@
                             "default_value": "",
                             "allow_in_bindings": 0,
                             "tabs": "all",
-                            "toolbar": "basic",
+                            "toolbar": "full",
                             "media_upload": 0,
                             "delay": 1
                         },
@@ -2532,7 +2532,7 @@
                                     "default_value": "",
                                     "allow_in_bindings": 0,
                                     "tabs": "all",
-                                    "toolbar": "basic",
+                                    "toolbar": "full",
                                     "media_upload": 0,
                                     "delay": 1
                                 }
@@ -2756,5 +2756,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1786024793
+    "modified": 1786026224
 }
