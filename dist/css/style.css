@@ -3997,6 +3997,20 @@ Tags: KurtFreyAG
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  /*
+  * Each item is a menu target now, so a jump has to clear the fixed
+  * bar. custom.js measures the header for links it handles; this is
+  * the fallback for a pasted URL, which the browser resolves before
+  * any script runs.
+  */
+  scroll-margin-top: calc(100px + 1.5rem);
+}
+@media (max-width: 1024px) {
+  .layout-iwiaat .iwiaat__item {
+    scroll-margin-top: calc(64px + 1.5rem);
+  }
+}
+.layout-iwiaat .iwiaat__item {
   -webkit-border-radius: 3.75rem;
   -moz-border-radius: 3.75rem;
   border-radius: 3.75rem;

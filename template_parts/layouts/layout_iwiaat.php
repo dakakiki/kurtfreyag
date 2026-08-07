@@ -41,6 +41,44 @@ $iw_backgrounds = array( 'i-bg-sky', 'i-bg-cream', 'i-bg-ice' );
 $iw_titles      = array( 'i-title-blue', 'i-title-golden' );
 
 $iw_arrow = THEME_URI . '/dist/images/ico_area_arrow.svg';
+
+/*
+ * Anchors.
+ *
+ * Each item gets an id built from its title so the main menu can link
+ * straight to it. Titles are a textarea and may carry a <br>, so the markup
+ * is stripped before the slug is made - otherwise "Energie mit<br />
+ * Verantwortung" would slug the tag along with the words.
+ *
+ * Two items with the same title would collide, so a repeat gets a counter.
+ *
+ * The row index is deliberately not part of the id: a menu link has to keep
+ * working when the block is moved up or down the page.
+ */
+$iw_used_anchors = array();
+
+$iw_make_anchor = function ( $title ) use ( &$iw_used_anchors ) {
+
+	$slug = sanitize_title( wp_strip_all_tags( (string) $title ) );
+
+	if ( ! $slug ) {
+		$slug = 'item-' . ( count( $iw_used_anchors ) + 1 );
+	}
+
+	$slug = 'iwiaat-' . $slug;
+
+	if ( isset( $iw_used_anchors[ $slug ] ) ) {
+
+		$iw_used_anchors[ $slug ]++;
+
+		$slug .= '-' . $iw_used_anchors[ $slug ];
+	} else {
+
+		$iw_used_anchors[ $slug ] = 1;
+	}
+
+	return $slug;
+};
 ?>
 
 <section
@@ -75,9 +113,14 @@ $iw_arrow = THEME_URI . '/dist/images/ico_area_arrow.svg';
 
 					/* The background is what turns the item into a collapsible card. */
 					$is_card = (bool) $background;
+
+					$item_anchor = $iw_make_anchor( $title );
 					?>
 
-					<article class="iwiaat__item <?= esc_attr( $is_card ? 'is-card ' . $background : 'is-plain' ); ?> fade-up">
+					<article
+						id="<?= esc_attr( $item_anchor ); ?>"
+						class="iwiaat__item <?= esc_attr( $is_card ? 'is-card ' . $background : 'is-plain' ); ?> fade-up"
+					>
 
 						<?php if ( $is_card ) : ?>
 

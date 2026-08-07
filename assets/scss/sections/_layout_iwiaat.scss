@@ -82,6 +82,19 @@
 
             box-sizing: border-box;
 
+            /*
+            * Each item is a menu target now, so a jump has to clear the fixed
+            * bar. custom.js measures the header for links it handles; this is
+            * the fallback for a pasted URL, which the browser resolves before
+            * any script runs.
+            */
+            scroll-margin-top: calc(#{$header-height} + #{rem(24)});
+
+            @include respond-max(xl) {
+
+                scroll-margin-top: calc(#{$header-height-rsp} + #{rem(24)});
+            }
+
             @include brd-radius-all($brd-radius: rem(60));
 
             @include respond-max(lg) {

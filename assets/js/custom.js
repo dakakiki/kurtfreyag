@@ -185,6 +185,62 @@ document.addEventListener("DOMContentLoaded", () => {
         smoothScrollTo(Math.max(0, targetY), duration);
     };
 
+    /*
+     * Scrolling to a hash on a page that is still loading.
+     *
+     * A fixed delay was not enough: the areas carry a full width photograph,
+     * and until it has loaded the blocks below it sit higher than they will.
+     * The scroll landed on the right number for a layout that then moved,
+     * which is what left the block's icon under the header.
+     *
+     * So it waits for load - by which time images have their real size - and
+     * then checks the position once more, in case something arrived even
+     * later. The check is dropped the moment the visitor scrolls themselves;
+     * pulling the page out from under them would be worse than being a few
+     * pixels off.
+     */
+    const scrollToHashWhenReady = (hash) => {
+        if (!hash) return;
+
+        let userScrolled = false;
+
+        const noteUserScroll = () => {
+            userScrolled = true;
+        };
+
+        ["wheel", "touchstart", "keydown"].forEach((type) => {
+            window.addEventListener(type, noteUserScroll, { once: true, passive: true });
+        });
+
+        const correct = () => {
+            if (userScrolled) return;
+
+            const target = document.querySelector(hash);
+            if (!target) return;
+
+            const offset = getScrollOffset(target);
+            const wanted = Math.max(0, getVisualTop(target) + window.pageYOffset - offset);
+
+            /* A pixel or two is measurement noise, not a misplaced block. */
+            if (Math.abs(wanted - window.pageYOffset) > 2) {
+                window.scrollTo(0, wanted);
+            }
+        };
+
+        const run = () => {
+            scrollToHash(hash);
+
+            /* After the scroll has finished, not during it. */
+            window.setTimeout(correct, 900);
+        };
+
+        if (document.readyState === "complete") {
+            window.requestAnimationFrame(run);
+        } else {
+            window.addEventListener("load", run, { once: true });
+        }
+    };
+
     const tryScrollFromStoredHash = () => {
         const storedHash = sessionStorage.getItem(STORAGE_KEY);
         if (!storedHash) return;
@@ -194,9 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         history.replaceState(null, "", storedHash);
 
-        setTimeout(() => {
-            scrollToHash(storedHash);
-        }, 400);
+        scrollToHashWhenReady(storedHash);
     };
 
     navLinks.forEach((link) => {
@@ -241,9 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.location.hash) {
         setActiveByHash(window.location.hash);
 
-        setTimeout(() => {
-            scrollToHash(window.location.hash);
-        }, 400);
+        scrollToHashWhenReady(window.location.hash);
     }
 
     tryScrollFromStoredHash();
