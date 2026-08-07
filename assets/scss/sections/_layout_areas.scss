@@ -535,13 +535,26 @@ $areas-inset: 98px;
 
         /* -------------------------------------------------------- image */
 
+        /*
+        * The picture closes the card, so it carries the same 3px border the
+        * head and the option bars do - on three sides, since the bar above
+        * already draws the line they share.
+        *
+        * A fixed height with a covering image rather than the picture's own
+        * proportions: the card is one continuous shape, and a tall photograph
+        * would stretch its base out of step with every other area.
+        */
         &__media {
 
             line-height: 0;
 
             overflow: hidden;
 
-            /* Closes the card: rounded at the bottom, square where it meets the bars */
+            @include fluid-prop('height', 280, 478, $min-resize, $max-resize, $unit: px);
+
+            border: 3px solid theme-color(brd-blue);
+            border-top: none;
+
             @include brd-radius-bottom($brd-radius: rem(60));
 
             img {
@@ -549,10 +562,14 @@ $areas-inset: 98px;
                 display: block;
 
                 width: 100%;
-                height: auto;
+                height: 100%;
+
+                object-fit: cover;
             }
 
             @include respond-max(lg) {
+
+                height: fluid(200, 280, 360, 991);
 
                 @include brd-radius-bottom($brd-radius: rem(30));
             }

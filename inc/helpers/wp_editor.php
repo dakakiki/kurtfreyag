@@ -33,6 +33,14 @@ add_filter( 'allowed_block_types_all', function( $allowed_blocks, $editor_contex
 		'core/list-item',
 		'core/quote',
 		'core/image',
+
+		/*
+		 * Both entries are needed: core/buttons is the wrapper the editor
+		 * inserts and core/button is the one inside it. Allowing only the
+		 * second leaves the block uninsertable.
+		 */
+		'core/buttons',
+		'core/button',
 		// 'core/gallery',
 		'core/spacer',
 		'core/missing',

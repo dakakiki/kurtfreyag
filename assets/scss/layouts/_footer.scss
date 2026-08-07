@@ -14,6 +14,8 @@
 
 footer.footer {
 
+    position: relative;
+
     display: block;
     width: 100%;
 
@@ -23,6 +25,76 @@ footer.footer {
 
         /* Same bleed as the header bar, so both edges line up at every width. */
         @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+    }
+
+    /*
+    * Back to top
+    *
+    * XD: a 58 circle whose right edge lands 41 from the viewport edge, and
+    * which sits about 37 above the footer. bottom: 100% pins it to the
+    * footer's top edge, so it travels with the footer instead of floating.
+    */
+    .footer__to-top {
+
+        position: absolute;
+        z-index: 2;
+        bottom: 100%;
+
+        @include fluid-prop('right', 16, 41, $min-resize, $max-resize, $unit: px);
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        box-sizing: border-box;
+
+        width: rem(58);
+        height: rem(58);
+
+        margin-bottom: rem(37);
+
+        /* Reset the default button chrome - this is a plain circle */
+        padding: 0;
+        border: none;
+        appearance: none;
+        -webkit-appearance: none;
+
+        background-color: theme-color(bg-blue);
+
+        @include brd-radius-all($brd-radius: 50%);
+
+        cursor: pointer;
+
+        @include trans;
+        @include focus-ring(theme-color(brd-blue));
+
+        &:hover {
+
+            background-color: theme-color(bg-golden);
+        }
+
+        img {
+
+            display: block;
+
+            width: rem(34);
+            height: rem(23);
+        }
+
+        @include respond-max(lg) {
+
+            width: rem(48);
+            height: rem(48);
+
+            margin-bottom: rem(24);
+
+            img {
+
+                width: rem(28);
+                height: rem(19);
+            }
+        }
     }
 
     /* ---------------------------------------------------------- blue block */

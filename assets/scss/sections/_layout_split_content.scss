@@ -32,7 +32,13 @@
 * which is what the approved build uses.
 */
 $split-media-5050: 66;
-$split-media-3070: 34;
+
+/*
+* 40 rather than the 34 the ACF label implies: the picture takes 40 of the
+* container and the card the remaining 60, plus the overlap it reaches back
+* over.
+*/
+$split-media-3070: 40;
 
 /* How far the image reaches over the card, in the same 100 column units */
 $split-overlap-5050: 15;
@@ -421,9 +427,59 @@ $split-overlap-3070: 6;
         }
     }
 
+    /*
+    * Homepage variant.
+    *
+    * XD: card 754 x 677 at y1842, image 474 x 527 at y1915 - so the picture
+    * is inset 73 at the top and 77 at the bottom, and the card sets the
+    * height rather than the photograph.
+    *
+    * Left in flow the image kept its own proportions, which made it short
+    * beside a tall card. Out of flow it contributes nothing to the row and
+    * fills the box the card makes, minus that inset.
+    */
     &.l-split-3070 {
 
         @include split-columns($split-media-3070, $split-overlap-3070);
+
+        @include respond-min(lg) {
+
+            .split-content__grid {
+
+                align-items: stretch;
+            }
+
+            .split-content__media {
+
+                position: relative;
+
+                @include fluid-prop('margin-top', 40, 75, $min-resize-sec, $max-resize-sec, $unit: px);
+                @include fluid-prop('margin-bottom', 40, 75, $min-resize-sec, $max-resize-sec, $unit: px);
+
+                img {
+
+                    position: absolute;
+                    inset: 0;
+
+                    width: 100%;
+                    height: 100%;
+
+                    object-fit: cover;
+
+                    /* Square in this variant, unlike the rounded 50/50 one */
+                    border-radius: 0;
+                }
+            }
+        }
+
+        /* Square below the breakpoint as well */
+        @include respond-max(lg) {
+
+            .split-content__media img {
+
+                border-radius: 0;
+            }
+        }
     }
 
     /* ------------------------------------------------------- responsive */

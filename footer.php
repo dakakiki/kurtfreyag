@@ -44,6 +44,30 @@ $show_contact = apply_filters(
 
 	<?php if ( $show_contact ) : ?>
 
+		<?php
+		/*
+		 * Back to top.
+		 *
+		 * Tied to the contact block on purpose: the XD draws it on every page
+		 * that carries one and leaves it off Kontakt, which is the one page
+		 * with the compact footer.
+		 */
+		?>
+		<button
+			type="button"
+			class="footer__to-top"
+			data-to-top
+			aria-label="<?php esc_attr_e( 'Nach oben scrollen', 'KurtFreyAG' ); ?>"
+		>
+			<img
+				src="<?= esc_url( THEME_URI . '/dist/images/go_to_top_arrow.svg' ); ?>"
+				width="34"
+				height="23"
+				alt=""
+				aria-hidden="true"
+			>
+		</button>
+
 		<div class="footer__main">
 
 			<div class="footer__container">

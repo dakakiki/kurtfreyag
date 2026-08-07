@@ -124,36 +124,207 @@
         @include fluid-prop('padding-bottom', 35, 70, $min-resize, $max-resize);
 
 
+        /*
+        * Page content - XD "Impressum" artboard
+        *
+        *   buttons  ice pills 180 x 45, radius 100, Lato Regular 16 #00529E,
+        *            16 apart, at the top of the content
+        *   h2       Lato Bold 53 #00529E
+        *   h3, h4   Lato Bold 25 #00529E
+        *   body     Lato Regular 16 #00529E on a 24 line
+        *
+        * Everything is scoped to .content, so it only applies to editor output
+        * and not to the flexible layouts.
+        */
         .content {
 
             @include format-text (
-                $max-size: 17,
-                $min-size: 17,
+                $max-size: 16,
+                $min-size: 15,
                 $max-height: 24,
-                $min-height: 24,
+                $min-height: 22,
                 $tx-color: theme-color(text-blue),
-                $tx-weight: 300,
-                $max-rsp: $max-resize,
-                $min-rsp: $min-resize,
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
             );
 
+            p {
+
+                margin: 0 0 rem(24);
+
+                color: inherit;
+                font: inherit;
+            }
+
+            ul,
+            ol {
+
+                margin: 0 0 rem(24);
+
+                padding-left: rem(24);
+
+                color: inherit;
+                font: inherit;
+            }
+
+            li {
+
+                margin-bottom: rem(4);
+            }
+
+            /*
+            * Bold, not bigger. The XD sets these runs at 25 because the whole
+            * page is one text block there, but in the markup they are strong
+            * inside a paragraph - raising the size would make a lead-in look
+            * like a heading.
+            */
+            strong,
+            b {
+
+                font-weight: 700;
+            }
+
+            /* XD: golden and plain - no underline, in either state */
+            a {
+
+                color: theme-color(text-golden);
+                text-decoration: none;
+
+                @include trans;
+
+                &:hover,
+                &:focus-visible {
+
+                    color: theme-color(text-blue);
+                    text-decoration: none;
+                }
+            }
 
             h2 {
 
-                @include t-h2;
-                @include fluid-prop-multi('margin', 20 0 15 0, 30 0 20 0, $min-resize, $max-resize);
+                @include format-text (
+                    $max-size: 53,
+                    $min-size: 32,
+                    $max-height: 62,
+                    $min-height: 40,
+                    $tx-color: theme-color(title-blue),
+                    $tx-weight: 700,
+                    $max-rsp: $max-resize-sec,
+                    $min-rsp: $min-resize-sec,
+                );
+
+                @include fluid-prop('margin-top', 48, 72, $min-resize-sec, $max-resize-sec, $unit: px);
+                @include fluid-prop('margin-bottom', 32, 56, $min-resize-sec, $max-resize-sec, $unit: px);
+
+                @include break-word;
             }
 
-            h3 {
+            h3,
+            h4,
+            h5,
+            h6 {
 
-                @include t-h3;
-                @include fluid-prop-multi('margin', 20 0 15 0, 30 0 20 0, $min-resize, $max-resize);
+                @include format-text (
+                    $max-size: 25,
+                    $min-size: 20,
+                    $max-height: 32,
+                    $min-height: 26,
+                    $tx-color: theme-color(title-blue),
+                    $tx-weight: 700,
+                    $max-rsp: $max-resize-sec,
+                    $min-rsp: $min-resize-sec,
+                );
+
+                @include fluid-prop('margin-top', 32, 48, $min-resize-sec, $max-resize-sec, $unit: px);
+
+                margin-bottom: rem(12);
+
+                @include break-word;
             }
 
-            h4 {
+            /* Nothing to separate from at the top of the page */
+            > :first-child {
 
-                font-weight: 700;
-                @include fluid-prop-multi('margin', 20 0 15 0, 30 0 20 0, $min-resize, $max-resize);
+                margin-top: 0;
+            }
+
+            > :last-child {
+
+                margin-bottom: 0;
+            }
+
+            /*
+            * The jump links at the top of the page.
+            *
+            * Gutenberg ships its own flex layout for this block, so only the
+            * pill itself is styled here - the row spacing is set on the
+            * wrapper because the block's own gap variable is not reliable
+            * once the theme has no theme.json.
+            */
+            .wp-block-buttons {
+
+                display: flex;
+                flex-wrap: wrap;
+
+                align-items: center;
+
+                gap: rem(16);
+
+                @include fluid-prop('margin-bottom', 40, 61, $min-resize-sec, $max-resize-sec, $unit: px);
+
+                /* An empty buttons block should take no space at all */
+                &:empty {
+
+                    display: none;
+                }
+            }
+
+            .wp-block-button__link {
+
+                display: inline-flex;
+
+                align-items: center;
+                justify-content: center;
+
+                box-sizing: border-box;
+
+                /* XD: 180 x 45 pill */
+                min-width: rem(180);
+
+                @include fluid-prop('height', 40, 45, $min-resize-sec, $max-resize-sec, $unit: px);
+
+                padding: 0 rem(24);
+
+                @include format-text (
+                    $max-size: 16,
+                    $min-size: 15,
+                    $max-height: 24,
+                    $min-height: 22,
+                    $tx-color: theme-color(text-blue),
+                    $tx-weight: 400,
+                    $max-rsp: $max-resize-sec,
+                    $min-rsp: $min-resize-sec,
+                );
+
+                text-align: center;
+                text-decoration: none;
+
+                background-color: theme-color(bg-ice);
+                border: 1px solid theme-color(brd-ice);
+
+                @include brd-radius-all($brd-radius: 100px);
+
+                @include trans;
+                @include focus-ring(theme-color(brd-blue));
+
+                &:hover,
+                &:focus-visible {
+
+                    text-decoration: none;
+
+                    border-color: theme-color(brd-blue);
+                }
             }
 
             figure {
@@ -164,8 +335,6 @@
                 margin: 0;
                 margin-top: rem(28);
                 margin-bottom: rem(28);
-
-                @include fluid-prop-multi('border-radius', 16 16 16 16, 16 16 16 16, $min-resize, $max-resize);
 
                 @include brd-radius-all (
                     $brd-radius: 20px
@@ -189,7 +358,7 @@
                 display: block;
 
                 width: 100%;
-                margin: 0;
+                margin: 0 0 rem(24);
                 padding: rem(16);
 
                 box-sizing: border-box;
@@ -201,8 +370,6 @@
                 @include brd-radius-all (
                     $brd-radius: 20px
                 );
-
-                @include block-shaddow;
             }
         }
     }

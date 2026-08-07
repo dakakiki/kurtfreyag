@@ -23,34 +23,6 @@ function prefersReducedMotion() {
     return reduceMotionQuery.matches;
 }
 
-window.runGsapFadeUp = function (scope = document) {
-    const fadeUpItems = scope.querySelectorAll(".gsap-fade-up");
-    const fadeUpBtns = scope.querySelectorAll(".gsap-fade-up-btn");
-
-    const reduced = prefersReducedMotion();
-
-    if (fadeUpItems.length) {
-        gsap.killTweensOf(fadeUpItems);
-        gsap.to(fadeUpItems, {
-            y: 0,
-            autoAlpha: 1,
-            duration: reduced ? 0 : 1,
-            stagger: reduced ? 0 : 0.15,
-            ease: "power2.out"
-        });
-    }
-
-    if (fadeUpBtns.length) {
-        gsap.killTweensOf(fadeUpBtns);
-        gsap.to(fadeUpBtns, {
-            y: 0,
-            autoAlpha: 1,
-            duration: reduced ? 0 : 1,
-            ease: "power2.out"
-        });
-    }
-};
-
 window.initFadeUpAnimations = function (scope = document, animateNow = false) {
     const animations = [
         { name: "fade-up", group: "group-fade-up", from: { y: 40 } },

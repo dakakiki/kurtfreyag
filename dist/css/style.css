@@ -313,6 +313,7 @@ Tags: KurtFreyAG
 *            and the bottom bar is 135px with everything centred
 */
 footer.footer {
+  position: relative;
   display: block;
   width: 100%;
   background-color: #ffffff;
@@ -329,6 +330,65 @@ footer.footer .footer__container {
   margin-inline: auto;
   padding-inline: var(--container-bleed);
   box-sizing: border-box;
+}
+footer.footer {
+  /*
+  * Back to top
+  *
+  * XD: a 58 circle whose right edge lands 41 from the viewport edge, and
+  * which sits about 37 above the footer. bottom: 100% pins it to the
+  * footer's top edge, so it travels with the footer instead of floating.
+  */
+}
+footer.footer .footer__to-top {
+  position: absolute;
+  z-index: 2;
+  bottom: 100%;
+  right: clamp(16px, -130.5976331361px + 14.7928994083vw, 41px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 3.625rem;
+  height: 3.625rem;
+  margin-bottom: 2.3125rem;
+  /* Reset the default button chrome - this is a plain circle */
+  padding: 0;
+  border: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #00529E;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  cursor: pointer;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+footer.footer .footer__to-top:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+footer.footer .footer__to-top:hover {
+  background-color: #FFB500;
+}
+footer.footer .footer__to-top img {
+  display: block;
+  width: 2.125rem;
+  height: 1.4375rem;
+}
+@media (max-width: 991px) {
+  footer.footer .footer__to-top {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1.5rem;
+  }
+  footer.footer .footer__to-top img {
+    width: 1.75rem;
+    height: 1.1875rem;
+  }
 }
 footer.footer {
   /* ---------------------------------------------------------- blue block */
@@ -2433,6 +2493,11 @@ Tags: KurtFreyAG
 * card 65 with a 6 overlap; the 34 below is the ratio the ACF label states,
 * which is what the approved build uses.
 */
+/*
+* 40 rather than the 34 the ACF label implies: the picture takes 40 of the
+* container and the card the remaining 60, plus the overlap it reaches back
+* over.
+*/
 /* How far the image reaches over the card, in the same 100 column units */
 /*
 * Both children sit in the same grid row and their spans deliberately
@@ -2716,18 +2781,58 @@ Tags: KurtFreyAG
     border-bottom-left-radius: 0.1875rem;
   }
 }
+.layout-split-content {
+  /*
+  * Homepage variant.
+  *
+  * XD: card 754 x 677 at y1842, image 474 x 527 at y1915 - so the picture
+  * is inset 73 at the top and 77 at the bottom, and the card sets the
+  * height rather than the photograph.
+  *
+  * Left in flow the image kept its own proportions, which made it short
+  * beside a tall card. Out of flow it contributes nothing to the row and
+  * fills the box the card makes, minus that inset.
+  */
+}
 @media (min-width: 991px) {
   .layout-split-content.l-split-3070.img-left .split-content__media {
-    grid-column: 1/35;
+    grid-column: 1/41;
   }
   .layout-split-content.l-split-3070.img-left .split-content__body {
-    grid-column: 29/-1;
+    grid-column: 35/-1;
   }
   .layout-split-content.l-split-3070.img-right .split-content__media {
-    grid-column: 67/-1;
+    grid-column: 61/-1;
   }
   .layout-split-content.l-split-3070.img-right .split-content__body {
-    grid-column: 1/73;
+    grid-column: 1/67;
+  }
+}
+@media (min-width: 991px) {
+  .layout-split-content.l-split-3070 .split-content__grid {
+    align-items: stretch;
+  }
+  .layout-split-content.l-split-3070 .split-content__media {
+    position: relative;
+    margin-top: clamp(40px, -219.8369565217px + 19.0217391304vw, 75px);
+    margin-bottom: clamp(40px, -219.8369565217px + 19.0217391304vw, 75px);
+  }
+  .layout-split-content.l-split-3070 .split-content__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Square in this variant, unlike the rounded 50/50 one */
+    border-radius: 0;
+  }
+}
+.layout-split-content.l-split-3070 {
+  /* Square below the breakpoint as well */
+}
+@media (max-width: 991px) {
+  .layout-split-content.l-split-3070 .split-content__media img {
+    border-radius: 0;
   }
 }
 .layout-split-content {
@@ -3423,11 +3528,22 @@ Tags: KurtFreyAG
 }
 .layout-areas .areas {
   /* -------------------------------------------------------- image */
+  /*
+  * The picture closes the card, so it carries the same 3px border the
+  * head and the option bars do - on three sides, since the bar above
+  * already draws the line they share.
+  *
+  * A fixed height with a covering image rather than the picture's own
+  * proportions: the card is one continuous shape, and a tall photograph
+  * would stretch its base out of step with every other area.
+  */
 }
 .layout-areas .areas__media {
   line-height: 0;
   overflow: hidden;
-  /* Closes the card: rounded at the bottom, square where it meets the bars */
+  height: clamp(280px, -881.0532544379px + 117.1597633136vw, 478px);
+  border: 3px solid #00529E;
+  border-top: none;
   -webkit-border-bottom-right-radius: 3.75rem;
   -webkit-border-bottom-left-radius: 3.75rem;
   -moz-border-radius-bottomright: 3.75rem;
@@ -3438,10 +3554,12 @@ Tags: KurtFreyAG
 .layout-areas .areas__media img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
 }
 @media (max-width: 991px) {
   .layout-areas .areas__media {
+    height: clamp(200px, 154.3581616482px + 12.6782884311vw, 280px);
     -webkit-border-bottom-right-radius: 1.875rem;
     -webkit-border-bottom-left-radius: 1.875rem;
     -moz-border-radius-bottomright: 1.875rem;
@@ -6341,43 +6459,162 @@ Tags: KurtFreyAG
   box-sizing: border-box;
   padding-top: clamp(15px, 15px + 0vw, 15px);
   padding-bottom: clamp(35px, -170.2366863905px + 20.7100591716vw, 70px);
+  /*
+  * Page content - XD "Impressum" artboard
+  *
+  *   buttons  ice pills 180 x 45, radius 100, Lato Regular 16 #00529E,
+  *            16 apart, at the top of the content
+  *   h2       Lato Bold 53 #00529E
+  *   h3, h4   Lato Bold 25 #00529E
+  *   body     Lato Regular 16 #00529E on a 24 line
+  *
+  * Everything is scoped to .content, so it only applies to editor output
+  * and not to the flexible layouts.
+  */
 }
 .page-wrap .page-content .content {
-  font-size: clamp(17px, 17px + 0vw, 17px);
-  line-height: clamp(24px, 24px + 0vw, 24px);
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
   color: #00529E;
-  font-weight: 300;
+  font-weight: 400;
   text-decoration: none;
   font-family: "Lato", sans-serif;
+}
+.page-wrap .page-content .content p {
+  margin: 0 0 1.5rem;
+  color: inherit;
+  font: inherit;
+}
+.page-wrap .page-content .content ul,
+.page-wrap .page-content .content ol {
+  margin: 0 0 1.5rem;
+  padding-left: 1.5rem;
+  color: inherit;
+  font: inherit;
+}
+.page-wrap .page-content .content li {
+  margin-bottom: 0.25rem;
+}
+.page-wrap .page-content .content {
+  /*
+  * Bold, not bigger. The XD sets these runs at 25 because the whole
+  * page is one text block there, but in the markup they are strong
+  * inside a paragraph - raising the size would make a lead-in look
+  * like a heading.
+  */
+}
+.page-wrap .page-content .content strong,
+.page-wrap .page-content .content b {
+  font-weight: 700;
+}
+.page-wrap .page-content .content {
+  /* XD: golden and plain - no underline, in either state */
+}
+.page-wrap .page-content .content a {
+  color: #FFB500;
+  text-decoration: none;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.page-wrap .page-content .content a:hover, .page-wrap .page-content .content a:focus-visible {
+  color: #00529E;
+  text-decoration: none;
 }
 .page-wrap .page-content .content h2 {
-  display: block;
-  font-size: clamp(32px, -55.9585798817px + 8.875739645vw, 47px);
-  line-height: clamp(34px, -53.9585798817px + 8.875739645vw, 49px);
+  font-size: clamp(32px, -123.902173913px + 11.4130434783vw, 53px);
+  line-height: clamp(40px, -123.3260869565px + 11.9565217391vw, 62px);
   color: #00529E;
   font-weight: 700;
   text-decoration: none;
   font-family: "Lato", sans-serif;
+  margin-top: clamp(48px, -130.1739130435px + 13.0434782609vw, 72px);
+  margin-bottom: clamp(32px, -146.1739130435px + 13.0434782609vw, 56px);
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
-.page-wrap .page-content .content h2 strong {
-  font-weight: 700;
-}
-.page-wrap .page-content .content h2 {
-  margin: clamp(20px, -38.6390532544px + 5.9171597633vw, 30px) clamp(0px, 0px + 0vw, 0px) clamp(15px, -14.3195266272px + 2.9585798817vw, 20px) clamp(0px, 0px + 0vw, 0px);
-}
-.page-wrap .page-content .content h3 {
-  display: block;
-  font-size: clamp(16px, -7.4556213018px + 2.3668639053vw, 20px);
-  line-height: clamp(21px, -2.4556213018px + 2.3668639053vw, 25px);
+.page-wrap .page-content .content h3,
+.page-wrap .page-content .content h4,
+.page-wrap .page-content .content h5,
+.page-wrap .page-content .content h6 {
+  font-size: clamp(20px, -17.1195652174px + 2.7173913043vw, 25px);
+  line-height: clamp(26px, -18.5434782609px + 3.2608695652vw, 32px);
   color: #00529E;
   font-weight: 700;
   text-decoration: none;
   font-family: "Lato", sans-serif;
-  margin: clamp(20px, -38.6390532544px + 5.9171597633vw, 30px) clamp(0px, 0px + 0vw, 0px) clamp(15px, -14.3195266272px + 2.9585798817vw, 20px) clamp(0px, 0px + 0vw, 0px);
+  margin-top: clamp(32px, -86.7826086957px + 8.6956521739vw, 48px);
+  margin-bottom: 0.75rem;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
-.page-wrap .page-content .content h4 {
-  font-weight: 700;
-  margin: clamp(20px, -38.6390532544px + 5.9171597633vw, 30px) clamp(0px, 0px + 0vw, 0px) clamp(15px, -14.3195266272px + 2.9585798817vw, 20px) clamp(0px, 0px + 0vw, 0px);
+.page-wrap .page-content .content {
+  /* Nothing to separate from at the top of the page */
+}
+.page-wrap .page-content .content > :first-child {
+  margin-top: 0;
+}
+.page-wrap .page-content .content > :last-child {
+  margin-bottom: 0;
+}
+.page-wrap .page-content .content {
+  /*
+  * The jump links at the top of the page.
+  *
+  * Gutenberg ships its own flex layout for this block, so only the
+  * pill itself is styled here - the row spacing is set on the
+  * wrapper because the block's own gap variable is not reliable
+  * once the theme has no theme.json.
+  */
+}
+.page-wrap .page-content .content .wp-block-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: clamp(40px, -115.902173913px + 11.4130434783vw, 61px);
+  /* An empty buttons block should take no space at all */
+}
+.page-wrap .page-content .content .wp-block-buttons:empty {
+  display: none;
+}
+.page-wrap .page-content .content .wp-block-button__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  /* XD: 180 x 45 pill */
+  min-width: 11.25rem;
+  height: clamp(40px, 2.8804347826px + 2.7173913043vw, 45px);
+  padding: 0 1.5rem;
+  font-size: clamp(15px, 7.5760869565px + 0.5434782609vw, 16px);
+  line-height: clamp(22px, 7.152173913px + 1.0869565217vw, 24px);
+  color: #00529E;
+  font-weight: 400;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  text-align: center;
+  text-decoration: none;
+  background-color: #EDF6FC;
+  border: 1px solid #EDF6FC;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.page-wrap .page-content .content .wp-block-button__link:focus-visible {
+  outline: 2px solid #00529E;
+  outline-offset: 3px;
+}
+.page-wrap .page-content .content .wp-block-button__link:hover, .page-wrap .page-content .content .wp-block-button__link:focus-visible {
+  text-decoration: none;
+  border-color: #00529E;
 }
 .page-wrap .page-content .content figure {
   display: block;
@@ -6385,7 +6622,6 @@ Tags: KurtFreyAG
   margin: 0;
   margin-top: 1.75rem;
   margin-bottom: 1.75rem;
-  border-radius: clamp(16px, 16px + 0vw, 16px) clamp(16px, 16px + 0vw, 16px) clamp(16px, 16px + 0vw, 16px) clamp(16px, 16px + 0vw, 16px);
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
@@ -6401,7 +6637,7 @@ Tags: KurtFreyAG
 .page-wrap .page-content .content blockquote {
   display: block;
   width: 100%;
-  margin: 0;
+  margin: 0 0 1.5rem;
   padding: 1rem;
   box-sizing: border-box;
   background-color: rgba(167, 216, 244, 0.8);
@@ -6409,9 +6645,6 @@ Tags: KurtFreyAG
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
-  -webkit-box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
-  -moz-box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
-  box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
 }
 
 /*

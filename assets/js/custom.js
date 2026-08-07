@@ -254,13 +254,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-const getScrollOffset = () => {
-    const header = document.querySelector("header");
-    const headerHeight = header ? header.offsetHeight : 0;
-
-    return headerHeight; // + 25
-};
-
 
 document.addEventListener("DOMContentLoaded", function () {
   const hamburger = document.querySelector(".header__hamburger");
@@ -789,4 +782,42 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (typeof mq.addListener === "function") {
         mq.addListener(apply);
     }
+});
+
+
+/*
+ * Back to top.
+ *
+ * The control only exists on pages that carry the footer's contact block, so
+ * there is nothing to guard against beyond it being absent. Smooth unless the
+ * visitor has asked for less motion, in which case the jump is instant.
+ */
+document.addEventListener("DOMContentLoaded", function () {
+
+    var button = document.querySelector("[data-to-top]");
+
+    if (!button) {
+        return;
+    }
+
+    button.addEventListener("click", function () {
+
+        var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        window.scrollTo({
+            top: 0,
+            behavior: reduced ? "auto" : "smooth"
+        });
+
+        /*
+         * Send the keyboard back to the start of the document as well - the
+         * page has scrolled, but focus would otherwise stay down here and the
+         * next Tab would carry on from the footer.
+         */
+        var main = document.getElementById("main") || document.body;
+
+        main.setAttribute("tabindex", "-1");
+        main.focus({ preventScroll: true });
+        main.removeAttribute("tabindex");
+    });
 });
