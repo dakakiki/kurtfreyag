@@ -1,6 +1,12 @@
 @use '../abstracts' as *;
 
 /*
+* How far the back to top control sits above the footer when it docks, and
+* from the bottom of the screen while it floats. XD: 37 above the footer.
+*/
+$footer-to-top-gap: 37px;
+
+/*
 * Footer
 *
 * XD reference:
@@ -34,13 +40,27 @@ footer.footer {
     * which sits about 37 above the footer. bottom: 100% pins it to the
     * footer's top edge, so it travels with the footer instead of floating.
     */
+    /*
+    * Back to top
+    *
+    * Fixed in the bottom right corner while the visitor reads, and docked
+    * above the footer once they reach it - the resting place the XD draws.
+    * Hidden until they are a screen and a half down, so it never covers the
+    * first thing they see.
+    */
     .footer__to-top {
 
-        position: absolute;
-        z-index: 2;
-        bottom: 100%;
+        position: fixed;
+        z-index: 90;
+
+        bottom: $footer-to-top-gap;
 
         @include fluid-prop('right', 16, 41, $min-resize, $max-resize, $unit: px);
+
+        opacity: 0;
+        visibility: hidden;
+
+        pointer-events: none;
 
         display: flex;
 
@@ -52,7 +72,6 @@ footer.footer {
         width: rem(58);
         height: rem(58);
 
-        margin-bottom: rem(37);
 
         /* Reset the default button chrome - this is a plain circle */
         padding: 0;
@@ -74,25 +93,69 @@ footer.footer {
             background-color: theme-color(bg-golden);
         }
 
+        /*
+        * Shown once the second screen is half read.
+        */
+        &.is-visible {
+
+            opacity: 1;
+            visibility: visible;
+
+            pointer-events: auto;
+        }
+
+        /*
+        * The end of the run: from here it sits above the footer and scrolls
+        * away with it, rather than hovering over the contact details.
+        */
+        &.is-docked {
+
+            position: absolute;
+
+            bottom: 100%;
+
+            margin-bottom: $footer-to-top-gap;
+        }
+
         img {
 
             display: block;
 
             width: rem(34);
             height: rem(23);
+
+            /*
+            * A triangle's optical centre sits above its geometric one, so
+            * centring the box leaves it looking low. Two pixels up corrects
+            * what the eye sees.
+            */
+            transform: translateY(#{rem(-2)});
         }
 
         @include respond-max(lg) {
 
-            width: rem(48);
-            height: rem(48);
+            width: rem(40);
+            height: rem(40);
 
-            margin-bottom: rem(24);
+            /* Closer to the footer on a small screen, floating and docked alike */
+            bottom: rem(12);
+
+            &.is-docked {
+
+                margin-bottom: rem(12);
+            }
+
+            /*
+            * The control passes over the blue footer at this size, where its
+            * own blue would disappear into it - the ring keeps its edge.
+            */
+            border: 1px solid theme-color(brd-white);
 
             img {
 
-                width: rem(28);
-                height: rem(19);
+                /* 14 tall, and the width that keeps the asset's 34:23 shape */
+                width: rem(21);
+                height: rem(14);
             }
         }
     }
@@ -558,8 +621,8 @@ footer.footer {
         */
         .sn-items a {
 
-            width: rem(30);
-            height: rem(30);
+            width: rem(40);
+            height: rem(40);
 
             svg,
             img {

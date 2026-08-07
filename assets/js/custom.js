@@ -800,6 +800,83 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    var footer = button.closest(".footer");
+
+    /*
+     * How far the control sits from the bottom of the screen while floating,
+     * and above the footer once docked.
+     *
+     * Read from the stylesheet rather than repeated here: the value drops on
+     * a small screen, and a hard coded copy would hand off at the wrong point
+     * there. Only readable while floating - docked, bottom is a percentage -
+     * so the last good value is kept.
+     */
+    var gap = 37;
+
+    function readGap() {
+
+        if (button.classList.contains("is-docked")) {
+            return gap;
+        }
+
+        var bottom = parseFloat(window.getComputedStyle(button).bottom);
+
+        return isNaN(bottom) ? gap : bottom;
+    }
+
+    /*
+     * Nothing until the visitor is a screen and a half down - half way into
+     * the second screen, so the control never covers the first thing they
+     * see.
+     */
+    function showThreshold() {
+        return window.innerHeight * 1.5;
+    }
+
+    var ticking = false;
+
+    function update() {
+
+        ticking = false;
+
+        var scrolled = window.scrollY || window.pageYOffset || 0;
+
+        button.classList.toggle("is-visible", scrolled > showThreshold());
+
+        if (!footer) {
+            return;
+        }
+
+        /*
+         * Dock as soon as the resting place above the footer has risen to
+         * where the floating control already is - any later and the two
+         * positions would visibly disagree.
+         */
+        gap = readGap();
+
+        var footerTop = footer.getBoundingClientRect().top;
+        var restingTop = footerTop - gap - button.offsetHeight;
+        var floatingTop = window.innerHeight - gap - button.offsetHeight;
+
+        button.classList.toggle("is-docked", restingTop <= floatingTop);
+    }
+
+    function onScroll() {
+
+        if (ticking) {
+            return;
+        }
+
+        ticking = true;
+
+        window.requestAnimationFrame(update);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    update();
+
     button.addEventListener("click", function () {
 
         var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
