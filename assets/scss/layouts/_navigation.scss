@@ -14,6 +14,18 @@
 
 $dropdown-width: 196px;
 
+/*
+* What an open dropdown looks like - shared by the hover and the click state.
+*/
+@mixin nav-submenu-open {
+
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s;
+}
+
 .nav-wrap {
 
     display: block;
@@ -130,12 +142,21 @@ $dropdown-width: 196px;
             transform: rotate(180deg);
         }
 
+        @media (hover: hover) {
+
+            header & > li.menu-item-has-children:hover > .nav-wrap__toggle .nav-wrap__toggle-icon {
+
+                transform: rotate(180deg);
+            }
+        }
+
         /*
         * Dropdown
         *
         * Hidden with visibility so the links stay out of the tab order while
-        * closed. Nothing here reacts to hover: the panel is shown only when
-        * the toggle button has set .is-open on the parent item.
+        * closed. Opened by hovering the item - the link or its icon, since
+        * both sit inside the same li - or by the toggle button, which is what
+        * a touch screen and the keyboard use.
         */
         .sub-menu {
 
@@ -231,11 +252,33 @@ $dropdown-width: 196px;
 
         > li.is-open > .sub-menu {
 
-            visibility: visible;
-            opacity: 1;
-            transform: translateY(0);
+            @include nav-submenu-open;
+        }
 
-            transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s;
+        /*
+        * Hover opens it too.
+        *
+        * Behind (hover: hover) on purpose: a touch screen fakes a hover on
+        * the first tap and then leaves it applied, which would hold the panel
+        * open with no way to close it. There the toggle button stays in
+        * charge.
+        *
+        * The whole li is the target, so hovering the link opens the panel
+        * while clicking it still follows the link - and the panel keeps
+        * itself open while the pointer is inside it.
+        */
+        @media (hover: hover) {
+
+            /*
+            * header scopes this to the fixed bar. The panel reuses the same
+            * markup, but collapses its submenus by height rather than by
+            * visibility - an unscoped hover would leave one showing at zero
+            * height there.
+            */
+            header & > li.menu-item-has-children:hover > .sub-menu {
+
+                @include nav-submenu-open;
+            }
         }
     }
 }

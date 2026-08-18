@@ -186,21 +186,33 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     /*
-     * Scrolling to a hash on a page that is still loading.
+     * Scrolling to a hash on a page that has just loaded.
      *
-     * A fixed delay was not enough: the areas carry a full width photograph,
-     * and until it has loaded the blocks below it sit higher than they will.
-     * The scroll landed on the right number for a layout that then moved,
-     * which is what left the block's icon under the header.
+     * Measured on a real load, the page is still settling long after the
+     * jump begins: the document went from 8388 to 8171 tall in the seconds
+     * afterwards, and the target's own position dropped by 341 with it. The
+     * old code measured once, then eased towards that number for 600ms while
+     * everything above the target was still moving - so it arrived at a
+     * position that had stopped being correct before the animation finished.
      *
-     * So it waits for load - by which time images have their real size - and
-     * then checks the position once more, in case something arrived even
-     * later. The check is dropped the moment the visitor scrolls themselves;
-     * pulling the page out from under them would be worse than being a few
-     * pixels off.
+     * So nothing is scrolled until the page has stopped changing height.
+     * Once it has held still for a moment the target is measured and the jump
+     * is made in one step, and the position is then held for a short while in
+     * case anything arrives even later.
      */
+    let holdToken = 0;
+
     const scrollToHashWhenReady = (hash) => {
         if (!hash) return;
+
+        /*
+         * Each call cancels the one before it: a visitor can click a second
+         * anchor while the first is still being held, and two routines
+         * pulling the page in different directions would fight.
+         */
+        holdToken++;
+
+        const myToken = holdToken;
 
         let userScrolled = false;
 
@@ -208,30 +220,134 @@ document.addEventListener("DOMContentLoaded", () => {
             userScrolled = true;
         };
 
-        ["wheel", "touchstart", "keydown"].forEach((type) => {
-            window.addEventListener(type, noteUserScroll, { once: true, passive: true });
-        });
+        /*
+         * Listening only from the next frame on.
+         *
+         * The tap that opened a menu item fires touchstart itself, and
+         * attaching straight away would let the visitor's own gesture cancel
+         * the jump they just asked for.
+         */
+        const watchForUserScroll = () => {
+            ["wheel", "touchstart", "keydown"].forEach((type) => {
+                window.addEventListener(type, noteUserScroll, { once: true, passive: true });
+            });
+        };
 
-        const correct = () => {
-            if (userScrolled) return;
+        window.requestAnimationFrame(watchForUserScroll);
 
+        const wantedY = () => {
             const target = document.querySelector(hash);
-            if (!target) return;
+            if (!target) return null;
 
-            const offset = getScrollOffset(target);
-            const wanted = Math.max(0, getVisualTop(target) + window.pageYOffset - offset);
+            /*
+             * The fade-up animations hold their block 40 low until they play,
+             * and getBoundingClientRect() reports that as if it were the
+             * layout. The transform is read off the element and taken back
+             * out, which gives the position the block will settle at.
+             */
+            const restingTop = (el) => {
+                const rect = el.getBoundingClientRect();
+                const transform = window.getComputedStyle(el).transform;
 
-            /* A pixel or two is measurement noise, not a misplaced block. */
+                if (!transform || transform === "none") return rect.top;
+
+                const values = transform.match(/matrix3?d?\(([^)]+)\)/);
+                if (!values) return rect.top;
+
+                const parts = values[1].split(",").map(parseFloat);
+                const ty = parts.length === 16 ? parts[13] : parts[5];
+
+                return isNaN(ty) ? rect.top : rect.top - ty;
+            };
+
+            let top = restingTop(target);
+
+            target.querySelectorAll("*").forEach((child) => {
+                const rect = child.getBoundingClientRect();
+
+                /* Skip anything not rendered - a collapsed panel, a hidden image. */
+                if (!rect.width || !rect.height) return;
+
+                const childTop = restingTop(child);
+                if (childTop < top) top = childTop;
+            });
+
+            const doc = document.documentElement;
+            const max = Math.max(0, doc.scrollHeight - window.innerHeight);
+
+            return Math.min(
+                Math.max(0, top + window.pageYOffset - getScrollOffset(target)),
+                max
+            );
+        };
+
+        const jump = () => {
+            if (userScrolled || myToken !== holdToken) return;
+
+            const wanted = wantedY();
+            if (wanted === null) return;
+
             if (Math.abs(wanted - window.pageYOffset) > 2) {
                 window.scrollTo(0, wanted);
             }
         };
 
-        const run = () => {
-            scrollToHash(hash);
+        /*
+         * Waits for the document to stop changing height, then jumps.
+         *
+         * settleFor is how long it has to hold still to count as settled, and
+         * giveUpAfter stops the wait becoming indefinite on a page that never
+         * quite stops - a slideshow, an ad - where jumping late is better
+         * than not jumping at all.
+         */
+        const whenSettled = (done) => {
+            const settleFor = 250;
+            const giveUpAfter = 4000;
 
-            /* After the scroll has finished, not during it. */
-            window.setTimeout(correct, 900);
+            const startedAt = Date.now();
+
+            let lastHeight = document.documentElement.scrollHeight;
+            let stableSince = Date.now();
+
+            const tick = () => {
+                if (userScrolled || myToken !== holdToken) return;
+
+                const height = document.documentElement.scrollHeight;
+
+                if (height !== lastHeight) {
+                    lastHeight = height;
+                    stableSince = Date.now();
+                }
+
+                if (Date.now() - stableSince >= settleFor || Date.now() - startedAt >= giveUpAfter) {
+                    done();
+                    return;
+                }
+
+                window.requestAnimationFrame(tick);
+            };
+
+            window.requestAnimationFrame(tick);
+        };
+
+        const run = () => {
+            whenSettled(() => {
+                jump();
+
+                /* Anything that lands later still gets corrected. */
+                let checks = 0;
+
+                const recheck = () => {
+                    if (userScrolled || myToken !== holdToken || checks > 20) return;
+
+                    checks++;
+                    jump();
+
+                    window.setTimeout(recheck, 100);
+                };
+
+                window.setTimeout(recheck, 100);
+            });
         };
 
         if (document.readyState === "complete") {
@@ -240,6 +356,7 @@ document.addEventListener("DOMContentLoaded", () => {
             window.addEventListener("load", run, { once: true });
         }
     };
+
 
     const tryScrollFromStoredHash = () => {
         const storedHash = sessionStorage.getItem(STORAGE_KEY);
@@ -278,9 +395,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 e.preventDefault();
                 history.pushState(null, "", hash);
 
-                setTimeout(() => {
-                    scrollToHash(hash);
-                }, 50);
+                /*
+                 * Through the settling routine, not straight to scrollToHash.
+                 *
+                 * On the first click after a page load the images further
+                 * down have not been fetched yet - they are lazy, and the
+                 * scroll is what brings them into view. Each one that lands
+                 * moves everything below it, so easing towards a position
+                 * measured at the start arrives somewhere else. Later clicks
+                 * work because by then nothing is left to load.
+                 */
+                scrollToHashWhenReady(hash);
 
                 return;
             }
