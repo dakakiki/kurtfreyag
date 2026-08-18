@@ -1,0 +1,115 @@
+@use '../abstracts' as *;
+
+/*
+* Block - Anchor cloud (layout_anchor_cloud)
+*
+* XD reference (Über Uns artboard, 1440):
+*   row    x140 -> 1300, pills 16 apart
+*   pill   45 tall, #EDF6FC, radius 100, Lato Regular 16 #00529E
+*          180 wide as a rule, and 376 for the longest label - so the width
+*          comes from the text and 180 is a minimum rather than a size
+*/
+
+.layout-anchor-cloud {
+
+    position: relative;
+
+    width: 100%;
+
+    @include fluid-prop('margin-top', 40, 60, $min-resize-sec, $max-resize-sec, $unit: px);
+    @include fluid-prop('margin-bottom', 40, 60, $min-resize-sec, $max-resize-sec, $unit: px);
+
+    @include respond-max(lg) {
+
+        margin-top: fluid(32, 40, 360, 991);
+        margin-bottom: fluid(32, 40, 360, 991);
+    }
+
+    .anchor-cloud {
+
+        &__container {
+
+            @include container-fluid($max-page-width, 16, 48, $min-resize, $max-resize);
+        }
+
+        &__list {
+
+            display: flex;
+            flex-wrap: wrap;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: rem(16);
+        }
+
+        &__pill {
+
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            box-sizing: border-box;
+
+            /*
+            * 180 in the XD, but "Unser Weg zur Energiewende" sits in a 376
+            * wide pill - so the label sets the width and 180 is the floor.
+            */
+            min-width: rem(180);
+
+            @include fluid-prop('height', 40, 45, $min-resize-sec, $max-resize-sec, $unit: px);
+
+            padding: 0 rem(24);
+
+            @include format-text(
+                $max-size: 16,
+                $min-size: 15,
+                $max-height: 24,
+                $min-height: 22,
+                $tx-color: theme-color(text-blue),
+                $tx-weight: 400,
+                $max-rsp: $max-resize-sec,
+                $min-rsp: $min-resize-sec,
+            );
+
+            text-align: center;
+            text-decoration: none;
+
+            /* One line each, as drawn - the pill grows rather than wrapping */
+            white-space: nowrap;
+
+            background-color: theme-color(bg-ice);
+            border: 1px solid theme-color(brd-ice);
+
+            @include brd-radius-all($brd-radius: 100px);
+
+            @include trans;
+            @include focus-ring(theme-color(brd-blue));
+
+            &:hover,
+            &:focus-visible {
+
+                text-decoration: none;
+
+                border-color: theme-color(brd-blue);
+            }
+
+            /*
+            * A label longer than the screen has to give way somewhere, so
+            * below the breakpoint the pill wraps rather than pushing the row
+            * sideways.
+            */
+            @include respond-max(sm) {
+
+                min-width: 0;
+
+                white-space: normal;
+
+                text-align: left;
+
+                padding: rem(10) rem(20);
+            }
+        }
+    }
+}
