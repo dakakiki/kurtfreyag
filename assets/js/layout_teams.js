@@ -6,7 +6,11 @@
  * Before this runs the row is a plain grid, so the members are readable with
  * no script at all. Slick takes over per group, and the sky panel on the right
  * - the hint drawn in the XD - is wired up as the control that moves the row
- * on. It hides itself once there is nothing left to reveal.
+ * on.
+ *
+ * One control, two jobs: it advances while there is more to see, and turns
+ * back once the end is reached, so a visitor can walk a group in both
+ * directions without a second panel taking up room beside the cards.
  */
 jQuery(function ($) {
 
@@ -26,6 +30,12 @@ jQuery(function ($) {
             return;
         }
 
+        /* Which way the control is currently pointing. */
+        var goingBack = false;
+
+        var labelNext = $next.attr("data-label-next") || $next.attr("aria-label") || "";
+        var labelPrev = $next.attr("data-label-prev") || labelNext;
+
         $slider.on("init reInit afterChange", function (e, slick) {
 
             if (!$next.length || !slick) {
@@ -39,6 +49,27 @@ jQuery(function ($) {
             var fits = slick.slideCount <= slick.options.slidesToShow;
 
             $next.prop("hidden", fits);
+
+            if (fits) {
+                return;
+            }
+
+            var current = slick.currentSlide;
+            var last = slick.slideCount - slick.options.slidesToShow;
+
+            /*
+             * Turn back at the end and forward again at the start. In between
+             * the direction is left alone, so a visitor walking backwards is
+             * not flipped round after a single step.
+             */
+            if (current >= last) {
+                goingBack = true;
+            } else if (current <= 0) {
+                goingBack = false;
+            }
+
+            $next.toggleClass("is-prev", goingBack);
+            $next.attr("aria-label", goingBack ? labelPrev : labelNext);
         });
 
         $slider.slick({
@@ -71,7 +102,7 @@ jQuery(function ($) {
         });
 
         $next.on("click", function () {
-            $slider.slick("slickNext");
+            $slider.slick(goingBack ? "slickPrev" : "slickNext");
         });
     });
 });

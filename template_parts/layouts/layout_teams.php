@@ -171,6 +171,8 @@ if ( ! $teams_title && ! $teams_text && empty( $teams_groups ) ) {
 								type="button"
 								class="teams__next"
 								data-teams-next
+								data-label-next="<?php esc_attr_e( 'Weitere Mitarbeitende anzeigen', 'KurtFreyAG' ); ?>"
+								data-label-prev="<?php esc_attr_e( 'Vorherige Mitarbeitende anzeigen', 'KurtFreyAG' ); ?>"
 								aria-label="<?php esc_attr_e( 'Weitere Mitarbeitende anzeigen', 'KurtFreyAG' ); ?>"
 							>
 								<img

@@ -449,6 +449,21 @@ $teams-hint-min: 40px;
                 display: none;
             }
 
+            /*
+            * At the end of a group the control turns back, and moves to the
+            * left edge with it - a panel pointing left while sitting on the
+            * right would cover the cards it is pointing away from.
+            */
+            &.is-prev {
+
+                right: auto;
+                left: -$teams-gutter;
+
+                .teams__next-icon {
+
+                    transform: scaleX(-1);
+                }
+            }
         }
 
         /*
@@ -463,6 +478,8 @@ $teams-hint-min: 40px;
 
             width: 37%;
             height: auto;
+
+            @include trans;
         }
     }
 }

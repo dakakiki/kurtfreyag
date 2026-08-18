@@ -4921,6 +4921,20 @@ Tags: KurtFreyAG
 .layout-teams .teams__next[hidden] {
   display: none;
 }
+.layout-teams .teams__next {
+  /*
+  * At the end of a group the control turns back, and moves to the
+  * left edge with it - a panel pointing left while sitting on the
+  * right would cover the cards it is pointing away from.
+  */
+}
+.layout-teams .teams__next.is-prev {
+  right: auto;
+  left: -8px;
+}
+.layout-teams .teams__next.is-prev .teams__next-icon {
+  transform: scaleX(-1);
+}
 .layout-teams .teams {
   /*
   * The supplied asset - 33 x 71, pointing the way the cards travel.
@@ -4933,6 +4947,10 @@ Tags: KurtFreyAG
   display: block;
   width: 37%;
   height: auto;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 /*
