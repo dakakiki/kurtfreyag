@@ -877,12 +877,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /*
-     * Nothing until the visitor is a screen and a half down - half way into
-     * the second screen, so the control never covers the first thing they
-     * see.
+     * Shown as soon as the first screen has scrolled away, so the control is
+     * there the moment there is anything to go back to.
+     *
+     * A little under a full screen on purpose: waiting for the whole of it
+     * means the button only arrives once the second screen has begun, which
+     * reads as late.
      */
     function showThreshold() {
-        return window.innerHeight * 1.5;
+        return window.innerHeight * 0.6;
     }
 
     var ticking = false;
